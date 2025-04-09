@@ -70,6 +70,7 @@ body {
   /*Footer*/
   footer {
     margin-top:6%;
+    margin-bottom: -10%;
     width: 100%;
     background: radial-gradient(circle, #141414 0%, #0a0a0a 85%);
     padding: 2.5rem 0 2rem 0;
