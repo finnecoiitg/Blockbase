@@ -328,38 +328,32 @@ li {
 .task-link {
   display: inline-flex;
   align-items: center;
-  font-size: 0.76rem;
+  font-size: 0.8rem;
   font-weight: 500;
-  color: #888;
-  background: #141414;
-  border: 1px solid #2a2a2a;
-  border-radius: 20px;
-  padding: 0.28rem 0.95rem;
-  transition:
-    background 0.15s,
-    border-color 0.15s,
-    color 0.15s;
+  color: #ccc;
+  background: #161616;
+  border: 1px solid #383838;
+  border-radius: 6px;
+  padding: 0.4rem 1.1rem;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
   transform: none !important;
 }
 .task-link:hover {
-  background: #1c1c1c;
-  border-color: #444;
-  color: #e0e0e0;
+  background: #222;
+  border-color: #555;
+  color: #fff;
   transform: none !important;
+}
+
+.day-card.locked {
+  display: none;
 }
 
 .day-locked-msg {
   display: none;
-  align-items: center;
-  gap: 0.45rem;
-  font-size: 0.76rem;
-  color: #2a2a2a;
 }
 .day-card.locked .day-locked-msg {
   display: flex;
-}
-.day-card.locked .day-locked-msg .fas {
-  font-size: 0.68rem;
 }
 
 /* ════════════════════════════════════════════════════════════════
