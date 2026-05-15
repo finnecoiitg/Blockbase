@@ -19,6 +19,7 @@
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
+    <div class="reading-progress" id="readingProgress"></div>
     <nav class="navbar">
       <div class="logo-container">
         <img src="blockbase.png" alt="Blockbase" />
@@ -27,7 +28,6 @@
       <ul class="nav-links">
         <li><a href="index.html#about">About</a></li>
         <li><a href="index.html#curriculum">Curriculum</a></li>
-        <li><a href="index.html#project">Project</a></li>
       </ul>
     </nav>
 
@@ -213,10 +213,7 @@
             block is added, it doesn't move.
           </p>
 
-          <div class="resource-card">
-            <span class="resource-label">Watch</span>
-            <a
-              href="https://www.youtube.com/watch?v=SSo_EIwHSd4"
+          <div class="resource-card watch-card">
               target="_blank"
               rel="noopener"
               >How does a blockchain work — Simply Explained</a
@@ -272,8 +269,7 @@ SHA-256: 2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043...</code></pre>
             the estimated number of atoms in the observable universe.
           </p>
 
-          <div class="resource-card">
-            <span class="resource-label">Try it</span>
+          <div class="resource-card try-card">
             <a
               href="https://xorbin.com/tools/sha256-hash-calculator"
               target="_blank"
@@ -342,8 +338,7 @@ SHA-256: 2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043...</code></pre>
             break immediately.
           </p>
 
-          <div class="resource-card">
-            <span class="resource-label">Demo</span>
+          <div class="resource-card demo-card">
             <a
               href="https://andersbrownworth.com/blockchain"
               target="_blank"
@@ -447,7 +442,7 @@ SHA-256: 2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043...</code></pre>
             can theoretically be attacked for a few hundred dollars per hour.
           </p>
 
-          <div class="resource-card">
+          <div class="resource-card explore-card">
             <span class="resource-label">Explore</span>
             <a href="https://crypto51.app" target="_blank" rel="noopener"
               >crypto51.app</a
@@ -596,10 +591,7 @@ SHA-256: 2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043...</code></pre>
             data. Open Bitcoin's block zero — mined by Satoshi in January 2009:
           </p>
 
-          <div class="resource-card">
-            <span class="resource-label">Explore</span>
-            <a
-              href="https://blockchair.com/bitcoin/block/0"
+          <div class="resource-card explore-card">
               target="_blank"
               rel="noopener"
               >blockchair.com/bitcoin/block/0</a
@@ -678,6 +670,12 @@ SHA-256: 2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043...</code></pre>
       nextBtn.addEventListener("click", () => showTask(current + 1));
 
       if (window.location.hash === "#task2") showTask(1);
+
+      window.addEventListener("scroll", () => {
+        const el = document.documentElement;
+        const pct = (el.scrollTop / (el.scrollHeight - el.clientHeight)) * 100;
+        document.getElementById("readingProgress").style.width = Math.min(pct, 100) + "%";
+      });
     </script>
   </body>
 </html>

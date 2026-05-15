@@ -719,3 +719,43 @@ li {
     font-size: 0.93rem;
   }
 }
+
+/* ── Reading Progress Bar ── */
+.reading-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 2px;
+  background: #3a3a3a;
+  width: 0%;
+  transition: width 0.1s linear;
+  z-index: 9999;
+}
+
+/* ── Section numbering on h3 ── */
+.task-pane {
+  counter-reset: section-counter;
+}
+.task-pane h3 {
+  counter-increment: section-counter;
+}
+.task-pane h3::before {
+  content: counter(section-counter, decimal-leading-zero) ".";
+  font-size: 0.68rem;
+  color: #3a3a3a;
+  font-family: "JetBrains Mono", monospace;
+  font-weight: 400;
+  margin-right: 0.65rem;
+  letter-spacing: 0.03em;
+}
+
+/* ── Resource card type accents ── */
+.resource-card.watch-card   { border-left: 3px solid #4a6fa5; }
+.resource-card.try-card     { border-left: 3px solid #4d9375; }
+.resource-card.demo-card    { border-left: 3px solid #9375d4; }
+.resource-card.explore-card { border-left: 3px solid #c47d3e; }
+
+/* ── Strong text in content ── */
+.task-pane p strong {
+  color: #e0e0e0;
+}
