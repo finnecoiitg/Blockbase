@@ -64,7 +64,7 @@ a:hover {
 }
 
 .nav-links li a::after {
-  content: '';
+  content: "";
   position: absolute;
   bottom: 0;
   left: 0;
@@ -123,6 +123,14 @@ footer .social-icons a {
 footer .social-icons a:hover {
   color: #fff;
   transform: scale(1.1);
+}
+
+footer .social-icons a .fa-whatsapp {
+  color: #4fba67;
+}
+
+footer .social-icons a:hover .fa-whatsapp {
+  color: #6ed485;
 }
 
 footer p {
