@@ -82,6 +82,21 @@ a:hover {
   width: 100%;
 }
 
+.nav-whatsapp {
+  color: #4fba67 !important;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.nav-whatsapp:hover {
+  color: #6ed485 !important;
+}
+
+.nav-whatsapp::after {
+  display: none !important;
+}
+
 .main-logo {
   text-align: center;
   margin-top: 2rem;
@@ -230,7 +245,9 @@ li {
   font-weight: 500;
   letter-spacing: 0.03em;
   text-decoration: none;
-  transition: background 0.2s, color 0.2s;
+  transition:
+    background 0.2s,
+    color 0.2s;
 }
 
 .whatsapp-cta:hover {
