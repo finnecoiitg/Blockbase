@@ -217,6 +217,27 @@ li {
   color: #aaa;
 }
 
+.whatsapp-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 1.75rem;
+  padding: 0.6rem 1.3rem;
+  border: 1px solid #4fba67;
+  border-radius: 6px;
+  color: #4fba67;
+  font-size: 0.85rem;
+  font-weight: 500;
+  letter-spacing: 0.03em;
+  text-decoration: none;
+  transition: background 0.2s, color 0.2s;
+}
+
+.whatsapp-cta:hover {
+  background: #4fba67;
+  color: #000;
+}
+
 /* Project section */
 .project-link {
   display: inline-block;
