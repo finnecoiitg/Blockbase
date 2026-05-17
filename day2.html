@@ -1,0 +1,1425 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Day 2 — Ethereum and Smart Contracts | BlockBase</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Karantina&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Nico+Moji&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="reading-progress" id="readingProgress"></div>
+    <nav class="navbar">
+      <div class="logo-container">
+        <img src="blockbase.png" alt="Blockbase" />
+        <img src="fec.png" alt="FEC IITG" />
+      </div>
+      <ul class="nav-links">
+        <li><a href="index.html#about">About</a></li>
+        <li><a href="index.html#curriculum">Curriculum</a></li>
+        <li>
+          <a
+            href="https://chat.whatsapp.com/EUfRkvIR5DPALPlOOrjKJf?mode=gi_t"
+            class="nav-whatsapp"
+            target="_blank"
+            rel="noopener"
+            ><i class="fab fa-whatsapp"></i> Join Blockbase WhatsApp</a
+          >
+        </li>
+      </ul>
+    </nav>
+
+    <div class="reader-wrap">
+      <div class="reader-header">
+        <a href="index.html#curriculum" class="back-link"
+          ><i class="fas fa-arrow-left"></i> Back to Curriculum</a
+        >
+        <div>
+          <span class="day-pill">Day 2</span>
+          <h1 class="day-header-title">Ethereum and Smart Contracts</h1>
+        </div>
+      </div>
+
+      <div class="task-tabs">
+        <button class="task-tab active" data-index="0">
+          Task 1 &mdash; What is Ethereum?
+        </button>
+        <button class="task-tab" data-index="1">
+          Task 2 &mdash; Gas, Wallets, and Getting Started
+        </button>
+        <button class="task-tab" data-index="2">
+          Task 3 &mdash; Proof of Work vs Proof of Stake
+        </button>
+      </div>
+
+      <div class="reader-body">
+        <!-- ═══════════════════════════════════════════════════════════ TASK 1 -->
+        <article id="task1" class="task-pane active">
+          <p>
+            Bitcoin solved one specific problem: how to transfer value between
+            two people, anywhere in the world, without trusting anyone in the
+            middle. It does that one thing extremely well. But it was never
+            designed to do much else.
+          </p>
+
+          <p>
+            In late 2013, a 19-year-old named Vitalik Buterin started thinking
+            about what it would mean to build a blockchain that could run
+            arbitrary code — not just transfer a currency, but execute any
+            program. He'd been writing about Bitcoin for a year, had read
+            everything, and had watched developers try to build applications on
+            top of it. Each time, they hit the same ceiling. Bitcoin's scripting
+            language is deliberately limited. You can write simple conditions
+            for spending coins. You can't build a loan protocol or a voting
+            system or an exchange. The foundation was too narrow.
+          </p>
+
+          <p>
+            His proposal: a new blockchain with a general-purpose programming
+            environment built in. Not a blockchain for currency. A blockchain
+            for computation.
+          </p>
+
+          <h3>Where Ethereum came from</h3>
+
+          <p>
+            Vitalik Buterin was born in 1994 in Russia, moved to Canada as a
+            child. He was prodigiously good at mathematics — reportedly three
+            times faster at mental arithmetic than his peers by age four.
+          </p>
+
+          <p>
+            As a teenager he played World of Warcraft obsessively. One day,
+            Blizzard patched the game and removed the damage component from his
+            favourite warlock skill — <em>Siphon Life</em>. Vitalik was
+            devastated. He later wrote:
+            <em
+              >"I happily played World of Warcraft during 2007–2010, but one day
+              Blizzard removed the damage component from my warlock's Siphon
+              Life spell... I cried myself to sleep, and on that day I realised
+              what horrors centralised services can bring."</em
+            >
+            A trivial grievance. But it planted something: the instinct that
+            centralised systems — where one company can unilaterally change
+            something that matters to you — are a problem.
+          </p>
+
+          <p>
+            In 2011, at 17, he discovered Bitcoin through his father. He had no
+            money to buy it, so he started writing articles for a cryptocurrency
+            blog at 5 BTC per article. By late 2011, he'd co-founded
+            <strong>Bitcoin Magazine</strong> — the first serious publication
+            dedicated to cryptocurrency — and was its lead writer. The following
+            year he won a <strong>Thiel Fellowship</strong>: a $100,000 grant to
+            pursue a project instead of finishing college. He dropped out of the
+            University of Waterloo.
+          </p>
+
+          <p>
+            He spent the next year travelling the world visiting every notable
+            crypto project. He talked to developers, read whitepapers,
+            understood every approach being tried. And he noticed the same
+            pattern everywhere: each project was building one specific
+            application on a blockchain — a decentralised domain name system, a
+            prediction market, a storage network. Each was rebuilding its own
+            consensus layer from scratch just to do one thing. The insight:
+            <em
+              >what if instead of application-specific blockchains, there was a
+              general-purpose blockchain that anyone could build any application
+              on?</em
+            >
+          </p>
+
+          <p>
+            In November 2013, he wrote the whitepaper. He was 19. He took it to
+            Bitcoin developers, who told him it wasn't necessary — use Bitcoin's
+            scripting language. (Bitcoin's script is deliberately not
+            Turing-complete: it can express conditions for spending coins, but
+            it cannot run arbitrary programs.) He decided to build it
+            independently.
+          </p>
+
+          <p>
+            <strong>Gavin Wood</strong> wrote the technical specification — the
+            Yellow Paper — and invented Solidity, the language you'll start
+            writing in Day 3. <strong>Charles Hoskinson</strong> handled early
+            operations before a falling-out; he went on to found Cardano.
+            <strong>Joseph Lubin</strong> co-founded the Ethereum Foundation and
+            later ConsenSys, the company now behind MetaMask.
+          </p>
+
+          <p>Key moments in Ethereum's history since then:</p>
+
+          <ul class="content-list">
+            <li>
+              <strong>January 2014</strong> — Ethereum announced publicly at the
+              Bitcoin conference in Miami
+            </li>
+            <li>
+              <strong>July–August 2014</strong> — The crowdsale raises 31,591
+              BTC (~$18 million at the time) — one of the first major token
+              sales ever conducted
+            </li>
+            <li>
+              <strong>July 30, 2015</strong> — Mainnet launches. The team named
+              it "Frontier" — deliberately framing it as a frontier, not a
+              finished product.
+            </li>
+            <li>
+              <strong>June 2016</strong> — The DAO hack: ~$60 million in ETH
+              stolen from a popular smart contract via a re-entrancy
+              vulnerability. The community controversially hard-forked to
+              reverse the theft, splitting the chain into
+              <strong>Ethereum (ETH)</strong> and
+              <strong>Ethereum Classic (ETC)</strong> — the unforked chain that
+              refused the reversal on the grounds that "code is law."
+            </li>
+            <li>
+              <strong>2020</strong> — DeFi Summer: Uniswap, Compound, and Aave
+              collectively handle billions in daily volume on Ethereum smart
+              contracts. Decentralised Finance becomes real.
+            </li>
+            <li>
+              <strong>September 15, 2022</strong> — The Merge: Ethereum switches
+              from Proof of Work to Proof of Stake. Energy use drops 99.95%
+              overnight. One of the most complex live software migrations ever
+              executed on infrastructure holding hundreds of billions of
+              dollars. (Task 3 covers this in detail.)
+            </li>
+            <li>
+              <strong>2024 onwards</strong> — Layer 2 networks (Arbitrum,
+              Optimism, Base, zkSync) scale Ethereum's throughput massively. The
+              ecosystem is now a multi-chain world built on Ethereum's security.
+            </li>
+          </ul>
+
+          <h3>Smart contracts</h3>
+
+          <p>
+            The term predates Ethereum by over two decades. A computer scientist
+            named <strong>Nick Szabo</strong> described the concept in 1994: a
+            contract whose terms are directly written as code, executing
+            automatically when conditions are met, without needing a lawyer,
+            court, or any other enforcement mechanism.
+          </p>
+
+          <p>
+            His classic example was a vending machine. You insert the correct
+            amount of money; the machine releases a product. No human needs to
+            verify the payment or hand you the item. The logic is built into the
+            machine. Trust is replaced by mechanism.
+          </p>
+
+          <p>
+            Szabo's idea was mostly theoretical for years — digital systems
+            couldn't guarantee that code would execute as written, because they
+            all ran on servers owned and controlled by someone. A database
+            administrator could alter the logic. A company could shut the system
+            down. The trust problem was just moved, not eliminated.
+          </p>
+
+          <p>
+            Ethereum solved this. A <strong>smart contract</strong> on Ethereum
+            is a program deployed to the blockchain. Once it's deployed, no one
+            can alter it — not the developer who wrote it, not Vitalik, not any
+            government. The code runs exactly as written, every time, on
+            thousands of nodes simultaneously. The execution is transparent and
+            verifiable by anyone.
+          </p>
+
+          <p>
+            In practice, smart contracts power most of what you'll interact with
+            in Web3: token standards, decentralised exchanges, lending
+            protocols, NFT marketplaces, stablecoins. All of it is running on
+            contract code that no one can unilaterally alter.
+          </p>
+
+          <h3>The EVM</h3>
+
+          <p>
+            When a smart contract is deployed to Ethereum, it gets compiled down
+            to <strong>bytecode</strong> — a low-level instruction set that runs
+            inside the <strong>Ethereum Virtual Machine</strong>, or EVM.
+          </p>
+
+          <p>
+            The EVM is not a physical machine. It's a specification — a precise
+            set of rules describing how code executes — and every Ethereum node
+            runs a software implementation of those rules. When a transaction
+            triggers a contract, every node executes the same bytecode
+            independently and arrives at the same result. Ten thousand computers
+            in fifty countries, all running the same code, all reaching the same
+            answer. If any of them produces a different result, the rest of the
+            network rejects it.
+          </p>
+
+          <p>
+            That's what "trustless execution" actually means in practice. Not
+            that the software is perfect or that no one can make mistakes — but
+            that no single party controls whether the code runs or what it does.
+            The outcome is enforced by consensus across thousands of independent
+            machines, not by any company's promise.
+          </p>
+
+          <p>
+            The EVM is <strong>Turing-complete</strong>, meaning it can run any
+            computable program given enough resources. Bitcoin's scripting
+            language deliberately is not — it can only express simple spending
+            conditions. That single design choice is what separates the two
+            chains in terms of what you can build on them.
+          </p>
+
+          <p>
+            One important consequence: Polygon, Arbitrum, Optimism, Base, and
+            most other major chains use the same EVM specification. A contract
+            written for Ethereum mainnet can usually be deployed on these chains
+            unchanged. Whatever you learn here applies across most of the Web3
+            ecosystem, not just Ethereum.
+          </p>
+
+          <h3>Two types of account</h3>
+
+          <p>
+            Ethereum has two distinct types of account, and understanding the
+            difference matters for everything that follows.
+          </p>
+
+          <dl class="definition-list">
+            <div class="def-row">
+              <dt>Externally Owned Account (EOA)</dt>
+              <dd>
+                Controlled by a private key. This is what you create when you
+                set up MetaMask. An EOA can hold ETH and tokens, send
+                transactions, and interact with contracts. It has no associated
+                code. The only way to initiate a transaction on Ethereum is
+                through an EOA — contracts cannot initiate transactions on their
+                own.
+              </dd>
+            </div>
+            <div class="def-row">
+              <dt>Contract Account</dt>
+              <dd>
+                Created by deploying a smart contract to the network. It has an
+                address, can hold ETH and tokens, and executes code when called.
+                It has no private key — it's controlled entirely by the logic
+                written into it at deployment. It cannot act independently; it
+                can only respond when an EOA (or another contract) sends it a
+                transaction.
+              </dd>
+            </div>
+          </dl>
+
+          <p>
+            Both types of account have a 42-character
+            <strong>address</strong> starting with <code>0x</code> — for
+            example, <code>0x71C7656EC7ab88b098defB751B7401B5f6d8976F</code>.
+            From an address alone, you can't tell whether it belongs to a person
+            or a contract. You'd need to query the network.
+          </p>
+
+          <h3>Transactions</h3>
+
+          <p>
+            Every state change on Ethereum happens through a transaction.
+            Sending ETH, calling a smart contract, deploying code — all of it is
+            a transaction. Each one contains the following fields:
+          </p>
+
+          <dl class="definition-list">
+            <div class="def-row">
+              <dt>From</dt>
+              <dd>
+                The sender's address. Always an EOA — contracts cannot initiate
+                transactions on their own.
+              </dd>
+            </div>
+            <div class="def-row">
+              <dt>To</dt>
+              <dd>
+                The recipient's address — another wallet, or a contract. If this
+                field is empty, you're deploying a new contract.
+              </dd>
+            </div>
+            <div class="def-row">
+              <dt>Value</dt>
+              <dd>
+                The amount of ETH to send, denominated in wei. Can be zero —
+                many contract calls send no ETH, they just invoke a function.
+              </dd>
+            </div>
+            <div class="def-row">
+              <dt>Data</dt>
+              <dd>
+                For contract calls, this encodes the function being called and
+                its arguments. For a plain ETH transfer, this field is empty.
+              </dd>
+            </div>
+            <div class="def-row">
+              <dt>Gas limit</dt>
+              <dd>
+                The maximum gas you're willing to spend. If the transaction uses
+                less, the remainder is refunded. If execution runs out of gas
+                mid-way, the transaction fails and state is rolled back — but
+                the gas already consumed is not refunded.
+              </dd>
+            </div>
+            <div class="def-row">
+              <dt>Nonce</dt>
+              <dd>
+                A counter: the number of transactions sent from this address so
+                far. Prevents replay attacks — a transaction reusing a nonce
+                you've already used is rejected by the network.
+              </dd>
+            </div>
+            <div class="def-row">
+              <dt>Signature</dt>
+              <dd>
+                Cryptographic proof that the sender owns the private key for the
+                From address. Without a valid signature, the transaction is
+                rejected. No one else can submit a transaction on your behalf.
+              </dd>
+            </div>
+          </dl>
+
+          <p>
+            You'll see every one of these fields when you inspect a transaction
+            on Etherscan. Task 2 walks through what they look like on a real
+            transaction.
+          </p>
+
+          <h3>Ether</h3>
+
+          <p>
+            <strong>Ether (ETH)</strong> is the native currency of the Ethereum
+            network. It serves two purposes: it's a transferable asset, and it's
+            what you pay to use the network's computational resources (called
+            gas — covered in Task 2).
+          </p>
+
+          <p>
+            ETH is denominated in very small units. The smallest unit is a
+            <strong>wei</strong>, named after <strong>Wei Dai</strong>, a
+            cryptographer who published a proposal for digital money called
+            b-money in 1998 — work that influenced Satoshi directly. One ETH is
+            10<sup>18</sup>
+            wei.
+          </p>
+
+          <dl class="definition-list">
+            <div class="def-row">
+              <dt>wei</dt>
+              <dd>The smallest unit. 1 ETH = 1,000,000,000,000,000,000 wei.</dd>
+            </div>
+            <div class="def-row">
+              <dt>gwei</dt>
+              <dd>
+                10<sup>9</sup> wei. This is the unit you'll see most often when
+                looking at gas prices. "Gas costs 15 gwei" means 15 × 10<sup
+                  >9</sup
+                >
+                wei per unit of gas.
+              </dd>
+            </div>
+            <div class="def-row">
+              <dt>ETH</dt>
+              <dd>
+                10<sup>18</sup> wei. What prices, portfolio values, and most
+                discussions are denominated in.
+              </dd>
+            </div>
+          </dl>
+
+          <p>
+            Unlike Bitcoin, Ethereum has no hard supply cap. New ETH is issued
+            as validator rewards. However, since August 2021 (EIP-1559), a
+            portion of every transaction fee is permanently burned — destroyed
+            forever. During periods of high network activity, the burn rate
+            exceeds issuance, making ETH deflationary. Whether that makes it a
+            better or worse monetary asset than Bitcoin is a debate that has
+            filled entire conferences.
+          </p>
+
+          <h3>dApps and the Web3 stack</h3>
+
+          <p>
+            A <strong>dApp</strong> — decentralised application — is an
+            application whose core logic runs on a smart contract rather than a
+            private company's server.
+          </p>
+
+          <pre><code>Traditional app:   User → Browser → Company Server → Company Database
+
+dApp:              User → Browser → ethers.js → MetaMask → Smart Contract</code></pre>
+
+          <p>
+            The key difference is the backend. A smart contract on a public
+            blockchain is readable by anyone, verifiable by anyone, and — once
+            deployed — modifiable by no one. No company can shut it down, change
+            the rules, or deny your access. You're interacting directly with
+            code, not with a company's promise to behave honestly.
+          </p>
+
+          <p>Some real dApps running entirely on Ethereum smart contracts:</p>
+
+          <ul class="content-list">
+            <li>
+              <strong>Uniswap</strong> — swap any ERC-20 token for any other
+              with no account, no KYC, no company intermediary. Processes
+              billions in daily volume. No employees handle the trades.
+            </li>
+            <li>
+              <strong>Aave</strong> — lend and borrow crypto. Interest rates set
+              algorithmically by supply and demand on-chain.
+            </li>
+            <li>
+              <strong>ENS (Ethereum Name Service)</strong> — buy a
+              <code>.eth</code> domain (e.g. <code>vitalik.eth</code>) that maps
+              to your Ethereum address, managed entirely by a contract.
+            </li>
+            <li>
+              <strong>MakerDAO</strong> — issues DAI, a stablecoin pegged to USD
+              via smart contract collateral — no company's bank account
+              involved.
+            </li>
+            <li>
+              <strong>OpenSea</strong> — an NFT marketplace where the smart
+              contract handles escrow and ownership transfer.
+            </li>
+          </ul>
+
+          <h3>ERC standards</h3>
+
+          <p>
+            Because anyone can deploy tokens on Ethereum, there needs to be an
+            agreed-upon interface so wallets, exchanges, and dApps can work with
+            any token without writing custom code for each one. That's what ERC
+            standards are — <strong>Ethereum Request for Comments</strong>, the
+            process by which interface standards get defined and adopted across
+            the ecosystem.
+          </p>
+
+          <dl class="definition-list">
+            <div class="def-row">
+              <dt>ERC-20</dt>
+              <dd>
+                Fungible tokens — every unit is identical, like coins. USDC,
+                DAI, LINK, and UNI are all ERC-20 tokens. Standard functions
+                include <code>transfer()</code>, <code>balanceOf()</code>, and
+                <code>approve()</code>. If a wallet supports ERC-20, it can
+                display any ERC-20 token without custom integration.
+              </dd>
+            </div>
+            <div class="def-row">
+              <dt>ERC-721</dt>
+              <dd>
+                Non-fungible tokens — each token has a unique ID and is not
+                interchangeable one-for-one with another. CryptoPunks and Bored
+                Apes are ERC-721. Used for digital art, collectibles, and
+                in-game items where uniqueness matters.
+              </dd>
+            </div>
+            <div class="def-row">
+              <dt>ERC-1155</dt>
+              <dd>
+                A multi-token standard supporting both fungible and non-fungible
+                tokens in a single contract. Common in gaming — interchangeable
+                in-game currency and unique legendary items can coexist in the
+                same contract, reducing deployment overhead.
+              </dd>
+            </div>
+          </dl>
+
+          <p>
+            You won't write these from scratch. Days 5 and 6 use OpenZeppelin's
+            audited implementations. But understanding what they are and why
+            they exist matters before you start using them.
+          </p>
+
+          <div class="resource-card watch-card">
+            <span class="resource-label">Watch</span>
+            <a
+              href="https://www.youtube.com/watch?v=jxLkbJozKbY"
+              target="_blank"
+              rel="noopener"
+              >What is Ethereum? A Beginner's Explanation</a
+            >
+            <p>
+              A clear 7-minute overview of Ethereum's purpose and architecture.
+              Watch after reading — the whitepaper-level concepts map directly
+              onto what you've just read.
+            </p>
+          </div>
+        </article>
+
+        <!-- ═══════════════════════════════════════════════════════════ TASK 2 -->
+        <article id="task2" class="task-pane">
+          <p>
+            Before you can deploy a contract or send a transaction, two things
+            need to be clear: why every operation on Ethereum costs something,
+            and what a wallet actually is. Both are misunderstood in ways that
+            cause real problems for people.
+          </p>
+
+          <h3>Gas</h3>
+
+          <p>
+            Consider what it actually means to run a program on a network of ten
+            thousand independent computers. Every time someone calls a function
+            on a smart contract, that function executes on every node
+            simultaneously. Add two numbers, read from storage, update a
+            balance, call another contract — each operation burns real CPU time,
+            replicated across the entire network. Something has to price that.
+          </p>
+
+          <p>
+            That something is <strong>gas</strong>. Gas is a unit of computation
+            — not ETH itself, but a measure of how much work a given operation
+            requires from the EVM. A simple ETH transfer costs exactly 21,000
+            gas. A more complex contract interaction — checking balances,
+            updating state, emitting events — might cost 200,000. Writing to
+            permanent on-chain storage, the most expensive EVM operation, costs
+            20,000 gas per 32-byte slot.
+          </p>
+
+          <p>The total transaction fee you pay is:</p>
+
+          <pre><code>fee = gas used × gas price (in gwei)
+
+Example:
+  Gas used:    21,000  (a simple ETH transfer)
+  Gas price:   15 gwei
+  Total fee:   21,000 × 15 gwei = 315,000 gwei = 0.000315 ETH</code></pre>
+
+          <p>To build intuition for what different operations actually cost:</p>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Operation</th>
+                  <th>Gas used</th>
+                  <th>At 20 gwei</th>
+                  <th>In ETH</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Simple ETH transfer</td>
+                  <td>21,000</td>
+                  <td>420,000 gwei</td>
+                  <td>0.00042 ETH</td>
+                </tr>
+                <tr>
+                  <td>ERC-20 token transfer</td>
+                  <td>~65,000</td>
+                  <td>1,300,000 gwei</td>
+                  <td>0.0013 ETH</td>
+                </tr>
+                <tr>
+                  <td>Contract interaction</td>
+                  <td>~100,000–200,000</td>
+                  <td>2–4M gwei</td>
+                  <td>0.002–0.004 ETH</td>
+                </tr>
+                <tr>
+                  <td>Complex DeFi swap</td>
+                  <td>~300,000</td>
+                  <td>6,000,000 gwei</td>
+                  <td>0.006 ETH</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <p>
+            Gas also solves a problem that comes directly from the EVM being
+            Turing-complete. Because you can write any program, you can
+            accidentally — or deliberately — write an infinite loop. If
+            computation were free, one transaction could spin forever and lock
+            up the entire network. Gas is how the protocol enforces a ceiling:
+            every transaction includes a <strong>gas limit</strong>, the maximum
+            it's allowed to consume. Hit that limit before execution finishes
+            and the transaction fails, all state changes are rolled back, and
+            the gas spent up to that point is still charged. You paid for the
+            work the network did, even though the result was failure.
+          </p>
+
+          <h3>How fees are priced — EIP-1559</h3>
+
+          <p>
+            Before August 2021, gas pricing was a blind auction. You guessed
+            what other people were paying, added a margin, and hoped your
+            transaction got in. During periods of congestion, users routinely
+            overpaid by 10x because they were afraid of guessing too low and
+            waiting hours for confirmation. It was a terrible user experience,
+            and the unpredictability made it hard to build anything that
+            required reliable cost estimates.
+          </p>
+
+          <p>
+            <strong>EIP-1559</strong>, implemented in August 2021, replaced the
+            auction. Every block now has a <strong>base fee</strong> — a minimum
+            price per gas unit — set algorithmically by the protocol itself, not
+            by user bids. You pay the base fee plus an optional
+            <strong>priority fee</strong> (tip) to the validator. The base fee
+            is <em>burned</em> — sent to a zero address and permanently removed
+            from supply. No one collects it.
+          </p>
+
+          <dl class="definition-list">
+            <div class="def-row">
+              <dt>Base fee</dt>
+              <dd>
+                Set by the protocol. Rises when blocks are more than 50% full,
+                falls when they're less than 50% full. This makes fee estimation
+                far more predictable than the old auction model.
+              </dd>
+            </div>
+            <div class="def-row">
+              <dt>Priority fee (tip)</dt>
+              <dd>
+                Paid to the validator. Incentivises validators to include your
+                transaction rather than a competing one with the same base fee.
+                During congestion, a higher tip gets you in sooner.
+              </dd>
+            </div>
+            <div class="def-row">
+              <dt>Max fee</dt>
+              <dd>
+                The maximum per-gas price you're willing to pay in total. If
+                base fee + priority fee is less than your max fee, you're
+                refunded the difference. This lets you set a ceiling without
+                overpaying.
+              </dd>
+            </div>
+          </dl>
+
+          <p>
+            Because the base fee adjusts automatically, fees spike during
+            congestion (everyone competing for the same block space) and drop
+            during quiet periods. Weekdays during US and European market hours
+            tend to be expensive. Weekends and late-night UTC are cheaper. For
+            test deployments, this doesn't matter — you'll be on a testnet with
+            free ETH. For production, it does.
+          </p>
+
+          <div class="resource-card try-card">
+            <span class="resource-label">Try it</span>
+            <a
+              href="https://etherscan.io/gastracker"
+              target="_blank"
+              rel="noopener"
+              >etherscan.io/gastracker</a
+            >
+            <p>
+              Look at the current gas price in gwei. Check what a "standard"
+              transfer costs in USD. Then use the formula above to verify:
+              21,000 gas × current base fee in gwei = fee in gwei → convert to
+              ETH → convert to USD. The numbers should match the tracker's
+              estimate.
+            </p>
+            <p>
+              Come back to this page at different times of day over the next few
+              days and notice how much the base fee fluctuates. The range is
+              typically 5–100 gwei depending on network load.
+            </p>
+          </div>
+
+          <h3>Reading a transaction on Etherscan</h3>
+
+          <p>
+            Every transaction on Ethereum is public and permanently recorded.
+            Etherscan is a block explorer — a website that reads the chain and
+            presents it in a readable form. You'll use it throughout the course
+            to inspect deployments, debug failures, and verify that your
+            transactions did what you intended.
+          </p>
+
+          <p>
+            Go to
+            <a
+              href="https://sepolia.etherscan.io"
+              target="_blank"
+              rel="noopener"
+              >sepolia.etherscan.io</a
+            >
+            and click any transaction hash on the homepage. Here's what each
+            field means:
+          </p>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Field</th>
+                  <th>What it means</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Transaction Hash</td>
+                  <td>
+                    The unique identifier for this transaction — a hash of its
+                    contents
+                  </td>
+                </tr>
+                <tr>
+                  <td>Status</td>
+                  <td>
+                    Success or Failed. A failed transaction still costs gas.
+                  </td>
+                </tr>
+                <tr>
+                  <td>Block</td>
+                  <td>Which block this transaction was included in</td>
+                </tr>
+                <tr>
+                  <td>From / To</td>
+                  <td>Sender address (EOA) and recipient (EOA or contract)</td>
+                </tr>
+                <tr>
+                  <td>Value</td>
+                  <td>ETH transferred. Zero for pure contract calls.</td>
+                </tr>
+                <tr>
+                  <td>Transaction Fee</td>
+                  <td>Gas used × gas price — the actual amount paid in ETH</td>
+                </tr>
+                <tr>
+                  <td>Gas Limit / Gas Used</td>
+                  <td>
+                    What the sender was willing to spend vs. what was actually
+                    consumed
+                  </td>
+                </tr>
+                <tr>
+                  <td>Gas Price</td>
+                  <td>Price per gas unit at time of inclusion, in gwei</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <p>
+            Find a transaction that called a contract — the "To" field will show
+            a contract address rather than a wallet. Click through to the
+            contract, then open the <strong>Contract</strong> tab. On verified
+            contracts, you'll see the Solidity source code. Skim it even if you
+            can't read it yet — function names and parameter types are readable
+            before you know the language. Click the
+            <strong>Read Contract</strong> tab to call view functions directly
+            from the browser, with no transaction and no gas fee.
+          </p>
+
+          <div class="resource-card demo-card">
+            <span class="resource-label">Explore</span>
+            <a
+              href="https://etherscan.io/block/0"
+              target="_blank"
+              rel="noopener"
+              >etherscan.io/block/0</a
+            >
+            <p>
+              Ethereum's Genesis Block — mined July 30, 2015. It contains 8,893
+              transactions: all the ICO participants receiving their
+              pre-allocated ETH. Compare this to Bitcoin's Genesis Block, which
+              contained exactly one transaction (the mining reward to Satoshi).
+              The difference reflects how each network launched.
+            </p>
+            <p>
+              Bonus: Vitalik's address is publicly known —
+              <code>0xab5801a7d398351b8be11c439e05c5b3259aec9b</code>. Look it
+              up on Etherscan and scroll through his earliest transactions.
+            </p>
+          </div>
+
+          <h3>What a wallet is</h3>
+
+          <p>
+            The most common misconception in crypto: a wallet stores your coins.
+            It doesn't. Your coins — your ETH, your tokens — exist as entries on
+            the blockchain. They don't live in any app. They can't be moved to
+            your wallet or out of it.
+          </p>
+
+          <p>
+            What a wallet stores is a <strong>private key</strong>: a randomly
+            generated 256-bit number. That's all. The private key is what gives
+            you the ability to sign transactions from your address. Whoever
+            holds the private key controls the account. The wallet application
+            is just software for managing and using that key.
+          </p>
+
+          <p>Here's how the cryptography works:</p>
+
+          <pre><code>Private key  →  (elliptic curve multiplication)  →  Public key
+Public key   →  (Keccak-256 hash, last 20 bytes)   →  Address (0x...)</code></pre>
+
+          <p>
+            The derivation only goes one way. Given an address, you cannot
+            recover the public key. Given a public key, you cannot recover the
+            private key. Anyone can send ETH to your address — it's public. Only
+            you can spend from it — because only you have the private key that
+            proves ownership when signing a transaction.
+          </p>
+
+          <p>
+            Lose the private key, and you lose access to the account.
+            Permanently. There is no customer support. There is no "forgot
+            password." The blockchain doesn't know who you are — it only
+            verifies signatures. Roughly 20% of all Bitcoin in existence is
+            estimated to be permanently inaccessible due to lost keys.
+          </p>
+
+          <h3>Seed phrases</h3>
+
+          <p>
+            A 256-bit private key is a number like
+            <code>0x4c0883a69102937d6231471b5dbb6e538eba2ef399a9a9bed4...</code
+            >. No one can memorise that. The <strong>seed phrase</strong> (also
+            called a mnemonic or recovery phrase) is a human-readable encoding
+            of the same information.
+          </p>
+
+          <p>
+            Under the <strong>BIP-39</strong> standard, a 128-bit seed becomes
+            12 words; a 256-bit seed becomes 24 words. Each word maps to an
+            entry in a fixed 2048-word list. The words carry the full entropy of
+            the original key — writing them down in order is exactly equivalent
+            to writing down the private key itself.
+          </p>
+
+          <blockquote>
+            "witch collapse practice feed shame open despair creek road again
+            ice least" — a valid BIP-39 seed phrase (do not use this one)
+          </blockquote>
+
+          <p>What this means in practice:</p>
+
+          <ul class="content-list">
+            <li>
+              Anyone who reads your seed phrase has full access to your account.
+              It doesn't matter that they don't have your phone or your MetaMask
+              password. The words are the key.
+            </li>
+            <li>
+              Never enter your seed phrase into any website or app other than
+              your wallet during initial setup. Any site asking for it is
+              attempting to steal your funds.
+            </li>
+            <li>
+              Write it on paper and store it somewhere physically secure. A
+              screenshot is a liability — phones get stolen, cloud backups get
+              breached.
+            </li>
+            <li>
+              One seed phrase can generate many accounts (addresses), each with
+              its own private key. MetaMask uses this — "Account 1", "Account 2"
+              are all derived from the same seed via a deterministic path
+              (BIP-44).
+            </li>
+          </ul>
+
+          <h3>Setting up MetaMask</h3>
+
+          <p>
+            You've read about wallets in theory. Now you need one.
+            <strong>MetaMask</strong> is a browser extension that stores your
+            private key, manages your accounts, and connects to dApps so they
+            can request transaction signatures from you. It's not a particularly
+            elegant piece of software — there are better-designed alternatives —
+            but it's what the ecosystem standardised on. Every tutorial, every
+            protocol's documentation, every course on Web3 assumes you have
+            MetaMask. Install it.
+          </p>
+
+          <p>Get it set up before Day 3:</p>
+
+          <ul class="content-list">
+            <li>
+              Go to <strong>metamask.io</strong> and install the extension for
+              your browser (Chrome, Brave, or Firefox). Only install from the
+              official site — there are many fake MetaMask extensions designed
+              to steal keys.
+            </li>
+            <li>
+              Select <strong>"Create a new wallet"</strong>. Set a local
+              password (this only protects the extension on your device — it's
+              not the same as your seed phrase).
+            </li>
+            <li>
+              Write down your <strong>12-word seed phrase</strong> on paper.
+              MetaMask will ask you to confirm it in order. Do not skip this
+              step. Store it somewhere you won't lose it.
+            </li>
+            <li>
+              Once set up, add the <strong>Sepolia testnet</strong>: in
+              MetaMask, go to the network dropdown → "Add a network" → search
+              for Sepolia. This is the test network you'll deploy contracts on.
+              Everything on Sepolia is fake ETH with no monetary value.
+            </li>
+            <li>
+              Get test ETH from the faucet linked below. Paste your MetaMask
+              address, request funds, and within a minute you should see test
+              ETH appear in your wallet.
+            </li>
+          </ul>
+
+          <div class="resource-card explore-card">
+            <span class="resource-label">Install</span>
+            <a
+              href="https://metamask.io/download/"
+              target="_blank"
+              rel="noopener"
+              >metamask.io/download</a
+            >
+            <p>
+              Install MetaMask from the official site only. After setup, copy
+              your wallet address (the 0x... string at the top of the extension)
+              — you'll need it for the faucet.
+            </p>
+          </div>
+
+          <div class="resource-card try-card">
+            <span class="resource-label">Faucet</span>
+            <a
+              href="https://cloud.google.com/application/web3/faucet/ethereum/sepolia"
+              target="_blank"
+              rel="noopener"
+              >Sepolia Faucet — Google Cloud</a
+            >
+            <p>
+              Paste your MetaMask address and request 0.05 Sepolia ETH. This is
+              more than enough to deploy several contracts and run transactions
+              during the course. If this faucet is rate-limiting you, a backup
+              option is
+              <a href="https://sepoliafaucet.com" target="_blank" rel="noopener"
+                >sepoliafaucet.com</a
+              >.
+            </p>
+          </div>
+
+          <div class="resource-card demo-card">
+            <span class="resource-label">Explore</span>
+            <a
+              href="https://sepolia.etherscan.io"
+              target="_blank"
+              rel="noopener"
+              >sepolia.etherscan.io</a
+            >
+            <p>
+              Once you've received test ETH, search for your address on Sepolia
+              Etherscan. You'll see the incoming faucet transaction — the same
+              view you'll use to inspect contract deployments and transactions
+              throughout the course. Note the gas used, the fee paid (in test
+              ETH), and the block it was included in.
+            </p>
+          </div>
+        </article>
+
+        <!-- ═══════════════════════════════════════════════════════════ TASK 3 -->
+        <article id="task3" class="task-pane">
+          <p>
+            Every blockchain faces the same fundamental question: when thousands
+            of nodes each receive a batch of transactions, how do they agree on
+            which are valid and in what order? No central authority decides. The
+            nodes don't trust each other. And yet the network must converge on a
+            single agreed-upon history.
+          </p>
+
+          <p>
+            The mechanism by which nodes reach this agreement is called
+            <strong>consensus</strong>. Bitcoin and Ethereum have used different
+            approaches to it, and understanding the difference matters —
+            especially for Ethereum, which switched mechanisms in September
+            2022.
+          </p>
+
+          <h3>Proof of Work</h3>
+
+          <p>
+            Bitcoin's answer to consensus is computational competition. When
+            it's time to add the next block, every miner on the network races to
+            solve the same puzzle: find a number — called a
+            <strong>nonce</strong> — such that when you combine it with the
+            block's contents and hash everything together, the result starts
+            with a specific number of zeros.
+          </p>
+
+          <pre><code>Hash(block data + nonce) must start with 0000000000...</code></pre>
+
+          <p>
+            There's no clever shortcut. The only approach is brute force: try
+            nonces one by one — 1, 2, 3, ..., 3,847,291 — billions of attempts
+            per second on modern ASIC mining hardware — until one produces a
+            valid hash. The number of required leading zeros is the
+            <strong>difficulty target</strong>, which the network adjusts every
+            2,016 blocks (~2 weeks) to keep average block time around 10 minutes
+            regardless of how much total mining power is on the network.
+          </p>
+
+          <p>
+            The first miner to find a valid nonce broadcasts the block to the
+            network. Other nodes verify it in milliseconds — checking that
+            <code>Hash(block + nonce)</code> starts with enough zeros is a
+            single computation. This asymmetry is the core of Proof of Work:
+            finding the solution is expensive; verifying it is essentially free.
+          </p>
+
+          <p>
+            The winning miner earns a <strong>block reward</strong> — newly
+            minted Bitcoin. This is how new BTC enters circulation. Bitcoin's
+            total supply is hardcoded at <strong>21 million BTC</strong>. The
+            reward halves every 210,000 blocks (~4 years): 50 BTC at launch,
+            then 25, 12.5, 6.25, 3.125 (current, after the April 2024 halving).
+            When all 21 million are mined — around 2140 — miners will earn
+            transaction fees only.
+          </p>
+
+          <p>
+            <strong>Why this provides security:</strong> Rewriting blockchain
+            history would require redoing all the computational work for every
+            block you want to change — and finishing before the honest network
+            adds more blocks on top. To successfully do this, you'd need to
+            control more than half the network's total computing power — hence
+            the <strong>51% attack</strong>. For Bitcoin, the combined hash rate
+            is currently in the hundreds of exahashes per second. Acquiring 51%
+            of that would cost more money than most nations' GDP. For smaller
+            chains with fewer miners, the same attack might cost a few hundred
+            dollars per hour.
+          </p>
+
+          <p>
+            <strong>The energy problem:</strong> Proof of Work is intentionally
+            wasteful. The computational difficulty <em>is</em> the security —
+            the irreversibility of burned electricity is what makes the record
+            trustworthy. Bitcoin's network currently consumes roughly as much
+            electricity as a medium-sized country. Whether that tradeoff is
+            acceptable is one of the more genuine debates in the space. It is
+            the primary reason Ethereum moved away from PoW.
+          </p>
+
+          <h3>Proof of Stake</h3>
+
+          <p>
+            Ethereum's answer replaces computational competition with
+            collateral. Instead of burning electricity to earn the right to
+            propose a block, validators lock up <strong>32 ETH</strong> as a
+            deposit. This is called <strong>staking</strong>.
+          </p>
+
+          <p>How block production works under Ethereum's Proof of Stake:</p>
+
+          <ul class="content-list">
+            <li>
+              Every 12 seconds is a <strong>slot</strong>. Each slot, one
+              validator is randomly selected — weighted by stake, using a
+              verifiable random function built from validator contributions — to
+              <strong>propose</strong> the next block.
+            </li>
+            <li>
+              A committee of other validators — hundreds of them —
+              <strong>attests</strong> to the validity of the proposed block. An
+              attestation is a vote: "I've verified this block and I agree it
+              should be added."
+            </li>
+            <li>
+              When enough attestations accumulate (a supermajority), the block
+              is added. The proposer and attesters earn small rewards in ETH.
+            </li>
+            <li>
+              After two rounds of voting (Casper FFG), a block achieves
+              <strong>finality</strong> — it would be economically catastrophic
+              to reverse it. Ethereum's finality takes about 12–15 minutes,
+              compared to Bitcoin's probabilistic deepening over hours.
+            </li>
+          </ul>
+
+          <p>
+            <strong>Slashing:</strong> If a validator tries to cheat — signing
+            two different blocks for the same slot, or submitting votes that
+            contradict their previous ones — the protocol detects it. The
+            validator's staked ETH is <strong>slashed</strong>: a portion (up to
+            all 32 ETH) is permanently destroyed by the protocol, and the
+            validator is ejected from the network. The cost of cheating isn't
+            wasted electricity — it's the direct financial destruction of the
+            asset you staked.
+          </p>
+
+          <p>
+            This changes the security model. Under PoW, an attacker buys
+            hardware and burns electricity. Under PoS, an attacker must first
+            acquire an enormous amount of ETH (currently requiring tens of
+            billions of dollars), stake it, and then risk losing it all to
+            slashing if caught. The attack would also likely crash the price of
+            the ETH being used to fund it. Attacking Ethereum PoS is
+            economically self-destructive in a way that attacking a PoW chain
+            isn't.
+          </p>
+
+          <h3>Side-by-side comparison</h3>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th></th>
+                  <th>Proof of Work</th>
+                  <th>Proof of Stake</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Who proposes blocks?</td>
+                  <td>Whoever solves the puzzle first (miners)</td>
+                  <td>Randomly selected validator (weighted by stake)</td>
+                </tr>
+                <tr>
+                  <td>How to participate</td>
+                  <td>Buy ASIC mining hardware</td>
+                  <td>Lock up 32 ETH as collateral</td>
+                </tr>
+                <tr>
+                  <td>Security mechanism</td>
+                  <td>
+                    Cost of electricity — irreversible physical expenditure
+                  </td>
+                  <td>
+                    Cost of staked ETH — slashing destroys it on detection
+                  </td>
+                </tr>
+                <tr>
+                  <td>Punishment for cheating</td>
+                  <td>Wasted electricity + lost block reward</td>
+                  <td>Staked ETH slashed (destroyed by protocol)</td>
+                </tr>
+                <tr>
+                  <td>Energy use</td>
+                  <td>
+                    Extremely high — Bitcoin ≈ medium-sized country's
+                    consumption
+                  </td>
+                  <td>~99.95% less than PoW</td>
+                </tr>
+                <tr>
+                  <td>Block time</td>
+                  <td>~10 min (Bitcoin) — probabilistic</td>
+                  <td>12 seconds (Ethereum) — fixed slots</td>
+                </tr>
+                <tr>
+                  <td>Finality</td>
+                  <td>Probabilistic — deeper blocks = safer</td>
+                  <td>Economic finality in ~12–15 min</td>
+                </tr>
+                <tr>
+                  <td>Used by</td>
+                  <td>Bitcoin (still PoW)</td>
+                  <td>Ethereum (since September 2022)</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3>The Merge</h3>
+
+          <p>
+            On September 15, 2022, Ethereum executed one of the most technically
+            audacious upgrades in software history. It switched a live network —
+            holding hundreds of billions of dollars in assets, running thousands
+            of dApps, processing millions of transactions — from one consensus
+            mechanism to an entirely different one, with no downtime.
+          </p>
+
+          <p>
+            The transition was called <strong>The Merge</strong> because it
+            merged two previously separate chains: the original Ethereum
+            proof-of-work chain (handling all transaction execution) and the
+            Beacon Chain — a parallel proof-of-stake chain that had been running
+            since December 2020 as a live test of the validator set, without
+            processing transactions. When The Merge happened, the execution
+            layer detached from proof-of-work and attached to the Beacon Chain's
+            consensus.
+          </p>
+
+          <p>
+            Block <strong>15,537,393</strong> was the last Proof of Work block,
+            mined in the traditional way. Block <strong>15,537,394</strong> was
+            the first Proof of Stake block, proposed by a validator. The
+            transition happened at a pre-set terminal total difficulty — a
+            cumulative hash value that the PoW chain was scheduled to hit,
+            triggering the switch. The handoff was seamless.
+          </p>
+
+          <p>
+            Energy consumption dropped 99.95% overnight. Ethereum went from
+            consuming as much electricity as a mid-sized country to consuming
+            roughly as much as a large website.
+          </p>
+
+          <h3>Is PoS as secure as PoW?</h3>
+
+          <p>
+            Genuinely debated. Both arguments have merit and it's worth
+            understanding each.
+          </p>
+
+          <p>
+            <strong>Bitcoin's camp argues:</strong> PoW's security is grounded
+            in physics. When you mine a block, you burn real electricity that
+            cannot be reclaimed. The cost is irreversible and external to the
+            system. PoS security is denominated in ETH — a digital asset whose
+            price fluctuates. Theoretical "nothing-at-stake" attacks — where
+            validators vote on multiple chain branches because it costs them
+            nothing — were a concern in early PoS designs.
+          </p>
+
+          <p>
+            <strong>Ethereum's camp argues:</strong> Slashing eliminates the
+            "nothing at stake" problem — validators have enormous skin in the
+            game. An attack on Ethereum PoS requires acquiring enough ETH to
+            control a third of the validator set (roughly $30–50 billion at
+            current prices), then risking that ETH being slashed on detection.
+            The attacker destroys their own investment in the process.
+          </p>
+
+          <p>
+            Both systems are considered secure at their current scales. Whether
+            the physical grounding of PoW is categorically superior to PoS's
+            financial deterrence is a question that remains unresolved — and one
+            you'll encounter in every serious discussion about blockchain
+            architecture.
+          </p>
+
+          <div class="resource-card watch-card">
+            <span class="resource-label">Watch</span>
+            <a
+              href="https://www.youtube.com/watch?v=EGL_8VU4p2M"
+              target="_blank"
+              rel="noopener"
+              >How Does Ethereum Work? (Proof of Stake)</a
+            >
+            <p>
+              A walkthrough of how Ethereum's validator network works — slots,
+              epochs, attestations, and finality. Pairs directly with the
+              sections above.
+            </p>
+          </div>
+
+          <div class="resource-card explore-card">
+            <span class="resource-label">Explore</span>
+            <a
+              href="https://etherscan.io/block/15537394"
+              target="_blank"
+              rel="noopener"
+              >etherscan.io/block/15537394</a
+            >
+            <p>
+              The first Proof of Stake block on Ethereum mainnet. Look at the
+              "Proposed by" field — a validator address, not a miner. Then
+              compare it to block
+              <a
+                href="https://etherscan.io/block/15537393"
+                target="_blank"
+                rel="noopener"
+                >15,537,393</a
+              >
+              — the last PoW block — where the field reads "Mined by" instead.
+            </p>
+          </div>
+        </article>
+      </div>
+
+      <div class="reader-footer-nav">
+        <button class="nav-btn" id="prevTaskBtn" style="visibility: hidden">
+          &larr; Previous
+        </button>
+        <button class="nav-btn" id="nextTaskBtn">Next &rarr;</button>
+      </div>
+    </div>
+
+    <footer>
+      <div class="social-icons">
+        <a href="https://www.instagram.com/fec_iitg/" target="_blank"
+          ><i class="fab fa-instagram"></i
+        ></a>
+        <a
+          href="https://www.linkedin.com/company/finance-and-economics-club-iitg/"
+          target="_blank"
+          ><i class="fab fa-linkedin"></i
+        ></a>
+        <a href="https://x.com/fec_iitg" target="_blank"
+          ><i class="fab fa-twitter"></i
+        ></a>
+        <a
+          href="https://www.youtube.com/@financeandeconomicsclubiit1029"
+          target="_blank"
+          ><i class="fab fa-youtube"></i
+        ></a>
+        <a href="https://www.facebook.com/financeclubiitg/" target="_blank"
+          ><i class="fab fa-facebook"></i
+        ></a>
+        <a
+          href="https://chat.whatsapp.com/EUfRkvIR5DPALPlOOrjKJf?mode=gi_t"
+          target="_blank"
+          rel="noopener"
+          ><i class="fab fa-whatsapp"></i
+        ></a>
+      </div>
+      <p>Finance and Economics Club,</p>
+      <p>IIT Guwahati</p>
+    </footer>
+
+    <script>
+      const tabs = document.querySelectorAll(".task-tab");
+      const panes = document.querySelectorAll(".task-pane");
+      const prevBtn = document.getElementById("prevTaskBtn");
+      const nextBtn = document.getElementById("nextTaskBtn");
+      let current = 0;
+
+      function showTask(index) {
+        tabs.forEach((t, i) => t.classList.toggle("active", i === index));
+        panes.forEach((p, i) => p.classList.toggle("active", i === index));
+        current = index;
+        prevBtn.style.visibility = current === 0 ? "hidden" : "visible";
+        nextBtn.style.visibility =
+          current === tabs.length - 1 ? "hidden" : "visible";
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+
+      tabs.forEach((tab, i) =>
+        tab.addEventListener("click", () => showTask(i)),
+      );
+      prevBtn.addEventListener("click", () => showTask(current - 1));
+      nextBtn.addEventListener("click", () => showTask(current + 1));
+
+      if (window.location.hash === "#task2") showTask(1);
+      if (window.location.hash === "#task3") showTask(2);
+
+      window.addEventListener("scroll", () => {
+        const el = document.documentElement;
+        const pct = (el.scrollTop / (el.scrollHeight - el.clientHeight)) * 100;
+        document.getElementById("readingProgress").style.width =
+          Math.min(pct, 100) + "%";
+      });
+    </script>
+  </body>
+</html>
