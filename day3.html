@@ -1,0 +1,956 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Day 3 — Solidity Basics | BlockBase</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Karantina&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Nico+Moji&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="reading-progress" id="readingProgress"></div>
+    <nav class="navbar">
+      <div class="logo-container">
+        <img src="blockbase.png" alt="Blockbase" />
+        <img src="fec.png" alt="FEC IITG" />
+      </div>
+      <ul class="nav-links">
+        <li><a href="index.html#about">About</a></li>
+        <li><a href="index.html#curriculum">Curriculum</a></li>
+        <li>
+          <a
+            href="https://chat.whatsapp.com/EUfRkvIR5DPALPlOOrjKJf?mode=gi_t"
+            class="nav-whatsapp"
+            target="_blank"
+            rel="noopener"
+            ><i class="fab fa-whatsapp"></i> Join Blockbase WhatsApp</a
+          >
+        </li>
+      </ul>
+    </nav>
+
+    <div class="reader-wrap">
+      <div class="reader-header">
+        <a href="index.html#curriculum" class="back-link"
+          ><i class="fas fa-arrow-left"></i> Back to Curriculum</a
+        >
+        <div>
+          <span class="day-pill">Day 3</span>
+          <h1 class="day-header-title">Solidity Basics</h1>
+        </div>
+      </div>
+
+      <div class="task-tabs">
+        <button class="task-tab active" data-index="0">
+          Task 1 &mdash; The Language
+        </button>
+        <button class="task-tab" data-index="1">
+          Task 2 &mdash; Your First Deployment
+        </button>
+        <button class="task-tab" data-index="2">
+          Task 3 &mdash; Constructors and the Counter
+        </button>
+      </div>
+
+      <div class="reader-body">
+        <!-- ═══════════════════════════════════════════════════════════ TASK 1 -->
+        <article id="task1" class="task-pane active">
+          <p>
+            From today, the course shifts from reading about blockchains to
+            building on them. That means writing Solidity — the programming
+            language that compiles to EVM bytecode and runs on every Ethereum
+            node simultaneously.
+          </p>
+
+          <p>
+            If you've written JavaScript, Python, or C++ before, the syntax
+            will look familiar. If you haven't written code before, the
+            structure is straightforward enough to follow. What makes Solidity
+            genuinely unusual isn't the keywords — it's the environment.
+            Every write operation costs real money. Deployed code can never be
+            changed. There is no exception handler that notifies someone when
+            things go wrong. Those constraints aren't just quirks; they show
+            up in how the language is designed and in every pattern you'll use.
+          </p>
+
+          <h3>The file header</h3>
+
+          <p>
+            Every Solidity file must begin with two lines before any contract
+            code:
+          </p>
+
+          <pre><code>// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.10;</code></pre>
+
+          <p>
+            The first is the <strong>license identifier</strong>. Tools like
+            Etherscan and package managers use it to categorise and verify your
+            contract. The Solidity compiler will issue a warning if you omit
+            it. For this course, <code>MIT</code> is always the right choice —
+            it's the standard permissive licence for open-source contracts.
+          </p>
+
+          <p>
+            The second is the <strong>pragma</strong> — a compiler directive
+            that specifies which version of Solidity you're targeting.
+            <code>^0.8.10</code> means "version 0.8.10 or any higher minor or
+            patch version, but not 0.9.x." This matters because the language
+            changes between major versions. Version 0.8 introduced a
+            particularly important safety change: checked arithmetic. Before
+            0.8, adding 1 to the maximum value of a <code>uint256</code> would
+            silently wrap around to 0 — a class of bug responsible for real
+            money losses in deployed contracts. In 0.8 and later, that
+            operation reverts the transaction rather than corrupting data
+            silently. Use 0.8.x for everything you write on this course.
+          </p>
+
+          <h3>What a contract is</h3>
+
+          <p>
+            A <code>contract</code> is the fundamental unit of Solidity code.
+            It groups together state variables and the functions that operate
+            on them — structurally similar to a class in object-oriented
+            languages.
+          </p>
+
+          <pre><code>contract HelloWorld {
+    // state variables and functions go here
+}</code></pre>
+
+          <p>
+            When you deploy a contract, it's compiled to bytecode and stored at
+            a newly created address on the blockchain. That address is
+            permanent. The code at it is permanent. You can send ETH to it,
+            call its functions, build other contracts that talk to it — but you
+            cannot change the code after deployment, and you cannot delete it.
+            Whatever you deploy is what exists, forever. This is why testing
+            before deployment matters more in Solidity than in almost any other
+            programming environment you'll encounter.
+          </p>
+
+          <h3>Variables on the blockchain</h3>
+
+          <p>
+            Solidity has three distinct categories of variable, and
+            understanding the difference between them is more important than
+            memorising any particular syntax.
+          </p>
+
+          <pre><code>contract Variables {
+    // ── STATE variables ───────────────────────────────────────────
+    // Declared at the contract level. Stored permanently on-chain.
+    uint public myNumber = 42;
+    string public myName = "BlockBase";
+    bool public isActive = true;
+
+    function doSomething() public {
+        // ── LOCAL variable ────────────────────────────────────────
+        // Exists only while this function runs. Never stored on-chain.
+        uint localVar = 10;
+
+        // ── GLOBAL variables ──────────────────────────────────────
+        // Injected by the EVM. No declaration needed.
+        address sender = msg.sender;       // who called this function
+        uint timestamp = block.timestamp;  // Unix time of the current block
+    }
+}</code></pre>
+
+          <p>
+            <strong>State variables</strong> are declared at the contract
+            level — not inside any function. They live in the contract's
+            storage slot on the blockchain and persist between every call. When
+            a function writes to a state variable, that write becomes part of a
+            transaction, gets included in a block, and is permanently recorded.
+            A week later, from a different computer, a different person calls a
+            view function that reads that variable — it returns exactly what was
+            stored a week ago. State variables are the reason smart contracts
+            can maintain data between interactions without any external
+            database. Writing to them costs gas. Reading them is free.
+          </p>
+
+          <p>
+            <strong>Local variables</strong> are declared inside a function
+            body and exist only for the duration of that function call. When the
+            function returns, they're gone — they're never written to the
+            blockchain and cost almost nothing to use. They behave just like
+            variables in any other language.
+          </p>
+
+          <p>
+            <strong>Global variables</strong> aren't declared anywhere — they're
+            built into the EVM and available in every function without any
+            import or setup. The two you'll use constantly are
+            <code>msg.sender</code> and <code>block.timestamp</code>.
+            <code>msg.sender</code> is the address of whoever called the current
+            function — a wallet address if a user called it directly, a
+            contract address if another contract made the call.
+            <code>block.timestamp</code> is the Unix timestamp of the block
+            being validated. These let your contract know <em>who</em> is
+            interacting with it and <em>when</em> — two pieces of information
+            you have no other way to obtain.
+          </p>
+
+          <h3>Data types</h3>
+
+          <p>The core types you'll use throughout this course:</p>
+
+          <dl class="definition-list">
+            <div class="def-row">
+              <dt><code>uint</code> / <code>uint256</code></dt>
+              <dd>
+                Unsigned integer — a non-negative whole number, from 0 to
+                2<sup>256</sup>−1. <code>uint</code> is an alias for
+                <code>uint256</code>. There's no generic "number" type in
+                Solidity — integers are always sized explicitly. You'll use
+                <code>uint</code> for most things: balances, counts, token
+                amounts, and any quantity that can't be negative.
+              </dd>
+            </div>
+            <div class="def-row">
+              <dt><code>int</code> / <code>int256</code></dt>
+              <dd>
+                Signed integer — can be negative. Range is −2<sup>255</sup> to
+                2<sup>255</sup>−1. Less common than <code>uint</code> in
+                practice because most quantities in smart contracts are
+                non-negative by definition. Use it when you genuinely need
+                negative numbers — temperature values, relative changes, offsets.
+              </dd>
+            </div>
+            <div class="def-row">
+              <dt><code>bool</code></dt>
+              <dd>
+                <code>true</code> or <code>false</code>. Used for flags and
+                on/off states. Common examples: <code>bool public paused</code>
+                to freeze a contract in an emergency,
+                <code>bool public isEnrolled</code> to track membership.
+              </dd>
+            </div>
+            <div class="def-row">
+              <dt><code>address</code></dt>
+              <dd>
+                A 20-byte Ethereum address — the <code>0x...</code> identifier
+                of a wallet or contract. This type has no direct equivalent in
+                most other languages. You'll use it constantly: storing who owns
+                something, who deployed the contract, or whose address is
+                allowed to call a restricted function. The
+                <code>address payable</code> variant can receive ETH.
+              </dd>
+            </div>
+            <div class="def-row">
+              <dt><code>string</code></dt>
+              <dd>
+                Arbitrary-length text. Solidity's string handling is limited
+                compared to most languages — concatenation, length checks, and
+                comparisons all require workarounds. More importantly, storing
+                strings on-chain is expensive because storage is priced per
+                byte. Short strings (names, labels, short messages) are fine.
+                Long text belongs off-chain (on IPFS, for example), with only
+                a hash stored in the contract.
+              </dd>
+            </div>
+            <div class="def-row">
+              <dt><code>bytes32</code></dt>
+              <dd>
+                A fixed-size 32-byte value. More gas-efficient than
+                <code>string</code> for short, bounded data. Commonly used for
+                identifiers, hashes, and names where the maximum length is
+                known. You'll see it frequently in production contracts and in
+                OpenZeppelin's library code.
+              </dd>
+            </div>
+          </dl>
+
+          <h3>Visibility</h3>
+
+          <p>
+            Every state variable and every function in Solidity must have a
+            visibility modifier. It controls who can read the variable or call
+            the function.
+          </p>
+
+          <dl class="definition-list">
+            <div class="def-row">
+              <dt><code>public</code></dt>
+              <dd>
+                For state variables, Solidity automatically generates a getter
+                function — anyone can call
+                <code>contractAddress.myVariable()</code> to read it. For
+                functions, anyone can call it from outside the contract and from
+                within it. Use <code>public</code> for anything you want
+                accessible to users, frontends, or other contracts.
+              </dd>
+            </div>
+            <div class="def-row">
+              <dt><code>private</code></dt>
+              <dd>
+                Accessible only from within this contract's own functions —
+                not from child contracts, not from external callers. One
+                important caveat: <code>private</code> does not mean the data
+                is secret. Everything on the blockchain is readable by anyone
+                who queries the raw storage slots directly.
+                <code>private</code> only removes the auto-generated getter
+                function; it does not encrypt or hide the value in any way.
+              </dd>
+            </div>
+            <div class="def-row">
+              <dt><code>internal</code></dt>
+              <dd>
+                Like <code>private</code>, but accessible to contracts that
+                inherit from this one. This is the implicit default for state
+                variables when you specify no modifier — though you should
+                always be explicit. Used heavily in base contracts and libraries
+                that are meant to be extended.
+              </dd>
+            </div>
+            <div class="def-row">
+              <dt><code>external</code></dt>
+              <dd>
+                Functions only — cannot be applied to state variables. An
+                <code>external</code> function can only be called from outside
+                the contract, not from within it. It's marginally more
+                gas-efficient than <code>public</code> for functions never
+                called internally, because the compiler can optimise how
+                arguments are handled. Common in interface definitions.
+              </dd>
+            </div>
+          </dl>
+
+          <h3>Functions and gas</h3>
+
+          <p>
+            The most consequential distinction in Solidity functions is whether
+            they change the blockchain's state. This determines whether calling
+            them costs gas.
+          </p>
+
+          <pre><code>contract Counter {
+    uint public count = 0;
+
+    // No modifier → changes state → transaction required → costs gas
+    function increment() public {
+        count = count + 1;
+    }
+
+    // view → reads state, cannot write it → no transaction → free
+    function getCount() public view returns (uint) {
+        return count;
+    }
+
+    // pure → reads nothing, writes nothing → no transaction → free
+    function add(uint a, uint b) public pure returns (uint) {
+        return a + b;
+    }
+}</code></pre>
+
+          <p>
+            A regular function — one with no <code>view</code> or
+            <code>pure</code> keyword — can read and write state variables.
+            Calling it requires broadcasting a transaction to the network,
+            having it included in a block, and paying gas. The state change is
+            permanent once the block is confirmed. This is a real operation with
+            real cost and real consequences.
+          </p>
+
+          <p>
+            A <code>view</code> function can read state but cannot modify it.
+            The compiler enforces this strictly — if you try to write to a
+            state variable inside a <code>view</code> function, it won't
+            compile. Calling a view function doesn't require a transaction.
+            Your node (or a provider like Infura or Alchemy) executes the code
+            locally and returns the result. No gas, no waiting for confirmation,
+            no MetaMask popup. This is why reading data on Etherscan is instant
+            and free — the node just runs the view function and hands back the
+            result.
+          </p>
+
+          <p>
+            A <code>pure</code> function cannot read or write state at all. It
+            operates only on its inputs. Use it for utility logic: mathematical
+            operations, format conversions, validation that doesn't need to look
+            at any stored data. Like <code>view</code> functions, calling them
+            costs nothing.
+          </p>
+
+          <p>
+            A practical rule: if you're writing a function that reads data and
+            returns something without changing anything, mark it
+            <code>view</code>. If it doesn't touch contract storage at all,
+            mark it <code>pure</code>. The compiler will warn you if your
+            annotation is inconsistent with what the function actually does.
+          </p>
+
+          <h3>Control flow</h3>
+
+          <p>
+            Solidity's control flow looks like JavaScript or C. The syntax is
+            familiar; a few Solidity-specific details are worth noting.
+          </p>
+
+          <pre><code>// Conditionals
+function describe(uint x) public pure returns (string memory) {
+    if (x &lt; 10) {
+        return "small";
+    } else if (x &lt; 100) {
+        return "medium";
+    } else {
+        return "large";
+    }
+}
+
+// For loop
+function sumToN(uint n) public pure returns (uint) {
+    uint total = 0;
+    for (uint i = 1; i &lt;= n; i++) {
+        total = total + i;
+    }
+    return total;
+}</code></pre>
+
+          <p>
+            Notice the <code>string memory</code> return type. Strings in
+            Solidity require a data location specifier because they're
+            dynamically sized. The rule: whenever you return a
+            <code>string</code>, a struct, or an array from a function, write
+            <code>memory</code> after the type name. The compiler will tell you
+            when you forget — it won't compile without it.
+          </p>
+
+          <p>
+            One trap that catches people coming from other languages:
+            <code>uint</code> values cannot go below zero. If a
+            <code>uint</code> loop counter reaches 0 and you decrement it
+            again, Solidity 0.8 will revert rather than wrapping around to a
+            large number. When you need to count downward, either restructure
+            the loop to count upward, or use a signed integer. You'll encounter
+            this the first time you try to write a descending loop.
+          </p>
+
+          <div class="resource-card explore-card">
+            <span class="resource-label">Open now</span>
+            <a
+              href="https://remix.ethereum.org"
+              target="_blank"
+              rel="noopener"
+              >remix.ethereum.org</a
+            >
+            <p>
+              Open Remix and read through the
+              <code>contracts/1_Storage.sol</code> file that comes pre-loaded.
+              You'll recognise most of what you just read: the pragma, the
+              state variable, the set and get functions. Don't modify it yet —
+              read through it first. Taking two minutes to understand existing
+              code before writing your own is worth more than it sounds.
+            </p>
+          </div>
+        </article>
+
+        <!-- ═══════════════════════════════════════════════════════════ TASK 2 -->
+        <article id="task2" class="task-pane">
+          <p>
+            You've read the syntax. Now you write a contract from scratch,
+            deploy it to a simulated blockchain, and call its functions. The
+            concepts from Task 1 stop being abstract the first time you see
+            your state change persist across function calls.
+          </p>
+
+          <h3>Setting up Remix</h3>
+
+          <p>
+            <strong>Remix</strong> is a browser-based IDE for Solidity — no
+            installation, no local setup, no Node.js environment to configure.
+            Go to
+            <a
+              href="https://remix.ethereum.org"
+              target="_blank"
+              rel="noopener"
+              >remix.ethereum.org</a
+            >. Use Chrome, Firefox, or Brave. Do not use Safari — MetaMask
+            doesn't work as a browser extension on it.
+          </p>
+
+          <p>The interface has three areas you'll work in constantly:</p>
+
+          <ul class="content-list">
+            <li>
+              <strong>Left sidebar</strong> — File Explorer (your .sol files),
+              Solidity Compiler (turns your code into bytecode), and Deploy
+              &amp; Run (sends contracts to the VM or to a real network via
+              MetaMask).
+            </li>
+            <li>
+              <strong>Editor (centre)</strong> — where you write code. It has
+              syntax highlighting and real-time error detection — red underlines
+              appear as you type for syntax errors, yellow for warnings.
+            </li>
+            <li>
+              <strong>Console (bottom)</strong> — transaction logs, compilation
+              errors, and return values from function calls. Every deploy and
+              every state-changing function call produces a log entry here.
+              Green ticks mean success; red circles mean the transaction
+              reverted.
+            </li>
+          </ul>
+
+          <p>
+            Remix comes with a few example contracts pre-loaded. Open
+            <code>contracts/1_Storage.sol</code> and read through it before
+            writing anything. It stores a single number and has a set and get
+            function — a minimal example of the pattern you're about to build
+            on.
+          </p>
+
+          <h3>Writing MyStorage</h3>
+
+          <p>
+            In the File Explorer (left sidebar), click the new file icon and
+            name it <code>MyStorage.sol</code>. Then write the following
+            contract — typing it out rather than pasting is worth the few extra
+            minutes:
+          </p>
+
+          <pre><code>// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.10;
+
+contract MyStorage {
+    uint public storedNumber;
+    string public storedMessage;
+    address public lastCaller;
+
+    function setNumber(uint _number) public {
+        storedNumber = _number;
+        lastCaller = msg.sender;
+    }
+
+    function setMessage(string memory _message) public {
+        storedMessage = _message;
+        lastCaller = msg.sender;
+    }
+
+    function getNumber() public view returns (uint) {
+        return storedNumber;
+    }
+}</code></pre>
+
+          <p>
+            Read through it before deploying. There are three state variables:
+            <code>storedNumber</code>, <code>storedMessage</code>, and
+            <code>lastCaller</code>. All three are <code>public</code>, which
+            means Solidity generates getter functions for each — Remix will
+            show them as blue read buttons after deployment.
+          </p>
+
+          <p>
+            The two setter functions each take a parameter (prefixed with
+            <code>_</code> by convention, to distinguish function parameters
+            from state variables that share the same name) and write it to
+            storage. They also record <code>msg.sender</code> in
+            <code>lastCaller</code> — so you can always see which address most
+            recently wrote to the contract.
+          </p>
+
+          <p>
+            <code>getNumber()</code> is marked <code>view</code> because it
+            only reads <code>storedNumber</code> and returns it. It doesn't
+            need to be a separate function — since <code>storedNumber</code> is
+            public, the auto-generated getter does the same thing — but writing
+            it explicitly is good practice for understanding which functions
+            are free to call.
+          </p>
+
+          <h3>Compiling and deploying</h3>
+
+          <ol class="content-list">
+            <li>
+              Click the <strong>Solidity Compiler</strong> tab in the left
+              sidebar (the icon looks like an S shape). Select compiler version
+              <code>0.8.10</code> or any higher 0.8.x. Click
+              <strong>Compile MyStorage.sol</strong>. A green checkmark means
+              success. A red circle means a syntax error — look at the console
+              panel for the exact line number and description.
+            </li>
+            <li>
+              Click the <strong>Deploy &amp; Run</strong> tab (the Ethereum
+              diamond icon). Under Environment, select
+              <strong>Remix VM (Shanghai)</strong> — this is a local
+              in-browser simulation with fake ETH. No real network, no
+              MetaMask, instant transactions.
+            </li>
+            <li>
+              Under Contract, confirm <code>MyStorage</code> is selected. Click
+              <strong>Deploy</strong>. The contract appears under "Deployed
+              Contracts" in the bottom-left panel with its simulated address.
+              Click the arrow to expand it.
+            </li>
+          </ol>
+
+          <p>
+            What just happened: the compiled bytecode was sent as a transaction
+            to the VM's simulated blockchain. The VM assigned it a new contract
+            address. That contract now exists at that address and responds to
+            calls — the same way a real deployed contract does, just without a
+            live network involved.
+          </p>
+
+          <h3>Interacting with your contract</h3>
+
+          <p>
+            With the deployed contract expanded, you'll see orange and blue
+            buttons. Orange buttons trigger state-changing functions — they go
+            through a simulated transaction and produce a log entry in the
+            console. Blue buttons call view functions or read public state
+            variables — they're instant and free.
+          </p>
+
+          <ul class="content-list">
+            <li>
+              Click <strong>setNumber</strong>, type <code>42</code> in the
+              input box, and click the button. The console shows a green-tick
+              transaction log.
+            </li>
+            <li>
+              Click <strong>getNumber</strong> — it returns <code>42</code>.
+              The number is now stored permanently in the simulated blockchain's
+              state.
+            </li>
+            <li>
+              Click <strong>setMessage</strong>, type
+              <code>"Hello from BlockBase"</code> (include the quote marks),
+              and submit.
+            </li>
+            <li>
+              Click <strong>storedMessage</strong> — your string is returned.
+            </li>
+            <li>
+              Click <strong>lastCaller</strong> — it shows the address that
+              last wrote to the contract. Look at the Account dropdown at the
+              top of the Deploy panel; it should be the same address.
+            </li>
+            <li>
+              Switch to a different account in the Account dropdown. Call
+              <strong>setNumber</strong> with a new value. Click
+              <strong>lastCaller</strong> again — it now shows the new address.
+            </li>
+          </ul>
+
+          <p>
+            That last step is the key thing to notice:
+            <code>msg.sender</code> is not a fixed value — it reflects whoever
+            sent the current transaction. The contract automatically tracks
+            which account last modified its state, with no manual passing of
+            addresses required.
+          </p>
+
+          <div class="resource-card demo-card">
+            <span class="resource-label">Reference</span>
+            <a
+              href="https://docs.soliditylang.org/en/v0.8.21/types.html"
+              target="_blank"
+              rel="noopener"
+              >Solidity Types — Official Docs</a
+            >
+            <p>
+              The official Solidity documentation is more readable than most
+              language references. If you want to see the full range of integer
+              sizes (<code>uint8</code> through <code>uint256</code>), the
+              difference between <code>bytes32</code> and <code>string</code>,
+              or how fixed-point numbers work, this is where to look. Bookmark
+              it.
+            </p>
+          </div>
+        </article>
+
+        <!-- ═══════════════════════════════════════════════════════════ TASK 3 -->
+        <article id="task3" class="task-pane">
+          <p>
+            You can write, deploy, and interact with a basic contract. Before
+            the challenge, two more tools that appear in nearly every real
+            Solidity contract: the constructor and <code>require()</code>.
+          </p>
+
+          <h3>Constructors</h3>
+
+          <p>
+            A <strong>constructor</strong> is a special function that runs
+            exactly once — at the moment the contract is deployed — and never
+            again. It's the contract's setup code: a place to initialise state
+            variables and capture information that's only available at
+            deployment time.
+          </p>
+
+          <pre><code>contract Owned {
+    address public owner;
+
+    constructor() {
+        owner = msg.sender;
+    }
+}</code></pre>
+
+          <p>
+            When this contract is deployed, <code>msg.sender</code> is the
+            deployer's address. The constructor captures it immediately and
+            stores it in <code>owner</code>. After that, the deployer's address
+            is permanently recorded on-chain and available to every function in
+            the contract for as long as the contract exists. There's no other
+            way to capture the deployer's address — by the time any other
+            function runs, <code>msg.sender</code> will be whoever called that
+            function, not whoever deployed the contract.
+          </p>
+
+          <p>
+            Constructors can also take parameters for configuring the contract
+            at deployment time:
+          </p>
+
+          <pre><code>contract Configurable {
+    uint public maxSupply;
+
+    constructor(uint _maxSupply) {
+        maxSupply = _maxSupply;
+    }
+}</code></pre>
+
+          <p>
+            When you deploy this in Remix, a text field appears next to the
+            Deploy button asking for the <code>_maxSupply</code> value.
+            Whatever you enter is stored permanently when the contract goes
+            live. The constructor runs once and is gone — it cannot be called
+            again later.
+          </p>
+
+          <h3>require()</h3>
+
+          <p>
+            <code>require()</code> is how you enforce preconditions. It takes
+            a boolean condition and an error message. If the condition is false,
+            the entire transaction reverts: no state changes, the error message
+            is returned to the caller, and the gas used up to the revert point
+            is charged (the rest is refunded).
+          </p>
+
+          <pre><code>function withdraw(uint _amount) public {
+    require(_amount &gt; 0, "Amount must be positive");
+    require(_amount &lt;= balance, "Insufficient balance");
+
+    balance -= _amount;
+    // transfer logic here
+}</code></pre>
+
+          <p>
+            Both <code>require</code> checks must pass before the function does
+            anything to state. If the first one fails — say,
+            <code>_amount</code> is 0 — the function stops immediately.
+            <code>balance</code> is never touched. The caller gets the message
+            <code>"Amount must be positive"</code> back and a partial refund.
+            If the first check passes but the second fails, same thing —
+            everything reverts as if the call never happened.
+          </p>
+
+          <p>
+            This is the primary pattern for input validation and access control
+            in Solidity. The structure is always the same: check all
+            preconditions at the top of the function, run the logic only if
+            every check passes. You'll use it in nearly every function you
+            write.
+          </p>
+
+          <h3>The Counter challenge</h3>
+
+          <p>
+            Build this contract from scratch in Remix — without copying the
+            solution below. Use only what you've learned in Tasks 1, 2, and 3.
+            If you get stuck on a specific piece, re-read the relevant section
+            before looking at the answer.
+          </p>
+
+          <pre><code>Contract: Counter
+
+State variables:
+  count  — uint, starts at 0
+  owner  — address, set to the deployer at deployment
+
+Functions:
+  increment()  — adds 1 to count
+  decrement()  — subtracts 1 from count; reverts if count is already 0
+  reset()      — sets count back to 0; only the owner can call this
+  getCount()   — returns the current count (view function)</code></pre>
+
+          <p>Three things to work out on your own before looking below:</p>
+
+          <ul class="content-list">
+            <li>
+              How does the contract know who the owner is? The deployer's
+              address needs to be captured exactly once, at a specific moment.
+            </li>
+            <li>
+              How does <code>decrement()</code> prevent underflow when count is
+              0? A <code>uint</code> can't go below zero — you need to stop the
+              function before it tries.
+            </li>
+            <li>
+              How does <code>reset()</code> check that only the owner can call
+              it? You have access to the current caller's address and the stored
+              owner address.
+            </li>
+          </ul>
+
+          <p>When you're ready to check your work:</p>
+
+          <pre><code>// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.10;
+
+contract Counter {
+    uint public count;
+    address public owner;
+
+    constructor() {
+        owner = msg.sender;
+    }
+
+    function increment() public {
+        count = count + 1;
+    }
+
+    function decrement() public {
+        require(count &gt; 0, "Counter is already at zero");
+        count = count - 1;
+    }
+
+    function reset() public {
+        require(msg.sender == owner, "Only the owner can reset");
+        count = 0;
+    }
+
+    function getCount() public view returns (uint) {
+        return count;
+    }
+}</code></pre>
+
+          <p>
+            Deploy this and test the failure paths — not just the happy path.
+            Increment several times, then decrement back to 0, then try one
+            more decrement: it should revert with your error message. Switch to
+            a different account in the Accounts dropdown and try calling
+            <code>reset()</code>: it should also revert. Switch back to the
+            deployer account and call <code>reset()</code>: it should succeed
+            and set count back to 0.
+          </p>
+
+          <p>
+            Testing the cases that should fail is as important as testing the
+            ones that should succeed. In production contracts, the failure paths
+            are exactly where exploits live.
+          </p>
+
+          <div class="resource-card watch-card">
+            <span class="resource-label">Watch</span>
+            <a
+              href="https://www.youtube.com/watch?v=M576WGiDBdQ"
+              target="_blank"
+              rel="noopener"
+              >Solidity Tutorial for Beginners — freeCodeCamp</a
+            >
+            <p>
+              A comprehensive Solidity walkthrough. Don't watch it all now —
+              but it's the best reference video for this stage of the course.
+              Use it to clarify anything in Tasks 1–3 that didn't fully click,
+              or to preview the data structures and modifiers coming in Day 4.
+            </p>
+          </div>
+        </article>
+      </div>
+
+      <div class="reader-footer-nav">
+        <button class="nav-btn" id="prevTaskBtn" style="visibility: hidden">
+          &larr; Previous
+        </button>
+        <button class="nav-btn" id="nextTaskBtn">Next &rarr;</button>
+      </div>
+    </div>
+
+    <footer>
+      <div class="social-icons">
+        <a href="https://www.instagram.com/fec_iitg/" target="_blank"
+          ><i class="fab fa-instagram"></i
+        ></a>
+        <a
+          href="https://www.linkedin.com/company/finance-and-economics-club-iitg/"
+          target="_blank"
+          ><i class="fab fa-linkedin"></i
+        ></a>
+        <a href="https://x.com/fec_iitg" target="_blank"
+          ><i class="fab fa-twitter"></i
+        ></a>
+        <a
+          href="https://www.youtube.com/@financeandeconomicsclubiit1029"
+          target="_blank"
+          ><i class="fab fa-youtube"></i
+        ></a>
+        <a href="https://www.facebook.com/financeclubiitg/" target="_blank"
+          ><i class="fab fa-facebook"></i
+        ></a>
+        <a
+          href="https://chat.whatsapp.com/EUfRkvIR5DPALPlOOrjKJf?mode=gi_t"
+          target="_blank"
+          rel="noopener"
+          ><i class="fab fa-whatsapp"></i
+        ></a>
+      </div>
+      <p>Finance and Economics Club,</p>
+      <p>IIT Guwahati</p>
+    </footer>
+
+    <script>
+      const tabs = document.querySelectorAll(".task-tab");
+      const panes = document.querySelectorAll(".task-pane");
+      const prevBtn = document.getElementById("prevTaskBtn");
+      const nextBtn = document.getElementById("nextTaskBtn");
+      let current = 0;
+
+      function showTask(index) {
+        tabs.forEach((t, i) => t.classList.toggle("active", i === index));
+        panes.forEach((p, i) => p.classList.toggle("active", i === index));
+        current = index;
+        prevBtn.style.visibility = current === 0 ? "hidden" : "visible";
+        nextBtn.style.visibility =
+          current === tabs.length - 1 ? "hidden" : "visible";
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+
+      tabs.forEach((tab, i) =>
+        tab.addEventListener("click", () => showTask(i)),
+      );
+      prevBtn.addEventListener("click", () => showTask(current - 1));
+      nextBtn.addEventListener("click", () => showTask(current + 1));
+
+      if (window.location.hash === "#task2") showTask(1);
+      if (window.location.hash === "#task3") showTask(2);
+
+      window.addEventListener("scroll", () => {
+        const el = document.documentElement;
+        const pct = (el.scrollTop / (el.scrollHeight - el.clientHeight)) * 100;
+        document.getElementById("readingProgress").style.width =
+          Math.min(pct, 100) + "%";
+      });
+    </script>
+  </body>
+</html>
