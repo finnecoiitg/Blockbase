@@ -156,21 +156,18 @@ pragma solidity ^0.8.10;</code></pre>
           </p>
 
           <pre><code>contract Variables {
-    // ── STATE variables ───────────────────────────────────────────
-    // Declared at the contract level. Stored permanently on-chain.
+    // State variables: stored permanently on-chain
     uint public myNumber = 42;
     string public myName = "BlockBase";
     bool public isActive = true;
 
     function doSomething() public {
-        // ── LOCAL variable ────────────────────────────────────────
-        // Exists only while this function runs. Never stored on-chain.
+        // Local variable: exists only during this function call
         uint localVar = 10;
 
-        // ── GLOBAL variables ──────────────────────────────────────
-        // Injected by the EVM. No declaration needed.
+        // Global variables: injected by the EVM, no declaration needed
         address sender = msg.sender;       // who called this function
-        uint timestamp = block.timestamp;  // Unix time of the current block
+        uint timestamp = block.timestamp;  // current block's Unix time
     }
 }</code></pre>
 
@@ -216,32 +213,81 @@ pragma solidity ^0.8.10;</code></pre>
           <div class="table-wrap">
             <table>
               <thead>
-                <tr><th style="width:130px">Type</th><th>What it stores</th></tr>
+                <tr>
+                  <th style="width: 130px">Type</th>
+                  <th>What it stores</th>
+                </tr>
               </thead>
               <tbody>
                 <tr>
                   <td><code>uint</code> / <code>uint256</code></td>
-                  <td>Unsigned integer — a non-negative whole number, from 0 to 2<sup>256</sup>&minus;1. <code>uint</code> is shorthand for <code>uint256</code>. There is no generic &ldquo;number&rdquo; type in Solidity; integers are always sized explicitly. Use <code>uint</code> for balances, counts, token amounts, and any quantity that cannot be negative.</td>
+                  <td>
+                    Unsigned integer — a non-negative whole number, from 0 to
+                    2<sup>256</sup>&minus;1. <code>uint</code> is shorthand for
+                    <code>uint256</code>. There is no generic
+                    &ldquo;number&rdquo; type in Solidity; integers are always
+                    sized explicitly. Use <code>uint</code> for balances,
+                    counts, token amounts, and any quantity that cannot be
+                    negative.
+                  </td>
                 </tr>
                 <tr>
                   <td><code>int</code> / <code>int256</code></td>
-                  <td>Signed integer — can be negative. Range is &minus;2<sup>255</sup> to 2<sup>255</sup>&minus;1. Less common than <code>uint</code> because most quantities in smart contracts are non-negative by definition. Use it when you genuinely need negative values: temperature readings, relative offsets, financial deltas.</td>
+                  <td>
+                    Signed integer — can be negative. Range is &minus;2<sup
+                      >255</sup
+                    >
+                    to 2<sup>255</sup>&minus;1. Less common than
+                    <code>uint</code> because most quantities in smart contracts
+                    are non-negative by definition. Use it when you genuinely
+                    need negative values: temperature readings, relative
+                    offsets, financial deltas.
+                  </td>
                 </tr>
                 <tr>
                   <td><code>bool</code></td>
-                  <td><code>true</code> or <code>false</code>. Used for flags and on/off states. Common examples: <code>bool public paused</code> to freeze a contract in an emergency, <code>bool public isEnrolled</code> to track membership.</td>
+                  <td>
+                    <code>true</code> or <code>false</code>. Used for flags and
+                    on/off states. Common examples:
+                    <code>bool public paused</code> to freeze a contract in an
+                    emergency, <code>bool public isEnrolled</code> to track
+                    membership.
+                  </td>
                 </tr>
                 <tr>
                   <td><code>address</code></td>
-                  <td>A 20-byte Ethereum address — the <code>0x&hellip;</code> identifier of a wallet or contract. This type has no direct equivalent in most other languages. You&rsquo;ll use it constantly: storing who owns something, who deployed the contract, or whose address is allowed to call a restricted function. The <code>address payable</code> variant can also receive ETH.</td>
+                  <td>
+                    A 20-byte Ethereum address — the
+                    <code>0x&hellip;</code> identifier of a wallet or contract.
+                    This type has no direct equivalent in most other languages.
+                    You&rsquo;ll use it constantly: storing who owns something,
+                    who deployed the contract, or whose address is allowed to
+                    call a restricted function. The
+                    <code>address payable</code> variant can also receive ETH.
+                  </td>
                 </tr>
                 <tr>
                   <td><code>string</code></td>
-                  <td>Arbitrary-length UTF-8 text. Solidity&rsquo;s string handling is limited compared to most languages — concatenation, length checks, and comparisons all require workarounds. Storing strings on-chain is expensive because storage is priced per byte. Short strings (names, labels) are fine; long text belongs off-chain on IPFS, with only a hash stored in the contract.</td>
+                  <td>
+                    Arbitrary-length UTF-8 text. Solidity&rsquo;s string
+                    handling is limited compared to most languages —
+                    concatenation, length checks, and comparisons all require
+                    workarounds. Storing strings on-chain is expensive because
+                    storage is priced per byte. Short strings (names, labels)
+                    are fine; long text belongs off-chain on IPFS, with only a
+                    hash stored in the contract.
+                  </td>
                 </tr>
                 <tr>
                   <td><code>bytes32</code></td>
-                  <td>A fixed-size 32-byte value. More gas-efficient than <code>string</code> for short, bounded data. Commonly used for identifiers, hashes, and names where the maximum length is known in advance. You&rsquo;ll see it frequently in production contracts and in OpenZeppelin&rsquo;s library code.</td>
+                  <td>
+                    A fixed-size 32-byte value. More gas-efficient than
+                    <code>string</code> for short, bounded data. Commonly used
+                    for identifiers, hashes, and names where the maximum length
+                    is known in advance. You&rsquo;ll see it frequently in
+                    production contracts and in OpenZeppelin&rsquo;s library
+                    code.
+                  </td>
                 </tr>
               </tbody>
             </table>
@@ -258,24 +304,57 @@ pragma solidity ^0.8.10;</code></pre>
           <div class="table-wrap">
             <table>
               <thead>
-                <tr><th style="width:90px">Modifier</th><th>Who can access it</th></tr>
+                <tr>
+                  <th style="width: 90px">Modifier</th>
+                  <th>Who can access it</th>
+                </tr>
               </thead>
               <tbody>
                 <tr>
                   <td><code>public</code></td>
-                  <td>For state variables, Solidity automatically generates a getter function — anyone can call <code>contractAddress.myVariable()</code> to read it. For functions, anyone can call it from outside the contract and from within it. Use <code>public</code> for anything accessible to users, frontends, or other contracts.</td>
+                  <td>
+                    For state variables, Solidity automatically generates a
+                    getter function — anyone can call
+                    <code>contractAddress.myVariable()</code> to read it. For
+                    functions, anyone can call it from outside the contract and
+                    from within it. Use <code>public</code> for anything
+                    accessible to users, frontends, or other contracts.
+                  </td>
                 </tr>
                 <tr>
                   <td><code>private</code></td>
-                  <td>Accessible only from within this contract&rsquo;s own functions — not from child contracts, not from external callers. One important note: <code>private</code> does not mean the data is secret. Everything on the blockchain is readable by anyone who queries the raw storage slots directly. <code>private</code> only removes the auto-generated getter; it does not encrypt or hide the value.</td>
+                  <td>
+                    Accessible only from within this contract&rsquo;s own
+                    functions — not from child contracts, not from external
+                    callers. One important note: <code>private</code> does not
+                    mean the data is secret. Everything on the blockchain is
+                    readable by anyone who queries the raw storage slots
+                    directly. <code>private</code> only removes the
+                    auto-generated getter; it does not encrypt or hide the
+                    value.
+                  </td>
                 </tr>
                 <tr>
                   <td><code>internal</code></td>
-                  <td>Like <code>private</code>, but also accessible to contracts that inherit from this one. This is the implicit default for state variables when you specify no modifier — though you should always be explicit. Used heavily in base contracts and libraries meant to be extended.</td>
+                  <td>
+                    Like <code>private</code>, but also accessible to contracts
+                    that inherit from this one. This is the implicit default for
+                    state variables when you specify no modifier — though you
+                    should always be explicit. Used heavily in base contracts
+                    and libraries meant to be extended.
+                  </td>
                 </tr>
                 <tr>
                   <td><code>external</code></td>
-                  <td>Functions only — cannot be applied to state variables. An <code>external</code> function can only be called from outside the contract, not from within it. Marginally more gas-efficient than <code>public</code> for functions never called internally, because the compiler can optimise how calldata arguments are handled. Common in interface definitions.</td>
+                  <td>
+                    Functions only — cannot be applied to state variables. An
+                    <code>external</code> function can only be called from
+                    outside the contract, not from within it. Marginally more
+                    gas-efficient than <code>public</code> for functions never
+                    called internally, because the compiler can optimise how
+                    calldata arguments are handled. Common in interface
+                    definitions.
+                  </td>
                 </tr>
               </tbody>
             </table>
@@ -396,12 +475,8 @@ function sumToN(uint n) public pure returns (uint) {
               >remix.ethereum.org</a
             >
             <p>
-              Open Remix and read through the
-              <code>contracts/1_Storage.sol</code> file that comes pre-loaded.
-              You'll recognise most of what you just read: the pragma, the state
-              variable, the set and get functions. Don't modify it yet — read
-              through it first. Taking two minutes to understand existing code
-              before writing your own is worth more than it sounds.
+              The browser IDE you'll use for every contract in this course.
+              Open it before starting Task 2 — no installation required.
             </p>
           </div>
         </article>
@@ -605,15 +680,13 @@ contract MyStorage {
               href="https://docs.soliditylang.org/en/v0.8.21/types.html"
               target="_blank"
               rel="noopener"
-              >Solidity Types — Official Docs</a
+              >Solidity Types &mdash; Official Docs</a
             >
             <p>
-              The official Solidity documentation is more readable than most
-              language references. If you want to see the full range of integer
-              sizes (<code>uint8</code> through <code>uint256</code>), the
-              difference between <code>bytes32</code> and <code>string</code>,
-              or how fixed-point numbers work, this is where to look. Bookmark
-              it.
+              Full reference for every built-in type, from
+              <code>uint8</code> through <code>uint256</code>, fixed-point
+              numbers, and the distinction between <code>bytes32</code> and
+              <code>string</code>. Use it when you want the exact specification.
             </p>
           </div>
         </article>
@@ -799,23 +872,20 @@ contract Counter {
             are exactly where exploits live.
           </p>
 
-          <div class="resource-card explore-card">
-            <span class="resource-label">Reference</span>
+          <div class="resource-card try-card">
+            <span class="resource-label">Try it</span>
             <a
-              href="https://solidity-by-example.org/"
+              href="https://cryptozombies.io/"
               target="_blank"
               rel="noopener"
-              >Solidity by Example</a
+              >CryptoZombies</a
             >
             <p>
-              A clean, no-fluff reference site that pairs each Solidity concept
-              with a minimal working contract. Look up
-              <a href="https://solidity-by-example.org/constructor/" target="_blank" rel="noopener">Constructor</a>,
-              <a href="https://solidity-by-example.org/error/" target="_blank" rel="noopener">Error handling</a>, and
-              <a href="https://solidity-by-example.org/first-app/" target="_blank" rel="noopener">First App</a>
-              to see exactly what you just built, written slightly differently.
-              Comparing your Counter solution against theirs is a faster way to
-              reinforce the concepts than re-reading the same explanation.
+              An interactive Solidity course built as a game &mdash; you write
+              real contracts in the browser and the game checks your work as you
+              go. The first two lessons cover constructors,
+              <code>require()</code>, state variables, and visibility, so it
+              picks up exactly where Day 3 leaves off.
             </p>
           </div>
         </article>
