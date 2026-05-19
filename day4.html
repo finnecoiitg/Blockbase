@@ -1,0 +1,837 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Day 4 — Data Structures and Modifiers | BlockBase</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Karantina&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Nico+Moji&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="reading-progress" id="readingProgress"></div>
+    <nav class="navbar">
+      <div class="logo-container">
+        <img src="blockbase.png" alt="Blockbase" />
+        <img src="fec.png" alt="FEC IITG" />
+      </div>
+      <ul class="nav-links">
+        <li><a href="index.html#about">About</a></li>
+        <li><a href="index.html#curriculum">Curriculum</a></li>
+        <li>
+          <a
+            href="https://chat.whatsapp.com/EUfRkvIR5DPALPlOOrjKJf?mode=gi_t"
+            class="nav-whatsapp"
+            target="_blank"
+            rel="noopener"
+            ><i class="fab fa-whatsapp"></i> Join Blockbase WhatsApp</a
+          >
+        </li>
+      </ul>
+    </nav>
+
+    <div class="reader-wrap">
+      <div class="reader-header">
+        <a href="index.html#curriculum" class="back-link"
+          ><i class="fas fa-arrow-left"></i> Back to Curriculum</a
+        >
+        <div>
+          <span class="day-pill">Day 4</span>
+          <h1 class="day-header-title">Data Structures and Modifiers</h1>
+        </div>
+      </div>
+
+      <div class="task-tabs">
+        <button class="task-tab active" data-index="0">
+          Task 1 &mdash; Data Structures
+        </button>
+        <button class="task-tab" data-index="1">
+          Task 2 &mdash; Events and Modifiers
+        </button>
+        <button class="task-tab" data-index="2">
+          Task 3 &mdash; TodoList and the Voting Challenge
+        </button>
+      </div>
+
+      <div class="reader-body">
+        <!-- ═══════════════════════════════════════════════════════════ TASK 1 -->
+        <article id="task1" class="task-pane active">
+          <p>
+            Day 3 covered the mechanics of a Solidity contract &mdash; how to
+            declare variables, write functions, and validate input with
+            <code>require()</code>. A contract that stores a counter or a name
+            is easy to follow. But real contracts maintain lists of participants,
+            link every address to some piece of state, and move through a
+            defined lifecycle. Arrays, structs, mappings, and enums make all of
+            that possible.
+          </p>
+
+          <p>
+            Before those, one concept that trips up almost everyone coming from
+            other languages: in Solidity, data doesn&rsquo;t just have a type
+            &mdash; it has a location.
+          </p>
+
+          <h3>Where data lives</h3>
+
+          <p>
+            In most languages, memory management is the runtime&rsquo;s
+            problem. Solidity makes you be explicit, because the cost difference
+            between locations is significant. Reading and writing to on-chain
+            storage is orders of magnitude more expensive than working with
+            temporary memory, and understanding the distinction early shapes how
+            you write every function from here on.
+          </p>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th style="width: 100px">Location</th>
+                  <th>Where it lives</th>
+                  <th>Lifetime</th>
+                  <th>Cost</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>storage</code></td>
+                  <td>The blockchain</td>
+                  <td>Permanent &mdash; persists after the function returns</td>
+                  <td>Most expensive</td>
+                </tr>
+                <tr>
+                  <td><code>memory</code></td>
+                  <td>Temporary RAM</td>
+                  <td>Erased when the function returns</td>
+                  <td>Cheap</td>
+                </tr>
+                <tr>
+                  <td><code>calldata</code></td>
+                  <td>Transaction input</td>
+                  <td>Read-only, exists only during the call</td>
+                  <td>Cheapest</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <p>
+            State variables are always <code>storage</code> &mdash; you never
+            write the keyword, the compiler assumes it. Where you do have to be
+            explicit is with <em>reference types</em> (strings, arrays, structs)
+            in function parameters and local variables. For value types
+            (<code>uint</code>, <code>bool</code>, <code>address</code>) the
+            compiler handles location automatically, but reference types require
+            you to say where they should live.
+          </p>
+
+          <pre><code>// This compiles: memory tells the EVM this string is temporary
+function greet(string memory _name) public pure returns (string memory) {
+    return _name;
+}
+
+// This does not compile: Solidity requires a data location for string
+function greet(string _name) public pure returns (string) { ... }</code></pre>
+
+          <p>
+            The practical rule: use <code>memory</code> for function parameters
+            and local variables you&rsquo;re working with temporarily. For
+            <code>external</code> functions where you only need to read a
+            parameter &mdash; not modify it &mdash; use <code>calldata</code>
+            instead; it skips the copy and costs a little less gas. The
+            difference is most noticeable when parameters are large strings or
+            arrays.
+          </p>
+
+          <h3>Arrays</h3>
+
+          <p>
+            Solidity has two kinds: dynamic (no fixed length, grows at runtime)
+            and fixed-size (length declared upfront, never changes). The one
+            you&rsquo;ll use most as a state variable is dynamic.
+          </p>
+
+          <pre><code>contract ArrayExample {
+    // Dynamic array: grows and shrinks freely
+    uint[] public numbers;
+
+    // Fixed-size array: always exactly 5 elements
+    uint[5] public fixedNumbers;
+
+    function addNumber(uint _n) public {
+        numbers.push(_n);
+    }
+
+    function removeLastNumber() public {
+        numbers.pop();
+    }
+
+    function getLength() public view returns (uint) {
+        return numbers.length;
+    }
+
+    function getAt(uint _index) public view returns (uint) {
+        return numbers[_index];
+    }
+}</code></pre>
+
+          <p>
+            Dynamic arrays stored as state variables support <code>push()</code>
+            to append an element and <code>pop()</code> to remove from the end.
+            There&rsquo;s no built-in remove-from-middle operation &mdash; the
+            Task 3 lab shows the standard pattern for that.
+          </p>
+
+          <p>
+            One important safety behaviour: accessing an index that
+            doesn&rsquo;t exist doesn&rsquo;t return <code>undefined</code> or
+            zero &mdash; it reverts the transaction. <code>numbers[10]</code> on
+            a 4-element array will fail. Any function that accepts a
+            user-supplied index should validate it before using it.
+          </p>
+
+          <p>
+            A note on memory arrays: inside a function body, you can declare a
+            fixed-size memory array like <code>uint[] memory arr = new uint[](5)</code>,
+            but <code>push()</code> and <code>pop()</code> are not available on
+            it. Those operations exist only on storage arrays.
+          </p>
+
+          <h3>Structs</h3>
+
+          <p>
+            A struct groups related fields into a named type. Once defined, you
+            use it the same way you&rsquo;d use <code>uint</code> or
+            <code>address</code> &mdash; as a state variable, as the element
+            type of an array, or as a function parameter.
+          </p>
+
+          <pre><code>contract StudentRegistry {
+    struct Student {
+        string name;
+        uint age;
+        bool isEnrolled;
+    }
+
+    Student[] public students;
+
+    function addStudent(string memory _name, uint _age) public {
+        students.push(Student({
+            name: _name,
+            age: _age,
+            isEnrolled: true
+        }));
+    }
+
+    function getStudent(uint _index) public view returns (string memory, uint, bool) {
+        Student memory s = students[_index];
+        return (s.name, s.age, s.isEnrolled);
+    }
+}</code></pre>
+
+          <p>
+            The most common pattern is exactly what&rsquo;s above: define the
+            record shape with a struct, then keep a dynamic array of that struct
+            as a state variable. This gives you an ordered, appendable list
+            where each element has named fields.
+          </p>
+
+          <p>
+            When you read a struct from a storage array into a local variable
+            &mdash; <code>Student memory s = students[_index]</code> &mdash; it
+            copies the data into temporary memory. Any changes to <code>s</code>
+            don&rsquo;t affect the stored struct. If you want to update a field
+            in storage, assign directly: <code>students[_index].isEnrolled = false</code>.
+          </p>
+
+          <h3>Mappings</h3>
+
+          <p>
+            Mappings are the data structure you&rsquo;ll use most in Solidity.
+            They&rsquo;re a key-value store: you write a key, you get the
+            associated value. The syntax is
+            <code>mapping(keyType =&gt; valueType)</code>.
+          </p>
+
+          <pre><code>contract Balances {
+    mapping(address => uint) public balances;
+
+    function deposit(uint _amount) public {
+        balances[msg.sender] = balances[msg.sender] + _amount;
+    }
+
+    function getBalance(address _user) public view returns (uint) {
+        return balances[_user];
+    }
+}</code></pre>
+
+          <p>
+            Two things set mappings apart from dictionaries in most other
+            languages.
+          </p>
+
+          <p>
+            First, every possible key already has a value. You never check
+            whether a key &ldquo;exists&rdquo; in a mapping &mdash; you just
+            read it, and if you haven&rsquo;t written anything there, you get
+            the zero value: <code>0</code> for <code>uint</code>,
+            <code>false</code> for <code>bool</code>, <code>address(0)</code>
+            for <code>address</code>. This means <code>balances[anyAddress]</code>
+            is always safe to read, even for an address that has never
+            interacted with the contract.
+          </p>
+
+          <p>
+            Second, mappings cannot be iterated. You can&rsquo;t loop over all
+            keys, you can&rsquo;t check how many keys have been written, and
+            there&rsquo;s no <code>.length</code>. The only operation is
+            looking up a specific key. If you need to enumerate &mdash; for
+            example, to pay out every address that deposited &mdash; you have to
+            maintain a separate array of addresses and push to it every time a
+            new address first writes to the mapping.
+          </p>
+
+          <p>
+            Mappings are constant-time for both reads and writes. This is why
+            they&rsquo;re used everywhere performance matters: token balances,
+            ownership records, voting registries, access control lists.
+          </p>
+
+          <h3>Enums</h3>
+
+          <p>
+            An enum defines a finite, named set of states. Under the hood each
+            value is stored as a <code>uint</code> starting from 0, but you
+            write and compare using the names. This prevents a whole class of
+            bugs where an integer argument has the wrong meaning.
+          </p>
+
+          <pre><code>contract ShippingStatus {
+    enum Status { Pending, Shipped, Delivered, Cancelled }
+
+    Status public currentStatus;
+
+    function ship() public {
+        currentStatus = Status.Shipped;
+    }
+
+    function isDelivered() public view returns (bool) {
+        return currentStatus == Status.Delivered;
+    }
+}</code></pre>
+
+          <p>
+            Use enums whenever something in your contract has a discrete
+            lifecycle: an order moving through Pending &rarr; Shipped &rarr;
+            Delivered &rarr; Cancelled, an auction moving through Accepting
+            &rarr; Active &rarr; Closed, a vote session that hasn&rsquo;t
+            started, is open, or has ended. The compiler will flag invalid
+            assignments &mdash; you can&rsquo;t accidentally set status to 99.
+          </p>
+
+          <div class="resource-card demo-card">
+            <span class="resource-label">Reference</span>
+            <a
+              href="https://docs.soliditylang.org/en/v0.8.21/types.html#reference-types"
+              target="_blank"
+              rel="noopener"
+              >Reference Types &mdash; Solidity Docs</a
+            >
+            <p>
+              The official reference for arrays, structs, mappings, and data
+              locations. Worth reading the section on data location rules in
+              full &mdash; it covers assignment behaviour between
+              <code>storage</code> and <code>memory</code> that catches people
+              off guard the first time.
+            </p>
+          </div>
+        </article>
+
+        <!-- ═══════════════════════════════════════════════════════════ TASK 2 -->
+        <article id="task2" class="task-pane">
+          <p>
+            Two patterns that appear together in nearly every production
+            contract. Events give your contract a way to write output that
+            external code can read &mdash; not a state change, but a permanent
+            log attached to the transaction. Modifiers let you write an access
+            rule once and attach it to as many functions as need it, rather than
+            repeating the same <code>require()</code> everywhere.
+          </p>
+
+          <h3>Events</h3>
+
+          <p>
+            When a function emits an event, a log entry is written into the
+            transaction receipt. That log is stored by every Ethereum node
+            and is permanently associated with the transaction &mdash; but it
+            sits outside the contract&rsquo;s storage, and you cannot read it
+            from within Solidity code. Events are strictly write-only from the
+            contract&rsquo;s perspective. They exist for the outside world.
+          </p>
+
+          <pre><code>contract EventExample {
+    event Transfer(address indexed from, address indexed to, uint amount);
+
+    function transfer(address _to, uint _amount) public {
+        // transfer logic here
+
+        emit Transfer(msg.sender, _to, _amount);
+    }
+}</code></pre>
+
+          <p>
+            Two reasons to use events instead of storing history in state
+            variables. First, gas. Writing a new value to a state variable costs
+            around 20,000 gas. Emitting an event with the same information costs
+            a fraction of that. For any contract that needs a full history of
+            every action &mdash; every deposit, every vote, every transfer
+            &mdash; events are the right tool.
+          </p>
+
+          <p>
+            Second, indexability. The <code>indexed</code> keyword on an event
+            parameter means that block explorers and frontends can filter by
+            that field efficiently. Every ERC-20 token&rsquo;s
+            <code>Transfer</code> event indexes both <code>from</code> and
+            <code>to</code>, which is why Etherscan can show you the complete
+            token transfer history for any address. You can mark up to 3
+            parameters as <code>indexed</code> per event. Non-indexed parameters
+            are still stored in the log &mdash; they just can&rsquo;t be
+            filtered by.
+          </p>
+
+          <p>
+            After deploying a contract in Remix and calling a function that
+            emits an event, expand the transaction entry in the console.
+            The Logs section shows the event name and the decoded parameter
+            values. On a verified contract on Etherscan, the same data appears
+            on the Logs tab of every transaction.
+          </p>
+
+          <h3>Modifiers</h3>
+
+          <p>
+            A modifier wraps a function with additional logic that runs before
+            the function body executes. If the modifier reverts, the function
+            body never runs.
+          </p>
+
+          <pre><code>contract Owned {
+    address public owner;
+
+    constructor() {
+        owner = msg.sender;
+    }
+
+    modifier onlyOwner() {
+        require(msg.sender == owner, "Not the owner");
+        _;
+    }
+
+    function sensitiveAction() public onlyOwner {
+        // this line only runs if msg.sender == owner
+    }
+
+    function anotherRestrictedFunction() public onlyOwner {
+        // same check, one word instead of one line
+    }
+}</code></pre>
+
+          <p>
+            The <code>_;</code> is a placeholder that marks where the
+            function&rsquo;s own body executes. Everything written before
+            <code>_;</code> in the modifier runs as a precondition. Anything
+            after it (uncommon) runs after the function body returns.
+          </p>
+
+          <p>
+            You already wrote <code>require(msg.sender == owner, ...)</code>
+            directly inside functions in Day 3. The modifier version does the
+            same thing &mdash; the benefit shows up when you have five functions
+            that all need the same check. One modifier, applied with one word,
+            means the check lives in one place. If you later want to change the
+            ownership logic &mdash; for example, to allow a multisig wallet
+            instead of a single address &mdash; you update the modifier and
+            every function gets the change automatically.
+          </p>
+
+          <p>
+            Multiple modifiers can be applied to a single function. They run
+            left to right:
+          </p>
+
+          <pre><code>modifier whenNotPaused() {
+    require(!paused, "Contract is paused");
+    _;
+}
+
+// onlyOwner runs first, then whenNotPaused, then the function body
+function withdraw() public onlyOwner whenNotPaused {
+    // ...
+}</code></pre>
+
+          <div class="resource-card demo-card">
+            <span class="resource-label">Reference</span>
+            <a
+              href="https://docs.soliditylang.org/en/v0.8.21/contracts.html#function-modifiers"
+              target="_blank"
+              rel="noopener"
+              >Function Modifiers &mdash; Solidity Docs</a
+            >
+            <p>
+              The official reference covers modifier inheritance, overriding,
+              and the less common case of placing logic after <code>_;</code>.
+              Worth a read before Day 5, when you&rsquo;ll inherit from
+              OpenZeppelin contracts that use modifiers extensively.
+            </p>
+          </div>
+        </article>
+
+        <!-- ═══════════════════════════════════════════════════════════ TASK 3 -->
+        <article id="task3" class="task-pane">
+          <p>
+            The TodoList is a complete contract. It manages a real list of
+            tasks with create, complete, and delete operations, ownership-based
+            access control, and event logs on every state change. Every line
+            uses something from Day 3 or Day 4. Write it yourself before
+            reading the full code.
+          </p>
+
+          <h3>The TodoList contract</h3>
+
+          <p>
+            Walk through what each part does before looking at the full code.
+          </p>
+
+          <p>
+            The <code>Task</code> struct holds three fields: <code>text</code>,
+            a <code>completed</code> flag, and <code>createdAt</code> &mdash;
+            the block timestamp when the task was added. The timestamp
+            isn&rsquo;t needed for this contract to function correctly, but
+            recording it is a pattern worth establishing early. Any feature
+            involving deadlines, expiry, or time-based logic depends on having
+            stored when something was created.
+          </p>
+
+          <p>
+            The delete operation uses the <strong>swap-and-pop</strong> pattern:
+            copy the last element into the slot being deleted, then pop the last
+            element. The array stays compact and the operation costs the same
+            regardless of where in the array the deletion happens. The tradeoff:
+            task order changes when a deletion occurs &mdash; whatever was last
+            moves into the deleted slot. For a task list that&rsquo;s
+            acceptable; for a contract where order matters, you&rsquo;d need a
+            different approach.
+          </p>
+
+          <pre><code>// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.10;
+
+contract TodoList {
+    address public owner;
+
+    struct Task {
+        string text;
+        bool completed;
+        uint createdAt;
+    }
+
+    Task[] public tasks;
+
+    event TaskAdded(uint indexed taskId, string text);
+    event TaskCompleted(uint indexed taskId);
+
+    constructor() {
+        owner = msg.sender;
+    }
+
+    modifier onlyOwner() {
+        require(msg.sender == owner, "Only owner can do this");
+        _;
+    }
+
+    function addTask(string memory _text) public {
+        tasks.push(Task({
+            text: _text,
+            completed: false,
+            createdAt: block.timestamp
+        }));
+        emit TaskAdded(tasks.length - 1, _text);
+    }
+
+    function completeTask(uint _index) public {
+        require(_index &lt; tasks.length, "Task does not exist");
+        require(!tasks[_index].completed, "Already completed");
+        tasks[_index].completed = true;
+        emit TaskCompleted(_index);
+    }
+
+    function deleteTask(uint _index) public onlyOwner {
+        require(_index &lt; tasks.length, "Task does not exist");
+        tasks[_index] = tasks[tasks.length - 1];
+        tasks.pop();
+    }
+
+    function getTaskCount() public view returns (uint) {
+        return tasks.length;
+    }
+}</code></pre>
+
+          <h3>Testing in Remix</h3>
+
+          <p>
+            Deploy with Remix VM (Shanghai). Then run through these steps in
+            order &mdash; the last three test the failure paths, which matter as
+            much as the success cases.
+          </p>
+
+          <ol class="content-list">
+            <li>
+              Call <strong>addTask</strong> three times with
+              <code>"Learn Solidity"</code>, <code>"Deploy a contract"</code>,
+              and <code>"Build a dApp"</code>.
+            </li>
+            <li>
+              Call <strong>getTaskCount</strong> &mdash; it should return
+              <code>3</code>.
+            </li>
+            <li>
+              Call <strong>completeTask</strong> with index <code>0</code>. The
+              transaction succeeds. Click the <strong>tasks</strong> button with
+              input <code>0</code> to confirm <code>completed</code> is now
+              <code>true</code>.
+            </li>
+            <li>
+              Call <strong>completeTask</strong> with index <code>0</code> again.
+              This time it should revert with <code>"Already completed"</code>.
+              Confirm the red circle in the Remix console.
+            </li>
+            <li>
+              Call <strong>deleteTask</strong> with index <code>1</code>. This
+              works because you&rsquo;re the deployer. Call
+              <strong>getTaskCount</strong> &mdash; it should return
+              <code>2</code>. The last task moved into slot 1.
+            </li>
+            <li>
+              Switch to a different account in the Accounts dropdown. Call
+              <strong>deleteTask</strong> again. It should revert with
+              <code>"Only owner can do this"</code>, confirming that the
+              <code>onlyOwner</code> modifier is enforced.
+            </li>
+          </ol>
+
+          <h3>The SimpleVote challenge</h3>
+
+          <p>
+            Build this from scratch before looking at the solution. Each
+            function has one or two things to figure out on your own.
+          </p>
+
+          <pre><code>Contract: SimpleVote
+
+State:
+  candidates  — dynamic string array
+  votes       — mapping from candidate index to vote count
+  hasVoted    — mapping from address to bool (prevents double voting)
+  owner       — address, set at deployment
+
+Functions:
+  addCandidate(string) — appends a candidate name (onlyOwner)
+  vote(uint)           — casts one vote for a candidate index
+  getVotes(uint)       — returns the vote count for a candidate
+  getWinner()          — returns the name of the leading candidate</code></pre>
+
+          <p>Three things to work out before looking at the solution:</p>
+
+          <ul class="content-list">
+            <li>
+              <code>vote()</code> needs to prevent the same address from voting
+              twice. You have a mapping from address to bool. Check it before
+              recording the vote, then set it to <code>true</code> after.
+            </li>
+            <li>
+              <code>vote()</code> also needs to reject an invalid candidate
+              index. The <code>candidates</code> array has a
+              <code>.length</code> &mdash; use it.
+            </li>
+            <li>
+              <code>getWinner()</code> is the first function you&rsquo;ve
+              written that needs a loop. You need to iterate over
+              <code>candidates</code>, check <code>votes[i]</code> against a
+              running maximum, and track the index of whoever is leading. In
+              case of a tie, return whichever candidate reached that count
+              first.
+            </li>
+          </ul>
+
+          <p>When you&rsquo;re ready to check your work:</p>
+
+          <pre><code>// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.10;
+
+contract SimpleVote {
+    address public owner;
+    string[] public candidates;
+    mapping(uint => uint) public votes;
+    mapping(address => bool) public hasVoted;
+
+    constructor() {
+        owner = msg.sender;
+    }
+
+    modifier onlyOwner() {
+        require(msg.sender == owner, "Not the owner");
+        _;
+    }
+
+    function addCandidate(string memory _name) public onlyOwner {
+        candidates.push(_name);
+    }
+
+    function vote(uint _index) public {
+        require(!hasVoted[msg.sender], "Already voted");
+        require(_index &lt; candidates.length, "Invalid candidate");
+        votes[_index] = votes[_index] + 1;
+        hasVoted[msg.sender] = true;
+    }
+
+    function getVotes(uint _index) public view returns (uint) {
+        return votes[_index];
+    }
+
+    function getWinner() public view returns (string memory) {
+        require(candidates.length &gt; 0, "No candidates");
+        uint maxVotes = 0;
+        uint winnerIndex = 0;
+        for (uint i = 0; i &lt; candidates.length; i++) {
+            if (votes[i] &gt; maxVotes) {
+                maxVotes = votes[i];
+                winnerIndex = i;
+            }
+        }
+        return candidates[winnerIndex];
+    }
+}</code></pre>
+
+          <p>
+            Test the full flow in Remix: add three candidates (only the deployer
+            can), switch to a second account and vote, switch to a third and
+            vote for a different candidate, then call <code>getWinner()</code>.
+            Then try voting a second time from the same account &mdash; it
+            should revert. Try calling <code>addCandidate</code> from a
+            non-owner account &mdash; that should revert too.
+          </p>
+
+          <div class="resource-card explore-card">
+            <span class="resource-label">Preview</span>
+            <a
+              href="https://wizard.openzeppelin.com/"
+              target="_blank"
+              rel="noopener"
+              >OpenZeppelin Contracts Wizard</a
+            >
+            <p>
+              Select ERC20, check the Mintable and Ownable boxes, and read
+              through what it generates. You&rsquo;ll recognise the
+              <code>onlyOwner</code> modifier, the constructor, and the mapping
+              underneath the token balance. Day 5 builds exactly this &mdash;
+              from scratch first, then using OpenZeppelin as the base.
+            </p>
+          </div>
+        </article>
+      </div>
+
+      <div class="reader-footer-nav">
+        <button class="nav-btn" id="prevTaskBtn" style="visibility: hidden">
+          &larr; Previous
+        </button>
+        <button class="nav-btn" id="nextTaskBtn">Next &rarr;</button>
+      </div>
+    </div>
+
+    <footer>
+      <div class="social-icons">
+        <a href="https://www.instagram.com/fec_iitg/" target="_blank"
+          ><i class="fab fa-instagram"></i
+        ></a>
+        <a
+          href="https://www.linkedin.com/company/finance-and-economics-club-iitg/"
+          target="_blank"
+          ><i class="fab fa-linkedin"></i
+        ></a>
+        <a href="https://x.com/fec_iitg" target="_blank"
+          ><i class="fab fa-twitter"></i
+        ></a>
+        <a
+          href="https://www.youtube.com/@financeandeconomicsclubiit1029"
+          target="_blank"
+          ><i class="fab fa-youtube"></i
+        ></a>
+        <a href="https://www.facebook.com/financeclubiitg/" target="_blank"
+          ><i class="fab fa-facebook"></i
+        ></a>
+        <a
+          href="https://chat.whatsapp.com/EUfRkvIR5DPALPlOOrjKJf?mode=gi_t"
+          target="_blank"
+          rel="noopener"
+          ><i class="fab fa-whatsapp"></i
+        ></a>
+      </div>
+      <p>Finance and Economics Club,</p>
+      <p>IIT Guwahati</p>
+    </footer>
+
+    <script>
+      const tabs = document.querySelectorAll(".task-tab");
+      const panes = document.querySelectorAll(".task-pane");
+      const prevBtn = document.getElementById("prevTaskBtn");
+      const nextBtn = document.getElementById("nextTaskBtn");
+      let current = 0;
+
+      function showTask(index) {
+        tabs.forEach((t, i) => t.classList.toggle("active", i === index));
+        panes.forEach((p, i) => p.classList.toggle("active", i === index));
+        current = index;
+        prevBtn.style.visibility = current === 0 ? "hidden" : "visible";
+        nextBtn.style.visibility =
+          current === tabs.length - 1 ? "hidden" : "visible";
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+
+      tabs.forEach((tab, i) =>
+        tab.addEventListener("click", () => showTask(i)),
+      );
+      prevBtn.addEventListener("click", () => showTask(current - 1));
+      nextBtn.addEventListener("click", () => showTask(current + 1));
+
+      if (window.location.hash === "#task2") showTask(1);
+      if (window.location.hash === "#task3") showTask(2);
+
+      window.addEventListener("scroll", () => {
+        const el = document.documentElement;
+        const pct = (el.scrollTop / (el.scrollHeight - el.clientHeight)) * 100;
+        document.getElementById("readingProgress").style.width =
+          Math.min(pct, 100) + "%";
+      });
+    </script>
+  </body>
+</html>

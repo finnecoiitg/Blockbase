@@ -163,12 +163,16 @@
         <div class="day-card" data-day="4">
           <div class="day-card-left"><span class="day-num">04</span></div>
           <div class="day-card-body">
-            <h3>Deploying and Interacting with Contracts</h3>
+            <h3>Data Structures and Modifiers</h3>
             <p>
-              Using Remix IDE to compile, deploy, and call your contract on a
-              test network. Reading and writing state on-chain.
+              Arrays, structs, mappings, events, and the onlyOwner pattern.
+              Build a TodoList and a voting contract.
             </p>
-            <div class="day-tasks"></div>
+            <div class="day-tasks">
+              <a href="day4.html#task1" class="task-link">Task 1 &mdash; Data Structures</a>
+              <a href="day4.html#task2" class="task-link">Task 2 &mdash; Events and Modifiers</a>
+              <a href="day4.html#task3" class="task-link">Task 3 &mdash; TodoList and the Voting Challenge</a>
+            </div>
             <div class="day-locked-msg">
               <i class="fas fa-lock"></i> Content releasing soon
             </div>
@@ -239,7 +243,7 @@
       <script>
         // â”€â”€ UNLOCK CONFIG â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
         // Add a day number to release it. Example: [1, 2] releases Days 1 and 2.
-        const UNLOCKED_DAYS = [1, 2, 3];
+        const UNLOCKED_DAYS = [1, 2, 3, 4];
         // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
         document.querySelectorAll(".day-card").forEach((card) => {
           const day = parseInt(card.dataset.day);
