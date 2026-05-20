@@ -1,0 +1,799 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Day 5 — ERC-20 Tokens | BlockBase</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Karantina&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Nico+Moji&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="reading-progress" id="readingProgress"></div>
+    <nav class="navbar">
+      <div class="logo-container">
+        <img src="blockbase.png" alt="Blockbase" />
+        <img src="fec.png" alt="FEC IITG" />
+      </div>
+      <ul class="nav-links">
+        <li><a href="index.html#about">About</a></li>
+        <li><a href="index.html#curriculum">Curriculum</a></li>
+        <li>
+          <a
+            href="https://chat.whatsapp.com/EUfRkvIR5DPALPlOOrjKJf?mode=gi_t"
+            class="nav-whatsapp"
+            target="_blank"
+            rel="noopener"
+            ><i class="fab fa-whatsapp"></i> Join Blockbase WhatsApp</a
+          >
+        </li>
+      </ul>
+    </nav>
+
+    <div class="reader-wrap">
+      <div class="reader-header">
+        <a href="index.html#curriculum" class="back-link"
+          ><i class="fas fa-arrow-left"></i> Back to Curriculum</a
+        >
+        <div>
+          <span class="day-pill">Day 5</span>
+          <h1 class="day-header-title">ERC-20 Tokens</h1>
+        </div>
+      </div>
+
+      <div class="task-tabs">
+        <button class="task-tab active" data-index="0">
+          Task 1 &mdash; What is a Token?
+        </button>
+        <button class="task-tab" data-index="1">
+          Task 2 &mdash; Building Your Token
+        </button>
+        <button class="task-tab" data-index="2">
+          Task 3 &mdash; Burn, Cap, and the Allowance System
+        </button>
+      </div>
+
+      <div class="reader-body">
+        <!-- ═══════════════════════════════════════════════════════════ TASK 1 -->
+        <article id="task1" class="task-pane active">
+          <p>
+            Before you write a single line of token code, it's worth stripping
+            away the mystique. Tokens — USDC, LINK, UNI, every ERC-20 you've
+            ever seen in a wallet — are not a special kind of blockchain object.
+            They are smart contracts. Contracts with a mapping from addresses to
+            balances, a function that moves numbers between entries in that
+            mapping, and a handful of utility functions that frontends use to
+            display information. That's all there is to it.
+          </p>
+
+          <p>
+            What you built in Day 4 already contains the core of a token. The
+            <code>Balances</code> contract had a
+            <code>mapping(address =&gt; uint)</code> and a function that added
+            to it. Extend that with a transfer function, a total supply tracker,
+            and some standard naming, and you have a token. The ERC-20 standard
+            is just the industry's agreement on what those functions should be
+            called, so that every wallet, exchange, and dApp can interact with
+            any token without writing custom code for each one.
+          </p>
+
+          <h3>The interoperability problem</h3>
+
+          <p>
+            Imagine if every bank used a completely different protocol for wire
+            transfers. Bank A sends money one way, Bank B handles it
+            differently, and no two are compatible. Every time you wanted to
+            move money between banks, someone would have to write a custom
+            integration. That's the situation Ethereum tokens were heading
+            toward in 2015, when developers were building token contracts with
+            different function names and signatures.
+          </p>
+
+          <p>
+            Fabian Vogelsteller and Vitalik Buterin proposed ERC-20 to fix this.
+            ERC stands for <em>Ethereum Request for Comment</em> — a process
+            borrowed from the early internet, where proposed standards are
+            published for community review before becoming official. ERC-20
+            defined a minimum interface every token contract must implement. If
+            your contract has these six functions and two events, any
+            MetaMask-connected wallet can display your token balance, any
+            decentralised exchange can list it for trading, and any other
+            contract can interact with it — without knowing anything specific
+            about your implementation.
+          </p>
+
+          <h3>The standard interface</h3>
+
+          <p>
+            Six functions and two events. That's the whole standard. Here's what
+            each one does:
+          </p>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th style="width: 240px">Function / Event</th>
+                  <th>Purpose</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>totalSupply()</code></td>
+                  <td>
+                    Returns the total number of tokens in existence. Every token
+                    minted increases this. Every token burned decreases it.
+                  </td>
+                </tr>
+                <tr>
+                  <td><code>balanceOf(address)</code></td>
+                  <td>
+                    Returns how many tokens a given address holds. This is what
+                    MetaMask calls to show you your balance.
+                  </td>
+                </tr>
+                <tr>
+                  <td><code>transfer(to, amount)</code></td>
+                  <td>
+                    Moves tokens from the caller's balance to another address.
+                    If the caller doesn't have enough tokens, it reverts.
+                  </td>
+                </tr>
+                <tr>
+                  <td><code>approve(spender, amount)</code></td>
+                  <td>
+                    Gives another address permission to spend up to
+                    <code>amount</code> of the caller's tokens on their behalf.
+                    Used by DeFi protocols. Covered in detail in Task 3.
+                  </td>
+                </tr>
+                <tr>
+                  <td><code>allowance(owner, spender)</code></td>
+                  <td>
+                    Returns how much a spender is still authorised to transfer
+                    from an owner's balance.
+                  </td>
+                </tr>
+                <tr>
+                  <td><code>transferFrom(from, to, amount)</code></td>
+                  <td>
+                    Moves tokens from one address to another, using a previously
+                    granted allowance. The caller must have been approved by the
+                    <code>from</code> address for at least <code>amount</code>.
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <code>Transfer(from, to, amount)</code>
+                    <em style="font-weight: normal; font-size: 0.9em"
+                      >(event)</em
+                    >
+                  </td>
+                  <td>
+                    Emitted on every token movement — whether from
+                    <code>transfer()</code>, <code>transferFrom()</code>, or
+                    minting. This is how Etherscan builds a token's complete
+                    transaction history.
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <code>Approval(owner, spender, amount)</code>
+                    <em style="font-weight: normal; font-size: 0.9em"
+                      >(event)</em
+                    >
+                  </td>
+                  <td>
+                    Emitted every time <code>approve()</code> is called,
+                    recording that an allowance was granted or updated.
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <p>
+            Three of these — <code>totalSupply</code>, <code>balanceOf</code>,
+            and <code>transfer</code> — you could write from scratch today with
+            what you already know. The <code>approve</code> /
+            <code>allowance</code> / <code>transferFrom</code> trio is where
+            most explanations lose people, so it gets its own section in Task 3.
+            For now, hold the idea that it exists to let a third contract spend
+            tokens on your behalf — without ever getting your private key.
+          </p>
+
+          <h3>Decimals: why 1 token isn't stored as 1</h3>
+
+          <p>
+            The EVM has no concept of decimal numbers. All arithmetic on the
+            blockchain operates on integers. So how do you represent a token
+            balance of 1.5? You don't — you represent it as
+            1,500,000,000,000,000,000 and agree that the last 18 digits are the
+            fractional part.
+          </p>
+
+          <p>
+            This is exactly the same relationship ETH has with wei. When your
+            wallet shows you 1.5 ETH, the blockchain is storing
+            1,500,000,000,000,000,000 wei. There is no floating point anywhere —
+            the display layer divides by 10<sup>18</sup> to show the
+            human-readable number. ERC-20 tokens follow the same convention by
+            default: 18 decimal places. The <code>decimals()</code> function
+            returns 18 unless you override it.
+          </p>
+
+          <p>
+            This has a concrete consequence when you write code. To mint one
+            million tokens, you don't pass <code>1000000</code> to the mint
+            function. You pass <code>1000000 * 10 ** 18</code>. Solidity has a
+            helper for this:
+          </p>
+
+          <pre><code>// These are equivalent — both mint 1,000,000 tokens
+_mint(msg.sender, 1000000 * 10 ** 18);
+_mint(msg.sender, 1000000 * 10 ** decimals());</code></pre>
+
+          <p>
+            The second form is preferred because it stays correct if you ever
+            change the decimal count. In practice you won't — 18 is the
+            universal convention, and deviating from it breaks compatibility
+            with most tooling — but using <code>decimals()</code> signals intent
+            more clearly.
+          </p>
+
+          <p>
+            When you call <code>balanceOf</code> on a deployed token and get
+            back a large raw number, that number is in the token's smallest unit
+            (equivalent to wei for ETH). Divide by 10<sup>18</sup> to get the
+            readable balance. Frontends do this automatically. In Remix you'll
+            see the raw number and have to do the conversion mentally.
+          </p>
+
+          <div class="resource-card explore-card">
+            <span class="resource-label">Read</span>
+            <a
+              href="https://eips.ethereum.org/EIPS/eip-20"
+              target="_blank"
+              rel="noopener"
+              >EIP-20 &mdash; Token Standard</a
+            >
+            <p>
+              The original proposal. Short, well-written, and worth reading
+              once. The rationale section explains exactly why each function
+              exists and what problem it solves. It's also a good example of
+              what a well-specified interface looks like.
+            </p>
+          </div>
+        </article>
+
+        <!-- ═══════════════════════════════════════════════════════════ TASK 2 -->
+        <article id="task2" class="task-pane">
+          <p>
+            Writing a fully compliant ERC-20 from scratch would take several
+            hundred lines and require getting subtleties exactly right —
+            handling edge cases in allowances, emitting the right events in the
+            right places, avoiding integer overflow on transfers. People have
+            done this wrong and lost real money. There is a better approach.
+          </p>
+
+          <h3>OpenZeppelin</h3>
+
+          <p>
+            The library you'll use is called OpenZeppelin — a collection of
+            smart contract building blocks written by security-focused
+            engineers, reviewed by professional auditors, and deployed in
+            contracts holding billions of dollars across the ecosystem. Their
+            ERC-20 implementation has been stress-tested in ways no first-year
+            project ever will be.
+          </p>
+
+          <p>
+            The right way to think about it is not as a shortcut but as the
+            correct engineering choice. When you write production software, you
+            don't reimplement string parsing from first principles when a
+            well-maintained library exists. The same logic applies here, and the
+            stakes are higher — a bug in a deployed token contract cannot be
+            patched.
+          </p>
+
+          <p>
+            In Remix, you import OpenZeppelin contracts directly from their
+            GitHub repository. The compiler fetches the source automatically:
+          </p>
+
+          <pre><code>import "@openzeppelin/contracts/token/ERC20/ERC20.sol";</code></pre>
+
+          <h3>Inheritance</h3>
+
+          <p>
+            Before writing the contract, one concept you need: inheritance. When
+            a contract uses <code>is SomeOtherContract</code>, it inherits
+            everything from that contract — all its state variables, all its
+            functions, all its internal logic. Your contract is an extension of
+            it. You get the base behaviour for free and can add to it, or
+            override specific parts.
+          </p>
+
+          <pre><code>// This contract IS an ERC20. It has totalSupply, balanceOf,
+// transfer, approve, allowance, transferFrom — all of it — for free.
+contract MyToken is ERC20 {
+    // Your additions go here
+}</code></pre>
+
+          <p>
+            OpenZeppelin's <code>ERC20</code> already implements the complete
+            standard correctly. <code>is ERC20</code> gives you all of that. You
+            only write what's unique to your specific token: its name, symbol,
+            initial supply, and any custom logic like minting or burning.
+          </p>
+
+          <h3>Writing the token</h3>
+
+          <p>
+            Create a new file in Remix called <code>MyToken.sol</code>. Write
+            this out rather than pasting it — the constructor line is where most
+            mistakes happen and typing it forces you to read it carefully:
+          </p>
+
+          <pre><code>// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.10;
+
+import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+
+contract MyToken is ERC20 {
+    address public owner;
+
+    constructor(string memory _name, string memory _symbol) ERC20(_name, _symbol) {
+        owner = msg.sender;
+        _mint(msg.sender, 1000000 * 10 ** decimals());
+    }
+
+    modifier onlyOwner() {
+        require(msg.sender == owner, "Not the owner");
+        _;
+    }
+
+    function mint(address _to, uint256 _amount) public onlyOwner {
+        _mint(_to, _amount);
+    }
+}</code></pre>
+
+          <p>
+            The constructor has two parameter lists — that's the one thing that
+            looks unusual.
+            <code>(string memory _name, string memory _symbol)</code> are the
+            parameters for <em>your</em> constructor. The
+            <code>ERC20(_name, _symbol)</code> that immediately follows is the
+            call to the parent contract's constructor — it's how you pass the
+            token name and symbol up to OpenZeppelin's code, which stores them.
+            This syntax is specific to inheritance in Solidity: when your
+            contract inherits from another that has a constructor with
+            parameters, you must call the parent constructor this way.
+          </p>
+
+          <p>
+            <code>_mint</code> is an internal function from OpenZeppelin's
+            <code>ERC20</code>. It creates tokens — increasing
+            <code>totalSupply</code> by the amount given, adding that amount to
+            the recipient's balance, and emitting the <code>Transfer</code>
+            event from the zero address to the recipient (the conventional way
+            to represent minting in the standard). You cannot call
+            <code>_mint</code> from outside the contract — the leading
+            underscore in OpenZeppelin's naming convention signals that a
+            function is internal. That's exactly what you want: the only way to
+            mint new tokens is through your public <code>mint()</code> function,
+            which is guarded by <code>onlyOwner</code>.
+          </p>
+
+          <h3>Deploying and testing</h3>
+
+          <p>
+            Compile with version 0.8.10 or higher. You may see a yellow warning
+            about unused variables — that's fine. Deploy to Remix VM (Shanghai)
+            with the constructor arguments filled in: enter your token name and
+            symbol in the input fields next to the Deploy button. Choose
+            something — you're building your own coin.
+          </p>
+
+          <p>
+            After deployment, expand the contract. You'll see a longer list of
+            functions than in previous days — these are all the ERC-20 functions
+            you inherited, plus yours. Work through these steps in order:
+          </p>
+
+          <ol class="content-list">
+            <li>
+              Call <strong>totalSupply</strong>. You'll see a large number —
+              <code>1000000000000000000000000</code>. That's one million tokens
+              expressed with 18 decimal places. Divide by 10<sup>18</sup> and
+              you get 1,000,000.
+            </li>
+            <li>
+              Call <strong>balanceOf</strong> with your deployer address (copy
+              it from the Account dropdown at the top of the Deploy panel). It
+              should return the same large number — you got the entire initial
+              supply.
+            </li>
+            <li>
+              Call <strong>name</strong> and <strong>symbol</strong>. They
+              return whatever you passed to the constructor.
+            </li>
+            <li>Call <strong>decimals</strong>. It returns <code>18</code>.</li>
+            <li>
+              Call <strong>transfer</strong> with a second Remix account address
+              and an amount of <code>1000000000000000000</code> (that's 10<sup
+                >18</sup
+              >
+              — exactly 1 token). Switch to the second account and call
+              <strong>balanceOf</strong> with its address — it should show
+              <code>1000000000000000000</code>.
+            </li>
+            <li>
+              Switch back to the deployer account. Call <strong>mint</strong>
+              with the second account's address and
+              <code>5000000000000000000</code> (5 tokens). Check the second
+              account's balance again — it should now be
+              <code>6000000000000000000</code>.
+            </li>
+            <li>
+              Switch to the second account. Try calling <strong>mint</strong>.
+              It should revert with <code>"Not the owner"</code>. The
+              <code>onlyOwner</code> modifier is working.
+            </li>
+          </ol>
+
+          <p>
+            One thing worth noticing in the Remix console after the transfer and
+            mint calls: expand the transaction log and look at the Logs section.
+            You'll see a decoded <code>Transfer</code> event for each one — the
+            from address, the to address, and the value. This is the event data
+            that Etherscan uses to build a token's transaction history.
+            OpenZeppelin's implementation emits these automatically; you don't
+            have to write any event code yourself.
+          </p>
+
+          <div class="resource-card demo-card">
+            <span class="resource-label">Reference</span>
+            <a
+              href="https://docs.openzeppelin.com/contracts/4.x/erc20"
+              target="_blank"
+              rel="noopener"
+              >ERC-20 &mdash; OpenZeppelin Docs</a
+            >
+            <p>
+              The full documentation for OpenZeppelin's ERC-20 implementation,
+              including every function's behaviour, the internal functions
+              available to child contracts (<code>_mint</code>,
+              <code>_burn</code>, <code>_beforeTokenTransfer</code>), and worked
+              examples of common patterns like Burnable and Capped extensions.
+            </p>
+          </div>
+        </article>
+
+        <!-- ═══════════════════════════════════════════════════════════ TASK 3 -->
+        <article id="task3" class="task-pane">
+          <p>
+            Your token works. Now extend it with two features that appear in
+            almost every production ERC-20 — a burn mechanism and a supply cap —
+            and then work through the approval system properly, because it's the
+            mechanism that makes all of DeFi function and it's consistently
+            misunderstood.
+          </p>
+
+          <h3>Adding burn</h3>
+
+          <p>
+            Burning destroys tokens permanently, reducing total supply. It's the
+            opposite of minting. OpenZeppelin provides an internal
+            <code>_burn(address, amount)</code> function that handles
+            everything: decrements the holder's balance, decrements
+            <code>totalSupply</code>, and emits a <code>Transfer</code> event to
+            the zero address (the conventional way to represent a burn in the
+            standard).
+          </p>
+
+          <p>
+            The question is who gets to burn tokens. The most common design: any
+            holder can burn their own tokens, but nobody can burn someone
+            else's. A public <code>burn</code> function that burns from
+            <code>msg.sender</code> naturally enforces this — you can only call
+            it on your own behalf.
+          </p>
+
+          <pre><code>function burn(uint256 _amount) public {
+    _burn(msg.sender, _amount);
+}</code></pre>
+
+          <p>
+            That's the entire function. <code>_burn</code> handles the balance
+            check internally — if <code>msg.sender</code> doesn't hold enough
+            tokens, the transaction reverts with a clear error message before
+            any state changes. You don't need a manual <code>require</code>
+            here; OpenZeppelin's implementation already has it.
+          </p>
+
+          <h3>Adding a supply cap</h3>
+
+          <p>
+            A cap prevents the owner from minting tokens beyond a fixed maximum.
+            It's a trust mechanism: if users know the maximum supply is capped
+            at 10 million and the contract enforces it, they know their holdings
+            can never be diluted beyond that point. You add the check to the
+            <code>mint</code> function:
+          </p>
+
+          <pre><code>uint256 public constant MAX_SUPPLY = 10_000_000 * 10 ** 18;
+
+function mint(address _to, uint256 _amount) public onlyOwner {
+    require(totalSupply() + _amount &lt;= MAX_SUPPLY, "Cap exceeded");
+    _mint(_to, _amount);
+}</code></pre>
+
+          <p>
+            <code>constant</code> means the value is fixed at compile time and
+            never changes — the compiler replaces every reference to
+            <code>MAX_SUPPLY</code> with the literal number, so it costs no
+            storage. The underscores in <code>10_000_000</code> are a
+            readability feature added in Solidity 0.8 — the compiler ignores
+            them, but they make large numbers much easier to read at a glance.
+          </p>
+
+          <p>
+            The check happens before the mint: if the current
+            <code>totalSupply()</code> plus the requested amount would exceed
+            the cap, the whole transaction reverts. No partial mints.
+          </p>
+
+          <h3>The approval system</h3>
+
+          <p>
+            This is the mechanism that almost everyone misunderstands the first
+            time they use DeFi. When you swap tokens on Uniswap, you're not
+            sending your tokens directly to Uniswap's contract. At some point
+            before the swap, you sign a transaction granting Uniswap's contract
+            permission to move a specific amount of your tokens on your behalf.
+            That permission is recorded in your token contract as an allowance.
+            When the swap executes, Uniswap calls <code>transferFrom</code> on
+            the token contract — and the token contract checks whether Uniswap
+            is authorised, then moves the tokens.
+          </p>
+
+          <p>
+            Your private key never leaves your wallet. You never sent your
+            tokens to Uniswap. You gave the token contract a signed instruction
+            saying "this specific contract is allowed to spend up to this amount
+            from my balance." That's all <code>approve</code> does.
+          </p>
+
+          <p>The full flow in code:</p>
+
+          <pre><code>// Step 1: Alice calls this on the token contract
+// "I allow Uniswap to spend up to 100 of my tokens"
+token.approve(uniswapAddress, 100 * 10 ** 18);
+
+// Step 2: Uniswap's contract calls this when executing Alice's swap
+// (Uniswap calls transferFrom on Alice's behalf)
+token.transferFrom(aliceAddress, poolAddress, 100 * 10 ** 18);</code></pre>
+
+          <p>
+            Inside OpenZeppelin's <code>transferFrom</code>, three things
+            happen: the function checks that the caller (Uniswap's contract) has
+            an allowance of at least 100 tokens from Alice, deducts that amount
+            from the allowance, and then moves the tokens. If Uniswap tries to
+            call <code>transferFrom</code> without Alice having approved it
+            first, the transaction reverts.
+          </p>
+
+          <p>
+            This pattern is why DeFi requires two transactions for a first-time
+            token interaction: one <code>approve</code> and one actual
+            operation. You might have noticed this with MetaMask — the first
+            time you use a new protocol with a new token, you approve, then
+            confirm the main transaction. That approval transaction is calling
+            <code>approve()</code> on the token contract.
+          </p>
+
+          <h3>Testing the approval flow in Remix</h3>
+
+          <ol class="content-list">
+            <li>
+              Deploy the full contract (with burn and cap) as Account A. Account
+              A starts with the full initial supply.
+            </li>
+            <li>
+              As Account A, call <strong>approve</strong> with Account B's
+              address and <code>500000000000000000000</code> (500 tokens).
+            </li>
+            <li>
+              Call <strong>allowance</strong> with Account A as owner and
+              Account B as spender. It should return
+              <code>500000000000000000000</code>.
+            </li>
+            <li>
+              Switch to Account B. Call <strong>transferFrom</strong> with
+              Account A as the <code>from</code> address, Account B as
+              <code>to</code>, and <code>100000000000000000000</code> (100
+              tokens).
+            </li>
+            <li>
+              Check Account A's balance — it should have decreased by 100
+              tokens. Check the allowance again — it should now be 400 tokens.
+              Account B consumed part of its allowance.
+            </li>
+            <li>
+              As Account B, try to call <strong>transferFrom</strong> with an
+              amount of 500 tokens — more than the remaining allowance of 400.
+              It should revert.
+            </li>
+            <li>
+              As Account A, call <strong>burn</strong> with
+              <code>1000000000000000000000</code> (1,000 tokens). Call
+              <strong>totalSupply</strong> — it should have decreased by exactly
+              that amount.
+            </li>
+            <li>
+              Try minting up to the cap: call <strong>totalSupply</strong>,
+              calculate how much is left before hitting <code>MAX_SUPPLY</code>,
+              and try to mint that plus one token more. It should revert with
+              <code>"Cap exceeded"</code>.
+            </li>
+          </ol>
+
+          <h3>The complete contract</h3>
+
+          <p>
+            Here is everything together. Read through it before deploying —
+            every line should be familiar by now, and anything that isn't is
+            worth pausing on:
+          </p>
+
+          <pre><code>// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.10;
+
+import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+
+contract MyToken is ERC20 {
+    address public owner;
+    uint256 public constant MAX_SUPPLY = 10_000_000 * 10 ** 18;
+
+    constructor(string memory _name, string memory _symbol) ERC20(_name, _symbol) {
+        owner = msg.sender;
+        _mint(msg.sender, 1_000_000 * 10 ** decimals());
+    }
+
+    modifier onlyOwner() {
+        require(msg.sender == owner, "Not the owner");
+        _;
+    }
+
+    function mint(address _to, uint256 _amount) public onlyOwner {
+        require(totalSupply() + _amount &lt;= MAX_SUPPLY, "Cap exceeded");
+        _mint(_to, _amount);
+    }
+
+    function burn(uint256 _amount) public {
+        _burn(msg.sender, _amount);
+    }
+}</code></pre>
+
+          <p>
+            This is a real, deployable ERC-20 token. It follows the standard, it
+            inherits a battle-tested implementation, it has an owner-gated mint
+            with a hard cap, and any holder can burn their own balance. In Day 6
+            you deploy this exact contract to the Sepolia testnet, verify it on
+            Etherscan, and import it into MetaMask so it appears in your wallet
+            alongside any other token you hold.
+          </p>
+
+          <div class="resource-card explore-card">
+            <span class="resource-label">Preview</span>
+            <a
+              href="https://wizard.openzeppelin.com/"
+              target="_blank"
+              rel="noopener"
+              >OpenZeppelin Contracts Wizard</a
+            >
+            <p>
+              Select ERC-20, toggle on Mintable, Burnable, and Capped. Read
+              through what it generates and compare it to what you wrote today.
+              You'll recognise everything — OpenZeppelin's wizard is just a more
+              fully-featured version of the same pattern. When you get to
+              building real projects, this is where most token contracts start.
+            </p>
+          </div>
+        </article>
+      </div>
+
+      <div class="reader-footer-nav">
+        <button class="nav-btn" id="prevTaskBtn" style="visibility: hidden">
+          &larr; Previous
+        </button>
+        <button class="nav-btn" id="nextTaskBtn">Next &rarr;</button>
+      </div>
+    </div>
+
+    <footer>
+      <div class="social-icons">
+        <a href="https://www.instagram.com/fec_iitg/" target="_blank"
+          ><i class="fab fa-instagram"></i
+        ></a>
+        <a
+          href="https://www.linkedin.com/company/finance-and-economics-club-iitg/"
+          target="_blank"
+          ><i class="fab fa-linkedin"></i
+        ></a>
+        <a href="https://x.com/fec_iitg" target="_blank"
+          ><i class="fab fa-twitter"></i
+        ></a>
+        <a
+          href="https://www.youtube.com/@financeandeconomicsclubiit1029"
+          target="_blank"
+          ><i class="fab fa-youtube"></i
+        ></a>
+        <a href="https://www.facebook.com/financeclubiitg/" target="_blank"
+          ><i class="fab fa-facebook"></i
+        ></a>
+        <a
+          href="https://chat.whatsapp.com/EUfRkvIR5DPALPlOOrjKJf?mode=gi_t"
+          target="_blank"
+          rel="noopener"
+          ><i class="fab fa-whatsapp"></i
+        ></a>
+      </div>
+      <p>Finance and Economics Club,</p>
+      <p>IIT Guwahati</p>
+    </footer>
+
+    <script>
+      const tabs = document.querySelectorAll(".task-tab");
+      const panes = document.querySelectorAll(".task-pane");
+      const prevBtn = document.getElementById("prevTaskBtn");
+      const nextBtn = document.getElementById("nextTaskBtn");
+      let current = 0;
+
+      function showTask(index) {
+        tabs.forEach((t, i) => t.classList.toggle("active", i === index));
+        panes.forEach((p, i) => p.classList.toggle("active", i === index));
+        current = index;
+        prevBtn.style.visibility = current === 0 ? "hidden" : "visible";
+        nextBtn.style.visibility =
+          current === tabs.length - 1 ? "hidden" : "visible";
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+
+      tabs.forEach((tab, i) =>
+        tab.addEventListener("click", () => showTask(i)),
+      );
+      prevBtn.addEventListener("click", () => showTask(current - 1));
+      nextBtn.addEventListener("click", () => showTask(current + 1));
+
+      if (window.location.hash === "#task2") showTask(1);
+      if (window.location.hash === "#task3") showTask(2);
+
+      window.addEventListener("scroll", () => {
+        const el = document.documentElement;
+        const pct = (el.scrollTop / (el.scrollHeight - el.clientHeight)) * 100;
+        document.getElementById("readingProgress").style.width =
+          Math.min(pct, 100) + "%";
+      });
+    </script>
+  </body>
+</html>

@@ -188,12 +188,22 @@
         <div class="day-card" data-day="5">
           <div class="day-card-left"><span class="day-num">05</span></div>
           <div class="day-card-body">
-            <h3>Web Development for Web3</h3>
+            <h3>ERC-20 Tokens</h3>
             <p>
-              HTML, CSS, and JavaScript essentials. How the web works and why
-              you need it before building a dApp frontend.
+              The token standard that powers DeFi &mdash; build your own ERC-20
+              with minting, burning, a supply cap, and the approval system.
             </p>
-            <div class="day-tasks"></div>
+            <div class="day-tasks">
+              <a href="day5.html#task1" class="task-link"
+                >Task 1 &mdash; What is a Token?</a
+              >
+              <a href="day5.html#task2" class="task-link"
+                >Task 2 &mdash; Building Your Token</a
+              >
+              <a href="day5.html#task3" class="task-link"
+                >Task 3 &mdash; Burn, Cap, and the Allowance System</a
+              >
+            </div>
             <div class="day-locked-msg">
               <i class="fas fa-lock"></i> Content releasing soon
             </div>
@@ -249,7 +259,7 @@
       <script>
         // â”€â”€ UNLOCK CONFIG â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
         // Add a day number to release it. Example: [1, 2] releases Days 1 and 2.
-        const UNLOCKED_DAYS = [1, 2, 3, 4];
+        const UNLOCKED_DAYS = [1, 2, 3, 4, 5];
         // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
         document.querySelectorAll(".day-card").forEach((card) => {
           const day = parseInt(card.dataset.day);
