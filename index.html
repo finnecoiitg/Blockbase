@@ -213,12 +213,23 @@
         <div class="day-card" data-day="6">
           <div class="day-card-left"><span class="day-num">06</span></div>
           <div class="day-card-body">
-            <h3>Connecting Frontend to the Blockchain</h3>
+            <h3>Deploying to a Real Network</h3>
             <p>
-              React and ethers.js &mdash; building the interface that talks to
-              your smart contract through MetaMask.
+              Testnets, Etherscan, and MetaMask &mdash; take your ERC-20 token
+              live on Sepolia, verify the source code, and share it with the
+              world.
             </p>
-            <div class="day-tasks"></div>
+            <div class="day-tasks">
+              <a href="day6.html#task1" class="task-link"
+                >Task 1 &mdash; Testnets and Deployment</a
+              >
+              <a href="day6.html#task2" class="task-link"
+                >Task 2 &mdash; Deploy Your Token</a
+              >
+              <a href="day6.html#task3" class="task-link"
+                >Task 3 &mdash; Verify, Import, and Share</a
+              >
+            </div>
             <div class="day-locked-msg">
               <i class="fas fa-lock"></i> Content releasing soon
             </div>
@@ -259,7 +270,7 @@
       <script>
         // â”€â”€ UNLOCK CONFIG â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
         // Add a day number to release it. Example: [1, 2] releases Days 1 and 2.
-        const UNLOCKED_DAYS = [1, 2, 3, 4, 5];
+        const UNLOCKED_DAYS = [1, 2, 3, 4, 5, 6];
         // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
         document.querySelectorAll(".day-card").forEach((card) => {
           const day = parseInt(card.dataset.day);

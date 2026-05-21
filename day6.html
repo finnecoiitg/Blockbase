@@ -1,0 +1,831 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Day 6 — Deploying to a Real Network | BlockBase</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Karantina&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Nico+Moji&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="reading-progress" id="readingProgress"></div>
+    <nav class="navbar">
+      <div class="logo-container">
+        <img src="blockbase.png" alt="Blockbase" />
+        <img src="fec.png" alt="FEC IITG" />
+      </div>
+      <ul class="nav-links">
+        <li><a href="index.html#about">About</a></li>
+        <li><a href="index.html#curriculum">Curriculum</a></li>
+        <li>
+          <a
+            href="https://chat.whatsapp.com/EUfRkvIR5DPALPlOOrjKJf?mode=gi_t"
+            class="nav-whatsapp"
+            target="_blank"
+            rel="noopener"
+            ><i class="fab fa-whatsapp"></i> Join Blockbase WhatsApp</a
+          >
+        </li>
+      </ul>
+    </nav>
+
+    <div class="reader-wrap">
+      <div class="reader-header">
+        <a href="index.html#curriculum" class="back-link"
+          ><i class="fas fa-arrow-left"></i> Back to Curriculum</a
+        >
+        <div>
+          <span class="day-pill">Day 6</span>
+          <h1 class="day-header-title">Deploying to a Real Network</h1>
+        </div>
+      </div>
+
+      <div class="task-tabs">
+        <button class="task-tab active" data-index="0">
+          Task 1 &mdash; Testnets and Deployment
+        </button>
+        <button class="task-tab" data-index="1">
+          Task 2 &mdash; Deploy Your Token
+        </button>
+        <button class="task-tab" data-index="2">
+          Task 3 &mdash; Verify, Import, and Share
+        </button>
+      </div>
+
+      <div class="reader-body">
+        <!-- ═══════════════════════════════════════════════════════════ TASK 1 -->
+        <article id="task1" class="task-pane active">
+          <p>
+            Everything you have built so far &mdash; counters, voting contracts,
+            ERC-20 tokens &mdash; has run inside Remix VM. Remix VM is a
+            sandboxed JavaScript simulator that lives entirely in your browser.
+            It has no real blockchain behind it. The accounts are fake, the ETH
+            is fake, and when you close the tab, every deployed contract
+            disappears. It is the right tool for writing and testing code. It is
+            the wrong tool for anything you want to actually exist.
+          </p>
+
+          <p>
+            Today you take your ERC-20 token from Day 5 and deploy it to Sepolia
+            &mdash; a real Ethereum testnet. After today, your contract will
+            have a permanent address on a live blockchain. Anyone in the world
+            can interact with it. It will persist after you close the browser.
+          </p>
+
+          <h3>What is a testnet?</h3>
+
+          <p>
+            A testnet is a complete, live copy of the Ethereum network that runs
+            in parallel with the main one. It uses the same EVM, the same
+            consensus rules, the same transaction format, and the same tooling.
+            The only difference: the ETH on it has no monetary value. You can
+            get it for free from a faucet.
+          </p>
+
+          <p>
+            This matters a great deal. Every deployment you make to a real
+            network costs gas. On mainnet, gas costs real money. A botched
+            deployment, a contract with a bug that needs redeployment, a test
+            you forgot to run &mdash; these are expensive mistakes on mainnet.
+            On a testnet they cost nothing, and the process is identical in
+            every technical sense. Professionals always test on a testnet before
+            touching mainnet.
+          </p>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th style="width: 160px">Environment</th>
+                  <th>Real ETH?</th>
+                  <th>Persistent?</th>
+                  <th>Use case</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Remix VM</strong></td>
+                  <td>No &mdash; simulated</td>
+                  <td>No &mdash; lost on tab close</td>
+                  <td>Writing and unit-testing code quickly</td>
+                </tr>
+                <tr>
+                  <td><strong>Sepolia testnet</strong></td>
+                  <td>No &mdash; free from faucet</td>
+                  <td>Yes &mdash; lives on a real blockchain</td>
+                  <td>
+                    Full integration testing, sharing with others, practising
+                    deployment
+                  </td>
+                </tr>
+                <tr>
+                  <td><strong>Ethereum mainnet</strong></td>
+                  <td>Yes &mdash; real money</td>
+                  <td>Yes &mdash; permanent</td>
+                  <td>Production contracts only</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <p>
+            Sepolia is the current recommended testnet for Ethereum development.
+            An older testnet called Goerli was widely used until 2023 but is now
+            deprecated &mdash; ignore it if you see it in older tutorials. Use
+            Sepolia for everything.
+          </p>
+
+          <h3>What actually happens when you deploy</h3>
+
+          <p>
+            In Remix VM, clicking Deploy is instant and frictionless. On a real
+            network, deploying a contract is a transaction &mdash; the same kind
+            of transaction as sending ETH, but with one difference: instead of
+            specifying a recipient address, you leave the <code>to</code> field
+            empty and put your compiled contract bytecode in the
+            <code>data</code> field.
+          </p>
+
+          <p>
+            The network processes this transaction like any other. A validator
+            picks it up, includes it in a block, and the EVM executes it. During
+            execution, the EVM runs the constructor, allocates storage, and
+            assigns the contract a new permanent address &mdash; derived
+            deterministically from the deployer&rsquo;s address and their
+            transaction count (the nonce). Once the block is finalised, the
+            contract exists at that address on the blockchain forever. There is
+            no delete.
+          </p>
+
+          <p>
+            The deployer pays gas for all of this. The cost depends on how much
+            EVM computation the deployment takes &mdash; contracts with large
+            constructors or that initialise a lot of storage cost more. Your
+            ERC-20 token will cost a modest amount of Sepolia ETH, which you
+            will get from a faucet.
+          </p>
+
+          <h3>Bytecode vs source code</h3>
+
+          <p>
+            When Remix compiles your Solidity, it produces two things. The first
+            is <strong>bytecode</strong>: low-level hexadecimal instructions
+            that the EVM executes directly, with no human-readable structure.
+            This is what actually gets stored on-chain. The second is the
+            <strong>ABI</strong> (Application Binary Interface): a JSON
+            description of your contract&rsquo;s functions and their
+            input/output types, which frontends and tools use to interact with
+            the deployed bytecode.
+          </p>
+
+          <p>
+            Your Solidity source code is not stored on-chain. Bytecode is. This
+            means that after deployment, anyone can see the raw bytecode at your
+            contract&rsquo;s address &mdash; but they cannot read what it does
+            unless you separately publish the source code. This is what
+            Etherscan verification does.
+          </p>
+
+          <h3>Etherscan and block explorers</h3>
+
+          <p>
+            Etherscan is a block explorer: a website that indexes the entire
+            Ethereum blockchain and presents it in a human-readable format. For
+            any address &mdash; wallet or contract &mdash; Etherscan shows every
+            transaction ever sent to or from it, every token held, every
+            internal call, and every event emitted.
+          </p>
+
+          <p>
+            Sepolia has its own Etherscan instance at
+            <a
+              href="https://sepolia.etherscan.io"
+              target="_blank"
+              rel="noopener"
+              >sepolia.etherscan.io</a
+            >. The interface is identical to mainnet Etherscan. After you
+            deploy, you will paste your contract address here and see everything
+            about it: the deployment transaction, the deployer&rsquo;s address,
+            the bytecode, and &mdash; after verification &mdash; the full
+            readable Solidity source.
+          </p>
+
+          <p>
+            An unverified contract on Etherscan shows only bytecode under its
+            Contract tab, with a banner reading
+            <em>&ldquo;Contract source code not verified.&rdquo;</em> A verified
+            contract shows the full Solidity, a readable function list under
+            Read Contract and Write Contract, and a green checkmark. In real
+            projects, verification is expected &mdash; a deployed contract that
+            nobody can read is a red flag.
+          </p>
+
+          <div class="resource-card explore-card">
+            <span class="resource-label">Explore</span>
+            <a
+              href="https://sepolia.etherscan.io"
+              target="_blank"
+              rel="noopener"
+              >Sepolia Etherscan</a
+            >
+            <p>
+              Open this now and search for any contract address. Look at a
+              verified contract &mdash; find the Contract tab, the Read Contract
+              tab, and the transaction list. This is what your contract will
+              look like after today.
+            </p>
+          </div>
+        </article>
+
+        <!-- ═══════════════════════════════════════════════════════════ TASK 2 -->
+        <article id="task2" class="task-pane">
+          <p>
+            This task is almost entirely practical. The steps below take you
+            from having a compiled contract in Remix to having a live, deployed
+            contract on Sepolia with a permanent address. Read each step fully
+            before clicking anything &mdash; the sequence matters, and a few
+            points trip people up consistently.
+          </p>
+
+          <h3>Before you start: Sepolia ETH</h3>
+
+          <p>
+            You need a small amount of Sepolia ETH in your MetaMask wallet to
+            pay gas. If you already have it from a previous session, check your
+            balance &mdash; even 0.1 SepoliaETH is more than enough for several
+            deployments. If you don&rsquo;t have any, use one of these faucets:
+          </p>
+
+          <div class="resource-card explore-card">
+            <span class="resource-label">Faucet</span>
+            <a
+              href="https://cloud.google.com/application/web3/faucet/ethereum/sepolia"
+              target="_blank"
+              rel="noopener"
+              >Google Cloud Web3 Faucet &mdash; Sepolia</a
+            >
+            <p>
+              Paste your MetaMask wallet address and request Sepolia ETH. No
+              login required. Dispenses 0.05 ETH per request &mdash; enough for
+              dozens of deployments.
+            </p>
+          </div>
+
+          <div class="resource-card explore-card">
+            <span class="resource-label">Faucet</span>
+            <a
+              href="https://www.alchemy.com/faucets/ethereum-sepolia"
+              target="_blank"
+              rel="noopener"
+              >Alchemy Sepolia Faucet</a
+            >
+            <p>
+              Alternative faucet if Google&rsquo;s is throttled. Requires a free
+              Alchemy account. Dispenses 0.5 ETH per day.
+            </p>
+          </div>
+
+          <h3>Step 1 &mdash; Open MyToken.sol in Remix</h3>
+
+          <p>
+            Go to
+            <a href="https://remix.ethereum.org" target="_blank" rel="noopener"
+              >remix.ethereum.org</a
+            >
+            and open the <code>MyToken.sol</code> file you wrote in Day 5. If
+            you no longer have it, here is the complete contract:
+          </p>
+
+          <pre><code>// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.10;
+
+import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+
+contract MyToken is ERC20 {
+    address public owner;
+    uint256 public constant MAX_SUPPLY = 10_000_000 * 10 ** 18;
+
+    constructor(string memory _name, string memory _symbol) ERC20(_name, _symbol) {
+        owner = msg.sender;
+        _mint(msg.sender, 1_000_000 * 10 ** decimals());
+    }
+
+    modifier onlyOwner() {
+        require(msg.sender == owner, "Not the owner");
+        _;
+    }
+
+    function mint(address _to, uint256 _amount) public onlyOwner {
+        require(totalSupply() + _amount &lt;= MAX_SUPPLY, "Cap exceeded");
+        _mint(_to, _amount);
+    }
+
+    function burn(uint256 _amount) public {
+        _burn(msg.sender, _amount);
+    }
+}</code></pre>
+
+          <p>
+            Compile it. Use version 0.8.10 or higher. Make sure there are no red
+            errors &mdash; yellow warnings are fine.
+          </p>
+
+          <h3>Step 2 &mdash; Switch the deployment environment</h3>
+
+          <p>
+            In Remix, open the
+            <strong>Deploy &amp; Run Transactions</strong> tab (the icon that
+            looks like a stack of blocks with a play button). At the top you
+            will see an <strong>Environment</strong> dropdown currently set to
+            &ldquo;Remix VM (Shanghai)&rdquo; or similar. Click it and select
+            <strong>&ldquo;Injected Provider &mdash; MetaMask&rdquo;</strong>.
+          </p>
+
+          <p>
+            MetaMask will immediately pop up asking to connect to Remix. Click
+            <strong>Connect</strong>. After connecting, check two things in
+            Remix:
+          </p>
+
+          <ol class="content-list">
+            <li>
+              The <strong>Account</strong> field now shows your MetaMask wallet
+              address instead of a fake Remix account.
+            </li>
+            <li>
+              The network indicator shows <strong>Sepolia</strong>. If MetaMask
+              is on a different network, switch it to Sepolia first (MetaMask
+              &rarr; network selector at the top &rarr; Sepolia Test Network).
+              Remix will update automatically.
+            </li>
+          </ol>
+
+          <p>
+            You should also see a small ETH balance next to your account address
+            in Remix &mdash; that is your real Sepolia ETH balance, pulled live
+            from the network.
+          </p>
+
+          <h3>Step 3 &mdash; Deploy</h3>
+
+          <p>
+            Scroll down to the Deploy section. You will see two input fields
+            next to the Deploy button: one for <code>_name</code> and one for
+            <code>_symbol</code>. These are the constructor parameters. Enter
+            whatever you want &mdash; choose a name and symbol for your token.
+          </p>
+
+          <p>
+            Click <strong>Deploy</strong>. MetaMask will pop up showing a
+            transaction summary including the estimated gas fee in Sepolia ETH.
+            Review it, then click <strong>Confirm</strong>.
+          </p>
+
+          <p>
+            Remix shows a pending spinner in the console at the bottom. After
+            15&ndash;30 seconds, the transaction is mined and the spinner
+            becomes a green checkmark. Your deployed contract appears in the
+            <strong>Deployed Contracts</strong> section at the bottom of the
+            panel, with its address.
+          </p>
+
+          <p>
+            Copy that address. It is your token&rsquo;s permanent address on
+            Sepolia. Save it somewhere &mdash; you will need it in Task 3 and in
+            Day 7.
+          </p>
+
+          <h3>Step 4 &mdash; Find your contract on Etherscan</h3>
+
+          <p>
+            Go to
+            <a
+              href="https://sepolia.etherscan.io"
+              target="_blank"
+              rel="noopener"
+              >sepolia.etherscan.io</a
+            >
+            and paste your contract address into the search bar. You should see:
+          </p>
+
+          <ol class="content-list">
+            <li>
+              Your contract address, labeled as a contract (not a wallet
+              address).
+            </li>
+            <li>
+              One transaction in the history &mdash; the deployment transaction,
+              with your wallet address as the &ldquo;From&rdquo;.
+            </li>
+            <li>
+              Under the <strong>Contract</strong> tab: bytecode, and a banner
+              saying the source code is not verified.
+            </li>
+          </ol>
+
+          <p>
+            This is exactly correct. The contract is live but unverified. Task 3
+            fixes that.
+          </p>
+
+          <div class="resource-card explore-card">
+            <span class="resource-label">Explore</span>
+            <a
+              href="https://sepolia.etherscan.io"
+              target="_blank"
+              rel="noopener"
+              >Sepolia Etherscan</a
+            >
+            <p>
+              Find your deployment transaction. Click into it and examine the
+              fields: the block it was included in, the gas used, the input data
+              (your contract&rsquo;s bytecode). The &ldquo;To&rdquo; field will
+              show &ldquo;Contract Creation&rdquo; &mdash; that is what a
+              deployment transaction looks like at the network level.
+            </p>
+          </div>
+        </article>
+
+        <!-- ═══════════════════════════════════════════════════════════ TASK 3 -->
+        <article id="task3" class="task-pane">
+          <p>
+            Your contract is live. This task covers three things: verifying the
+            source code on Etherscan so others can read it, importing the token
+            into MetaMask so it shows up in your wallet, and interacting with
+            classmates&rsquo; contracts using Etherscan&rsquo;s built-in
+            interface.
+          </p>
+
+          <h3>Verifying on Etherscan</h3>
+
+          <p>
+            Verification is the process of submitting your Solidity source code
+            to Etherscan, which recompiles it and confirms the resulting
+            bytecode matches what is stored at your contract&rsquo;s address. If
+            they match, Etherscan publishes the source code publicly and marks
+            the contract as verified.
+          </p>
+
+          <p>
+            This is not about trust in Etherscan specifically. It&rsquo;s about
+            giving anyone who interacts with your contract the ability to audit
+            what it actually does. A contract that holds other people&rsquo;s
+            tokens and cannot be read is a contract nobody should trust.
+          </p>
+
+          <p>Follow these steps exactly:</p>
+
+          <ol class="content-list">
+            <li>
+              On your contract&rsquo;s Etherscan page, click the
+              <strong>Contract</strong> tab (between Transactions and Events).
+              You will see the raw bytecode and a button labelled
+              <strong>&ldquo;Verify and Publish&rdquo;</strong>. Click it.
+            </li>
+            <li>
+              <strong>Compiler Type:</strong> Select
+              <em>Solidity (Single file)</em>. Your contract imports from
+              OpenZeppelin, but Remix flattens those imports when you use the
+              single-file option &mdash; you will paste the entire flattened
+              source.
+            </li>
+            <li>
+              <strong>Compiler Version:</strong> This must match exactly what
+              you compiled with in Remix. If you used <code>0.8.10</code>, pick
+              <code>v0.8.10+commit.fc410830</code>. Check Remix&rsquo;s compiler
+              tab to confirm which version was used.
+            </li>
+            <li>
+              <strong>Open Source License Type:</strong> Select
+              <em>MIT License (MIT)</em>.
+            </li>
+            <li>Click <strong>Continue</strong>.</li>
+            <li>
+              In the source code box, you need to paste a
+              <strong>flattened</strong> version of your contract &mdash; one
+              that inlines the OpenZeppelin imports rather than referencing
+              them. In Remix, right-click your <code>MyToken.sol</code> file in
+              the file explorer and select
+              <strong>&ldquo;Flatten&rdquo;</strong>. This creates a
+              <code>MyToken_flat.sol</code> file with all imports merged. Copy
+              its entire contents and paste it into the Etherscan source code
+              box.
+            </li>
+            <li>
+              Leave the Constructor Arguments field empty &mdash; Etherscan
+              usually detects them automatically from the deployment
+              transaction.
+            </li>
+            <li>
+              Click <strong>Verify and Publish</strong>. After 30&ndash;60
+              seconds, you will see a success page.
+            </li>
+          </ol>
+
+          <p>
+            Return to your contract&rsquo;s main Etherscan page and refresh. The
+            Contract tab now shows your full Solidity source. You will also see
+            two new sub-tabs: <strong>Read Contract</strong> and
+            <strong>Write Contract</strong>.
+          </p>
+
+          <h3>Read Contract and Write Contract</h3>
+
+          <p>
+            These two tabs are Etherscan&rsquo;s built-in interface for
+            interacting with your deployed contract &mdash; without needing to
+            return to Remix.
+          </p>
+
+          <p>
+            <strong>Read Contract</strong> shows all your <code>view</code> and
+            <code>pure</code> functions: functions that only read state and cost
+            no gas. You can call them directly from the browser &mdash; no
+            wallet required, no transaction, instant results. Try calling
+            <code>totalSupply</code>, <code>name</code>, <code>symbol</code>,
+            and <code>balanceOf</code> with your own address.
+          </p>
+
+          <p>
+            <strong>Write Contract</strong> shows all state-changing functions.
+            To use them you need to connect your wallet &mdash; click
+            &ldquo;Connect to Web3&rdquo; at the top of the Write Contract tab
+            and approve the MetaMask popup. From here you can call
+            <code>transfer</code>, <code>mint</code>, <code>burn</code>, and
+            <code>approve</code> directly on your live Sepolia contract. Each
+            call opens MetaMask to confirm a real transaction.
+          </p>
+
+          <h3>Importing your token into MetaMask</h3>
+
+          <p>
+            By default MetaMask only tracks ETH. To see your token balance in
+            the wallet, you need to tell MetaMask where to look.
+          </p>
+
+          <ol class="content-list">
+            <li>Open MetaMask. Make sure you are on the Sepolia network.</li>
+            <li>
+              Scroll down in the Assets tab until you see
+              <strong>&ldquo;Import tokens&rdquo;</strong>. Click it.
+            </li>
+            <li>
+              Paste your token&rsquo;s contract address. MetaMask will
+              automatically fetch the token symbol and decimal count from the
+              contract.
+            </li>
+            <li>Click <strong>Next</strong>, then <strong>Import</strong>.</li>
+          </ol>
+
+          <p>
+            Your token now appears in MetaMask alongside Sepolia ETH. The
+            balance shown is the 1,000,000 tokens minted to your address at
+            deployment. This is exactly what MetaMask does when it calls
+            <code>balanceOf</code> on your contract &mdash; everything you wrote
+            in Day 5 is now powering a live wallet display.
+          </p>
+
+          <h3>Interact with a classmate&rsquo;s token</h3>
+
+          <p>
+            Share your Etherscan link in the group chat and find someone
+            else&rsquo;s contract. Open their Etherscan page &mdash; because
+            they have verified their contract, you can read exactly what it does
+            before interacting with it.
+          </p>
+
+          <ol class="content-list">
+            <li>
+              Go to their <strong>Read Contract</strong> tab. Call
+              <code>balanceOf</code> with your own wallet address. You hold 0 of
+              their token &mdash; you have not received any.
+            </li>
+            <li>
+              Ask them to use <strong>Write Contract</strong> on their own page
+              to call <code>transfer</code> with your address and a small amount
+              (remember: amounts are in the smallest unit, so 1 token =
+              <code>1000000000000000000</code>).
+            </li>
+            <li>
+              After their transaction is mined, call <code>balanceOf</code>
+              again with your address. You now hold some of their token.
+            </li>
+            <li>
+              Import their token into your MetaMask the same way you imported
+              your own. It appears in your wallet alongside yours.
+            </li>
+          </ol>
+
+          <p>
+            This is the ERC-20 standard working in practice. Two different
+            tokens, two different contracts, both imported and displayed in the
+            same wallet without any custom code &mdash; because they both
+            implement the same interface.
+          </p>
+
+          <h3>Hardhat: what professionals use instead of Remix</h3>
+
+          <p>
+            Remix is excellent for learning and for quick prototyping.
+            Production projects use a different tool: <strong>Hardhat</strong>.
+            You will not use it in this course, but you will see it everywhere
+            &mdash; in tutorials, in job descriptions, in every serious
+            open-source contract repository &mdash; so here is what you need to
+            know about it.
+          </p>
+
+          <p>
+            Hardhat is a Node.js development environment for Ethereum. It runs
+            on your local machine and gives you a local blockchain (faster than
+            Remix VM), a test runner, and deployment scripts. Contracts live in
+            a
+            <code>/contracts</code> folder. Tests live in a
+            <code>/test</code> folder and are written in JavaScript using the
+            Mocha and Chai testing libraries.
+          </p>
+
+          <p>The three commands you will encounter most often:</p>
+
+          <pre><code># Create a new Hardhat project in an empty folder
+npx hardhat init
+
+# Compile all .sol files in the /contracts folder
+npx hardhat compile
+
+# Run all test files in the /test folder
+npx hardhat test</code></pre>
+
+          <p>A typical Hardhat test looks like this:</p>
+
+          <pre><code>const { expect } = require("chai");
+
+describe("MyToken", function () {
+  it("Should mint 1 million tokens to the deployer", async function () {
+    const [owner] = await ethers.getSigners();
+    const MyToken = await ethers.getContractFactory("MyToken");
+    const token = await MyToken.deploy("BlockBase Token", "BBT");
+
+    const balance = await token.balanceOf(owner.address);
+    expect(balance).to.equal(ethers.parseUnits("1000000", 18));
+  });
+});</code></pre>
+
+          <p>
+            The pattern is straightforward: deploy the contract inside the test,
+            call its functions, and assert that the results match what you
+            expect. If they don&rsquo;t, the test fails and shows you exactly
+            which assertion failed. For a real project with multiple contracts,
+            dozens of edge cases, and real money at stake, this kind of
+            automated test suite is not optional.
+          </p>
+
+          <p>
+            You will not write Hardhat tests in this course. But after Day 8,
+            when you explore further on your own, Hardhat is the right next
+            step.
+          </p>
+
+          <div class="resource-card explore-card">
+            <span class="resource-label">Read</span>
+            <a
+              href="https://hardhat.org/tutorial"
+              target="_blank"
+              rel="noopener"
+              >Hardhat &mdash; Beginners Tutorial</a
+            >
+            <p>
+              The official Hardhat tutorial builds a token contract from scratch
+              with a full test suite and a deployment script. After finishing
+              this course, this is the right next project &mdash; it bridges
+              from what you know to professional-grade development practices.
+            </p>
+          </div>
+
+          <h3>Challenge &mdash; Deploy your Voting contract</h3>
+
+          <p>
+            Take the voting contract you wrote in the Day 4 challenge and deploy
+            it to Sepolia using the same process:
+          </p>
+
+          <ol class="content-list">
+            <li>Open it in Remix and compile cleanly.</li>
+            <li>
+              Switch to Injected Provider and deploy to Sepolia. If the
+              constructor takes parameters, fill them in.
+            </li>
+            <li>Find it on Etherscan. Flatten the source and verify it.</li>
+            <li>
+              Once verified, use the <strong>Write Contract</strong> tab on
+              Etherscan to add candidates and cast votes &mdash; without
+              touching Remix at all.
+            </li>
+            <li>
+              Use <strong>Read Contract</strong> to check the vote tallies. Try
+              doing this from a different browser where MetaMask is not
+              installed &mdash; read functions work without any wallet.
+            </li>
+          </ol>
+
+          <p>
+            In Day 7 you connect a JavaScript frontend to the ERC-20 token you
+            deployed today, and the contract address you saved becomes the
+            central piece of that project.
+          </p>
+        </article>
+      </div>
+
+      <div class="reader-footer-nav">
+        <button class="nav-btn" id="prevTaskBtn" style="visibility: hidden">
+          &larr; Previous
+        </button>
+        <button class="nav-btn" id="nextTaskBtn">Next &rarr;</button>
+      </div>
+    </div>
+
+    <footer>
+      <div class="social-icons">
+        <a href="https://www.instagram.com/fec_iitg/" target="_blank"
+          ><i class="fab fa-instagram"></i
+        ></a>
+        <a
+          href="https://www.linkedin.com/company/finance-and-economics-club-iitg/"
+          target="_blank"
+          ><i class="fab fa-linkedin"></i
+        ></a>
+        <a href="https://x.com/fec_iitg" target="_blank"
+          ><i class="fab fa-twitter"></i
+        ></a>
+        <a
+          href="https://www.youtube.com/@financeandeconomicsclubiit1029"
+          target="_blank"
+          ><i class="fab fa-youtube"></i
+        ></a>
+        <a href="https://www.facebook.com/financeclubiitg/" target="_blank"
+          ><i class="fab fa-facebook"></i
+        ></a>
+        <a
+          href="https://chat.whatsapp.com/EUfRkvIR5DPALPlOOrjKJf?mode=gi_t"
+          target="_blank"
+          rel="noopener"
+          ><i class="fab fa-whatsapp"></i
+        ></a>
+      </div>
+      <p>Finance and Economics Club,</p>
+      <p>IIT Guwahati</p>
+    </footer>
+
+    <script>
+      const tabs = document.querySelectorAll(".task-tab");
+      const panes = document.querySelectorAll(".task-pane");
+      const prevBtn = document.getElementById("prevTaskBtn");
+      const nextBtn = document.getElementById("nextTaskBtn");
+      let current = 0;
+
+      function showTask(index) {
+        tabs.forEach((t, i) => t.classList.toggle("active", i === index));
+        panes.forEach((p, i) => p.classList.toggle("active", i === index));
+        current = index;
+        prevBtn.style.visibility = current === 0 ? "hidden" : "visible";
+        nextBtn.style.visibility =
+          current === tabs.length - 1 ? "hidden" : "visible";
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+
+      tabs.forEach((tab, i) =>
+        tab.addEventListener("click", () => showTask(i)),
+      );
+      prevBtn.addEventListener("click", () => showTask(current - 1));
+      nextBtn.addEventListener("click", () => showTask(current + 1));
+
+      if (window.location.hash === "#task2") showTask(1);
+      if (window.location.hash === "#task3") showTask(2);
+
+      window.addEventListener("scroll", () => {
+        const el = document.documentElement;
+        const pct = (el.scrollTop / (el.scrollHeight - el.clientHeight)) * 100;
+        document.getElementById("readingProgress").style.width =
+          Math.min(pct, 100) + "%";
+      });
+    </script>
+  </body>
+</html>
