@@ -1,0 +1,945 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Day 7 — Connecting to a Frontend | BlockBase</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Karantina&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Nico+Moji&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="reading-progress" id="readingProgress"></div>
+    <nav class="navbar">
+      <div class="logo-container">
+        <img src="blockbase.png" alt="Blockbase" />
+        <img src="fec.png" alt="FEC IITG" />
+      </div>
+      <ul class="nav-links">
+        <li><a href="index.html#about">About</a></li>
+        <li><a href="index.html#curriculum">Curriculum</a></li>
+        <li>
+          <a
+            href="https://chat.whatsapp.com/EUfRkvIR5DPALPlOOrjKJf?mode=gi_t"
+            class="nav-whatsapp"
+            target="_blank"
+            rel="noopener"
+            ><i class="fab fa-whatsapp"></i> Join Blockbase WhatsApp</a
+          >
+        </li>
+      </ul>
+    </nav>
+
+    <div class="reader-wrap">
+      <div class="reader-header">
+        <a href="index.html#curriculum" class="back-link"
+          ><i class="fas fa-arrow-left"></i> Back to Curriculum</a
+        >
+        <div>
+          <span class="day-pill">Day 7</span>
+          <h1 class="day-header-title">Connecting to a Frontend</h1>
+        </div>
+      </div>
+
+      <div class="task-tabs">
+        <button class="task-tab active" data-index="0">
+          Task 1 &mdash; How dApps Work
+        </button>
+        <button class="task-tab" data-index="1">
+          Task 2 &mdash; Build the Dashboard
+        </button>
+        <button class="task-tab" data-index="2">
+          Task 3 &mdash; Events and the Balance Checker
+        </button>
+      </div>
+
+      <div class="reader-body">
+        <!-- ═══════════════════════════════════════════════════════════ TASK 1 -->
+        <article id="task1" class="task-pane active">
+          <p>
+            You have a smart contract deployed on Sepolia. Right now the only
+            way to interact with it is through Remix or Etherscan&rsquo;s Write
+            Contract tab &mdash; tools built for developers, not users. A real
+            dApp needs a frontend: a webpage that anyone can open, connect their
+            wallet to, and use without knowing what Solidity is.
+          </p>
+
+          <p>
+            Today you build exactly that. By the end of this session you will
+            have a working HTML page that connects to your ERC-20 token on
+            Sepolia, reads its data, and lets you send tokens &mdash; all from a
+            browser, with no backend server involved.
+          </p>
+
+          <h3>The dApp stack</h3>
+
+          <p>
+            A decentralised application has three layers. Understanding where
+            each one sits makes every code decision easier to reason about.
+          </p>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th style="width: 200px">Layer</th>
+                  <th>What it does</th>
+                  <th>Who controls it</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Frontend</strong><br /><em>HTML / CSS / JS</em></td>
+                  <td>
+                    The interface the user sees. Renders data, accepts inputs,
+                    triggers actions.
+                  </td>
+                  <td>
+                    The developer (you). Can be hosted anywhere &mdash; GitHub
+                    Pages, IPFS, a normal web server.
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <strong>ethers.js</strong><br /><em>JavaScript library</em>
+                  </td>
+                  <td>
+                    Translates your JavaScript calls into Ethereum transactions
+                    and RPC requests. Handles all the encoding/decoding.
+                  </td>
+                  <td>
+                    Open-source library. You include it via CDN or npm.
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <strong>MetaMask</strong><br /><em>Browser wallet</em>
+                  </td>
+                  <td>
+                    Holds the user&rsquo;s private key. Signs transactions on
+                    their behalf. Connects to the Ethereum network via its own
+                    RPC node.
+                  </td>
+                  <td>
+                    The user. Your code never sees the private key.
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <strong>Smart contract</strong><br /><em>On Sepolia</em>
+                  </td>
+                  <td>
+                    The actual logic and storage. Immutable. Runs on every
+                    validator node in the network.
+                  </td>
+                  <td>
+                    The blockchain. Nobody &mdash; once deployed, even you
+                    can&rsquo;t change it.
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <p>
+            The flow for a write operation looks like this: the user fills in a
+            form and clicks a button &rarr; your JavaScript calls
+            <code>contract.transfer(...)</code> via ethers.js &rarr; ethers.js
+            encodes the call and passes it to MetaMask &rarr; MetaMask shows the
+            user a confirmation popup with the gas estimate &rarr; the user
+            clicks Confirm &rarr; MetaMask signs the transaction with the
+            user&rsquo;s private key and broadcasts it to the network &rarr; the
+            transaction lands in a block &rarr; ethers.js resolves the
+            <code>await tx.wait()</code> promise &rarr; your UI updates.
+          </p>
+
+          <p>
+            Read operations are simpler: no signing, no MetaMask popup, no gas.
+            Your JavaScript calls a <code>view</code> function &rarr; ethers.js
+            sends an RPC request directly to MetaMask&rsquo;s node &rarr; the
+            result comes back as a JavaScript value &rarr; you display it.
+          </p>
+
+          <h3>Provider vs signer</h3>
+
+          <p>
+            These two concepts appear everywhere in ethers.js code and are
+            consistently confused at first. They are different things.
+          </p>
+
+          <p>
+            A <strong>provider</strong> is a read-only connection to the
+            network. It can fetch balances, call <code>view</code> functions,
+            and listen for events. It does not have any signing capability.
+            When you create a provider from MetaMask, you are essentially
+            borrowing MetaMask&rsquo;s connection to its node &mdash; but not
+            its keys.
+          </p>
+
+          <p>
+            A <strong>signer</strong> wraps a provider and adds the ability to
+            sign transactions. It represents a specific wallet address. When
+            you call a state-changing function through a signer-connected
+            contract, MetaMask pops up to ask the user to approve the
+            signature.
+          </p>
+
+          <pre><code>// Provider: read-only, no wallet needed
+const provider = new ethers.providers.Web3Provider(window.ethereum);
+
+// Signer: wraps the provider, tied to a specific account
+const signer = provider.getSigner();</code></pre>
+
+          <p>
+            When you connect a contract to a provider, calling any function on
+            it is free and instant &mdash; no MetaMask popup. When you connect a
+            contract to a signer, calling a state-changing function opens
+            MetaMask. Use the right one for the right job: read-only calls
+            should use the provider, so the user isn&rsquo;t asked to approve
+            things unnecessarily.
+          </p>
+
+          <h3>What is an ABI?</h3>
+
+          <p>
+            Your smart contract&rsquo;s bytecode is stored on-chain. To call a
+            specific function in that bytecode, ethers.js needs to know the
+            function&rsquo;s name, its parameter types, and its return types
+            &mdash; so it can encode the call correctly and decode the response.
+            This description is the ABI.
+          </p>
+
+          <p>
+            The full JSON ABI is generated by the Solidity compiler and
+            available in Remix (Compiler tab &rarr; after compiling &rarr; click
+            the <strong>ABI</strong> button to copy it). It looks like this:
+          </p>
+
+          <pre><code>[
+  {
+    "inputs": [{ "internalType": "address", "name": "account", "type": "address" }],
+    "name": "balanceOf",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  ...
+]</code></pre>
+
+          <p>
+            For a large contract this JSON is hundreds of lines. ethers.js also
+            accepts a much more readable shorthand called the
+            <strong>human-readable ABI</strong> &mdash; just the function
+            signatures as strings, the same way they appear in Solidity
+            interfaces:
+          </p>
+
+          <pre><code>const ABI = [
+    "function name() view returns (string)",
+    "function symbol() view returns (string)",
+    "function totalSupply() view returns (uint256)",
+    "function balanceOf(address) view returns (uint256)",
+    "function transfer(address to, uint256 amount) returns (bool)",
+    "event Transfer(address indexed from, address indexed to, uint256 value)"
+];</code></pre>
+
+          <p>
+            This is what you will use today. It lists only the functions you
+            actually call, which is fine &mdash; you don&rsquo;t need to include
+            functions your frontend doesn&rsquo;t use.
+          </p>
+
+          <h3>ethers.js via CDN</h3>
+
+          <p>
+            For this course you do not need Node.js, npm, or any build tooling.
+            One script tag is enough:
+          </p>
+
+          <pre><code>&lt;script src="https://cdn.ethers.io/lib/ethers-5.7.2.umd.min.js"&gt;&lt;/script&gt;</code></pre>
+
+          <p>
+            Place this at the bottom of your HTML body, before your own script.
+            It makes the <code>ethers</code> object available globally. In
+            production projects ethers.js is installed via npm and imported as a
+            module, but the CDN version behaves identically for our purposes.
+          </p>
+
+          <h3>The five patterns you need</h3>
+
+          <p>
+            All ethers.js frontend code is a combination of five patterns. Learn
+            these and you can build any dApp read/write interface.
+          </p>
+
+          <p><strong>1. Connect wallet and get a signer:</strong></p>
+
+          <pre><code>const provider = new ethers.providers.Web3Provider(window.ethereum);
+await provider.send("eth_requestAccounts", []);  // triggers MetaMask popup
+const signer = provider.getSigner();
+const address = await signer.getAddress();       // "0xYourWalletAddress"</code></pre>
+
+          <p><strong>2. Connect to a contract:</strong></p>
+
+          <pre><code>// Read-only — use provider
+const readContract = new ethers.Contract(CONTRACT_ADDRESS, ABI, provider);
+
+// Read/write — use signer
+const writeContract = new ethers.Contract(CONTRACT_ADDRESS, ABI, signer);</code></pre>
+
+          <p>
+            <strong>3. Call a view function</strong> (free, no MetaMask popup):
+          </p>
+
+          <pre><code>const balance = await readContract.balanceOf(userAddress);
+// balance is a BigNumber — convert before displaying:
+const readable = ethers.utils.formatUnits(balance, 18);  // "1000000.0"</code></pre>
+
+          <p>
+            <strong>4. Send a transaction</strong> (costs gas, MetaMask popup):
+          </p>
+
+          <pre><code>// parseUnits converts a human-readable number to the 18-decimal representation
+const amount = ethers.utils.parseUnits("10", 18);  // 10 tokens → BigNumber
+const tx = await writeContract.transfer(recipientAddress, amount);
+await tx.wait();  // waits until the transaction is mined</code></pre>
+
+          <p><strong>5. Listen for events:</strong></p>
+
+          <pre><code>readContract.on("Transfer", (from, to, amount, event) => {
+    console.log(`${from} sent ${ethers.utils.formatUnits(amount, 18)} tokens to ${to}`);
+    // This fires every time a Transfer event is emitted by your contract
+    // event.transactionHash gives you the tx hash
+});</code></pre>
+
+          <p>
+            The <code>BigNumber</code> type appears throughout ethers.js because
+            JavaScript&rsquo;s native <code>number</code> type cannot safely
+            represent integers as large as token balances (up to
+            10<sup>77</sup>). Never do arithmetic on BigNumbers with
+            <code>+</code> or <code>*</code> &mdash; use their methods
+            (<code>.add()</code>, <code>.mul()</code>) or convert first. When
+            displaying to the user, always call
+            <code>ethers.utils.formatUnits(bn, 18)</code>. When accepting input
+            from the user, always call
+            <code>ethers.utils.parseUnits(string, 18)</code>.
+          </p>
+
+          <div class="resource-card demo-card">
+            <span class="resource-label">Docs</span>
+            <a
+              href="https://docs.ethers.org/v5/"
+              target="_blank"
+              rel="noopener"
+              >ethers.js v5 Documentation</a
+            >
+            <p>
+              The complete reference for everything ethers.js can do.
+              Particularly useful sections: Providers, Signers, Contract, and
+              Utils. The examples in the docs are runnable &mdash; the code
+              patterns shown today come directly from here.
+            </p>
+          </div>
+        </article>
+
+        <!-- ═══════════════════════════════════════════════════════════ TASK 2 -->
+        <article id="task2" class="task-pane">
+          <p>
+            You now have all the pieces. This task builds a complete Token
+            Dashboard &mdash; a single HTML file that connects to your Sepolia
+            ERC-20 token, shows live data, and lets you send tokens. Read
+            through the full code before typing it out. Every section is
+            explained after the listing.
+          </p>
+
+          <h3>Setup: what you need first</h3>
+
+          <p>
+            Before writing a line of JavaScript, get two values from previous
+            sessions and keep them open:
+          </p>
+
+          <ol class="content-list">
+            <li>
+              <strong>Your contract address</strong> &mdash; the Sepolia address
+              you saved at the end of Day 6. It starts with
+              <code>0x</code> and is 42 characters long.
+            </li>
+            <li>
+              <strong>Your ABI</strong> &mdash; you can use the human-readable
+              ABI shown in Task 1. It covers all the functions the dashboard
+              uses. If you want the full JSON ABI instead, open Remix, compile
+              your contract, and click the ABI button in the compiler panel.
+            </li>
+          </ol>
+
+          <h3>The complete dashboard</h3>
+
+          <p>
+            Create a new file called <code>token-dashboard.html</code> anywhere
+            on your computer. Write out the following &mdash; typing it line by
+            line is strongly encouraged over pasting, especially the JavaScript
+            section:
+          </p>
+
+          <pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;title&gt;My Token Dashboard&lt;/title&gt;
+    &lt;style&gt;
+        body { font-family: Arial, sans-serif; max-width: 600px; margin: 40px auto; padding: 0 20px; }
+        button { padding: 10px 20px; margin: 8px 0; cursor: pointer; background: #6366f1; color: white; border: none; border-radius: 6px; }
+        input { padding: 8px; margin: 4px 0; width: 100%; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px; }
+        .card { border: 1px solid #e5e7eb; border-radius: 8px; padding: 20px; margin: 16px 0; }
+        #status { color: #6b7280; font-size: 14px; margin-top: 8px; }
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1&gt;My Token Dashboard&lt;/h1&gt;
+
+    &lt;div class="card"&gt;
+        &lt;h2&gt;Wallet&lt;/h2&gt;
+        &lt;button onclick="connectWallet()"&gt;Connect MetaMask&lt;/button&gt;
+        &lt;p id="walletAddress"&gt;Not connected&lt;/p&gt;
+        &lt;p&gt;Your balance: &lt;strong id="userBalance"&gt;&mdash;&lt;/strong&gt;&lt;/p&gt;
+    &lt;/div&gt;
+
+    &lt;div class="card"&gt;
+        &lt;h2&gt;Token Info&lt;/h2&gt;
+        &lt;p&gt;Name: &lt;strong id="tokenName"&gt;&mdash;&lt;/strong&gt;&lt;/p&gt;
+        &lt;p&gt;Symbol: &lt;strong id="tokenSymbol"&gt;&mdash;&lt;/strong&gt;&lt;/p&gt;
+        &lt;p&gt;Total Supply: &lt;strong id="totalSupply"&gt;&mdash;&lt;/strong&gt;&lt;/p&gt;
+    &lt;/div&gt;
+
+    &lt;div class="card"&gt;
+        &lt;h2&gt;Send Tokens&lt;/h2&gt;
+        &lt;input type="text" id="recipientAddress" placeholder="Recipient address (0x...)"&gt;
+        &lt;input type="number" id="sendAmount" placeholder="Amount to send"&gt;
+        &lt;button onclick="sendTokens()"&gt;Send&lt;/button&gt;
+        &lt;p id="status"&gt;&lt;/p&gt;
+    &lt;/div&gt;
+
+    &lt;script src="https://cdn.ethers.io/lib/ethers-5.7.2.umd.min.js"&gt;&lt;/script&gt;
+    &lt;script&gt;
+        // ⚠️ Replace with your own values from Day 6
+        const CONTRACT_ADDRESS = "0xYOUR_CONTRACT_ADDRESS_HERE";
+        const ABI = [
+            "function name() view returns (string)",
+            "function symbol() view returns (string)",
+            "function totalSupply() view returns (uint256)",
+            "function balanceOf(address) view returns (uint256)",
+            "function transfer(address to, uint256 amount) returns (bool)",
+            "event Transfer(address indexed from, address indexed to, uint256 value)"
+        ];
+
+        let provider, signer, contract;
+
+        async function connectWallet() {
+            provider = new ethers.providers.Web3Provider(window.ethereum);
+            await provider.send("eth_requestAccounts", []);
+            signer = provider.getSigner();
+            const address = await signer.getAddress();
+            document.getElementById("walletAddress").textContent = address;
+
+            contract = new ethers.Contract(CONTRACT_ADDRESS, ABI, signer);
+
+            document.getElementById("tokenName").textContent = await contract.name();
+            document.getElementById("tokenSymbol").textContent = await contract.symbol();
+
+            const supply = await contract.totalSupply();
+            document.getElementById("totalSupply").textContent =
+                ethers.utils.formatUnits(supply, 18) + " tokens";
+
+            await refreshBalance(address);
+
+            contract.on("Transfer", async (from, to, amount) => {
+                const myAddr = await signer.getAddress();
+                if (to.toLowerCase() === myAddr.toLowerCase()) {
+                    await refreshBalance(myAddr);
+                    setStatus("Received " + ethers.utils.formatUnits(amount, 18) + " tokens!");
+                }
+            });
+        }
+
+        async function refreshBalance(address) {
+            const bal = await contract.balanceOf(address);
+            const sym = await contract.symbol();
+            document.getElementById("userBalance").textContent =
+                ethers.utils.formatUnits(bal, 18) + " " + sym;
+        }
+
+        async function sendTokens() {
+            const recipient = document.getElementById("recipientAddress").value;
+            const amount = document.getElementById("sendAmount").value;
+
+            if (!recipient || !amount) { setStatus("Please fill in all fields."); return; }
+
+            try {
+                setStatus("Sending transaction...");
+                const tx = await contract.transfer(
+                    recipient,
+                    ethers.utils.parseUnits(amount, 18)
+                );
+                setStatus("Waiting for confirmation...");
+                await tx.wait();
+                setStatus("Sent! Tx: " + tx.hash);
+                await refreshBalance(await signer.getAddress());
+            } catch (err) {
+                setStatus("Error: " + err.message);
+            }
+        }
+
+        function setStatus(msg) {
+            document.getElementById("status").textContent = msg;
+        }
+    &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+
+          <h3>Walking through the JavaScript</h3>
+
+          <p>
+            <strong>The module-level variables</strong> &mdash;
+            <code>provider</code>, <code>signer</code>, and
+            <code>contract</code> &mdash; are declared outside any function so
+            that all functions share them. <code>connectWallet()</code>
+            initialises all three. The other functions (<code>sendTokens</code>,
+            <code>refreshBalance</code>) rely on <code>contract</code> and
+            <code>signer</code> already being set, which is why you
+            must click Connect before doing anything else.
+          </p>
+
+          <p>
+            <strong><code>connectWallet</code></strong> does five things in
+            order: creates a provider from MetaMask, requests the user&rsquo;s
+            accounts (this is the popup), gets a signer for the connected
+            account, creates a contract instance tied to that signer, and then
+            loads all the display data. The event listener is registered here
+            too &mdash; once per connection. Task 3 covers how that works in
+            detail.
+          </p>
+
+          <p>
+            <strong><code>refreshBalance</code></strong> calls
+            <code>balanceOf</code> with a specific address and updates the
+            display. It is a separate function because you call it in two
+            places: once after connecting, and again after a successful send.
+            Rather than duplicating the DOM update code, you extract it.
+          </p>
+
+          <p>
+            <strong><code>sendTokens</code></strong> reads both input fields,
+            validates that they are filled, and then calls
+            <code>contract.transfer()</code>. The call is wrapped in
+            <code>try/catch</code> because many things can go wrong: the user
+            rejects the MetaMask popup, the recipient address is malformed, or
+            the sender doesn&rsquo;t have enough tokens. All of these throw
+            exceptions &mdash; catch them and display the error message rather
+            than letting the page crash silently.
+          </p>
+
+          <p>
+            The <code>await tx.wait()</code> call is important. Without it, your
+            code would mark the send as complete the moment the transaction was
+            submitted to the mempool &mdash; not when it was actually mined. The
+            balance would be wrong. <code>tx.wait()</code> resolves only after
+            the transaction appears in a block.
+          </p>
+
+          <h3>Running it</h3>
+
+          <ol class="content-list">
+            <li>
+              Replace <code>CONTRACT_ADDRESS</code> with your actual deployed
+              Sepolia address from Day 6.
+            </li>
+            <li>
+              Open <code>token-dashboard.html</code> directly in your browser
+              (double-click the file &mdash; no server needed).
+            </li>
+            <li>
+              Make sure MetaMask is on the <strong>Sepolia</strong> network. If
+              it&rsquo;s on mainnet, the contract address will not be found and
+              all calls will fail.
+            </li>
+            <li>Click <strong>Connect MetaMask</strong> and approve.</li>
+            <li>
+              Token name, symbol, and total supply load. Your balance appears.
+            </li>
+            <li>
+              Enter a classmate&rsquo;s address in the Send field. Enter a small
+              amount (1, 5, 10 &mdash; whatever). Click Send. MetaMask opens.
+              Confirm it.
+            </li>
+            <li>
+              Wait for the &ldquo;Sent!&rdquo; status message. Your balance
+              updates automatically.
+            </li>
+          </ol>
+
+          <div class="resource-card explore-card">
+            <span class="resource-label">Reference</span>
+            <a
+              href="https://docs.ethers.org/v5/api/contract/contract/"
+              target="_blank"
+              rel="noopener"
+              >ethers.js v5 &mdash; Contract API</a
+            >
+            <p>
+              Every method available on a Contract instance: how to call
+              functions, send transactions, estimate gas, and attach event
+              listeners. The
+              <code>overrides</code> parameter is worth reading &mdash; it lets
+              you manually set gas limits and ETH value for payable functions.
+            </p>
+          </div>
+        </article>
+
+        <!-- ═══════════════════════════════════════════════════════════ TASK 3 -->
+        <article id="task3" class="task-pane">
+          <p>
+            The dashboard works. This task goes deeper on two things: how the
+            event listener actually works and why it matters, and the balance
+            checker challenge that extends the dashboard with a genuinely useful
+            read-only feature.
+          </p>
+
+          <h3>How event listening works</h3>
+
+          <p>
+            In the dashboard, this block runs once, inside
+            <code>connectWallet</code>:
+          </p>
+
+          <pre><code>contract.on("Transfer", async (from, to, amount) => {
+    const myAddr = await signer.getAddress();
+    if (to.toLowerCase() === myAddr.toLowerCase()) {
+        await refreshBalance(myAddr);
+        setStatus("Received " + ethers.utils.formatUnits(amount, 18) + " tokens!");
+    }
+});</code></pre>
+
+          <p>
+            Under the hood, ethers.js subscribes to Ethereum logs &mdash; the
+            on-chain record of every event emitted. Every time the network mines
+            a new block that contains a <code>Transfer</code> event from your
+            contract, MetaMask&rsquo;s node notifies ethers.js, which decodes
+            the event data and calls your callback with the three arguments.
+          </p>
+
+          <p>
+            The address comparison uses <code>.toLowerCase()</code> on both
+            sides. Ethereum addresses are case-insensitive at the protocol
+            level, but the casing varies depending on the source
+            &mdash; MetaMask returns checksummed addresses (mixed case), event
+            data may come back in lowercase, and user input could be anything.
+            Always normalise before comparing.
+          </p>
+
+          <p>
+            The check <code>if (to.toLowerCase() === myAddr.toLowerCase())</code>
+            filters out transfers the connected wallet <em>sent</em>. Every
+            transfer event fires the callback regardless of direction. Without
+            the filter, your balance would refresh and show a notification both
+            when you receive tokens <em>and</em> when you send them &mdash; which
+            is confusing, since the send path already handles its own UI update.
+          </p>
+
+          <p>
+            One thing to know: <code>contract.on()</code> keeps the subscription
+            alive indefinitely. If the user disconnects or the page reloads, it
+            disappears. In production apps you would also call
+            <code>contract.off("Transfer", handler)</code> on cleanup to avoid
+            memory leaks &mdash; but for a session-based page like this one, it
+            is not a concern.
+          </p>
+
+          <h3>Challenge &mdash; The balance checker</h3>
+
+          <p>
+            Add a fourth card to the dashboard. It should let anyone type in any
+            Ethereum address and see how many of your tokens that address holds
+            &mdash; without needing MetaMask to be connected. This is a pure
+            read operation.
+          </p>
+
+          <p>Add this HTML after the &ldquo;Send Tokens&rdquo; card:</p>
+
+          <pre><code>&lt;div class="card"&gt;
+    &lt;h2&gt;Check Any Balance&lt;/h2&gt;
+    &lt;input type="text" id="checkAddress" placeholder="Any Ethereum address (0x...)"&gt;
+    &lt;button onclick="checkBalance()"&gt;Check Balance&lt;/button&gt;
+    &lt;p id="checkResult"&gt;&mdash;&lt;/p&gt;
+&lt;/div&gt;</code></pre>
+
+          <p>
+            Now write the <code>checkBalance()</code> function. A few things to
+            think through before writing it:
+          </p>
+
+          <ul class="content-list">
+            <li>
+              This function should work even if the user has not connected their
+              wallet yet. That means it cannot rely on <code>contract</code> (which
+              is only set after <code>connectWallet</code> runs). It needs its own
+              read-only contract instance built from the provider alone.
+            </li>
+            <li>
+              But <code>provider</code> is also only set after
+              <code>connectWallet</code>. You need a provider that always exists
+              &mdash; even before wallet connection.
+            </li>
+            <li>
+              MetaMask injects <code>window.ethereum</code> into every page,
+              regardless of whether the user has connected. You can create a
+              provider from it at any time:
+              <code>new ethers.providers.Web3Provider(window.ethereum)</code>.
+              This provider can read from the network without any wallet
+              approval.
+            </li>
+          </ul>
+
+          <p>
+            With that in mind, here is the function &mdash; try writing it
+            yourself first, then compare:
+          </p>
+
+          <pre><code>async function checkBalance() {
+    const address = document.getElementById("checkAddress").value.trim();
+    if (!address) { document.getElementById("checkResult").textContent = "Enter an address."; return; }
+
+    // Build a read-only contract without needing connectWallet to have run
+    const readProvider = new ethers.providers.Web3Provider(window.ethereum);
+    const readContract = new ethers.Contract(CONTRACT_ADDRESS, ABI, readProvider);
+
+    try {
+        const bal = await readContract.balanceOf(address);
+        const sym = await readContract.symbol();
+        document.getElementById("checkResult").textContent =
+            ethers.utils.formatUnits(bal, 18) + " " + sym;
+    } catch (err) {
+        document.getElementById("checkResult").textContent = "Error: " + err.message;
+    }
+}</code></pre>
+
+          <p>
+            Test it with three addresses: your own wallet (should match the
+            balance shown in the Wallet card), a classmate&rsquo;s address
+            (should show what you sent them), and a random address from
+            Etherscan (should return 0.0).
+          </p>
+
+          <h3>What you now have</h3>
+
+          <p>
+            A single HTML file, opened directly in a browser, that connects to a
+            live smart contract on a real blockchain, reads live data, sends
+            transactions, and reacts to on-chain events in real time. No
+            backend. No database. No server. The contract is the backend.
+          </p>
+
+          <p>
+            This is the complete Web3 development loop: write the contract in
+            Solidity &rarr; deploy it to a network &rarr; build a frontend that
+            talks to it via ethers.js. Everything from Day 1 to today was
+            building toward this.
+          </p>
+
+          <h3>Where to go from here</h3>
+
+          <p>
+            Plain HTML with a CDN script tag gets you surprisingly far, but
+            real production dApps move to a more structured setup. The natural
+            progression after today:
+          </p>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th style="width: 200px">Tool</th>
+                  <th>What it adds over today&rsquo;s setup</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    <a href="https://hardhat.org" target="_blank" rel="noopener"
+                      ><strong>Hardhat</strong></a
+                    >
+                  </td>
+                  <td>
+                    A local blockchain, automated tests, and deployment scripts.
+                    Replaces the Remix workflow entirely for serious projects.
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <a
+                      href="https://wagmi.sh"
+                      target="_blank"
+                      rel="noopener"
+                      ><strong>wagmi</strong></a
+                    >
+                  </td>
+                  <td>
+                    React hooks that wrap ethers.js. Handles wallet connection
+                    state, network switching, and transaction lifecycle with much
+                    less boilerplate than raw ethers.js.
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <a
+                      href="https://www.rainbowkit.com"
+                      target="_blank"
+                      rel="noopener"
+                      ><strong>RainbowKit</strong></a
+                    >
+                  </td>
+                  <td>
+                    A polished wallet connection modal that supports MetaMask,
+                    WalletConnect, Coinbase Wallet, and more &mdash; all wired up
+                    with one component.
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <a
+                      href="https://docs.ethers.org/v6/"
+                      target="_blank"
+                      rel="noopener"
+                      ><strong>ethers.js v6</strong></a
+                    >
+                  </td>
+                  <td>
+                    The current major version. The API is slightly different
+                    from v5 (which you used today): <code>BrowserProvider</code>
+                    instead of <code>Web3Provider</code>,
+                    <code>parseUnits</code> directly on
+                    <code>ethers</code> rather than <code>ethers.utils</code>.
+                    The concepts are identical; only the method paths changed.
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <p>
+            Day 8 is the capstone: you will build a complete dApp from scratch,
+            combining everything &mdash; a smart contract, deployment to Sepolia,
+            and a frontend wired up with ethers.js &mdash; and present it.
+          </p>
+
+          <div class="resource-card explore-card">
+            <span class="resource-label">Practice</span>
+            <a
+              href="https://speedrunethereum.com"
+              target="_blank"
+              rel="noopener"
+              >Speed Run Ethereum</a
+            >
+            <p>
+              Guided challenges that progressively build more complex dApps with
+              Hardhat and a real React frontend. After Day 8, this is the best
+              structured next step &mdash; Challenge 0 takes about two hours and
+              covers the full modern toolchain.
+            </p>
+          </div>
+        </article>
+      </div>
+
+      <div class="reader-footer-nav">
+        <button class="nav-btn" id="prevTaskBtn" style="visibility: hidden">
+          &larr; Previous
+        </button>
+        <button class="nav-btn" id="nextTaskBtn">Next &rarr;</button>
+      </div>
+    </div>
+
+    <footer>
+      <div class="social-icons">
+        <a href="https://www.instagram.com/fec_iitg/" target="_blank"
+          ><i class="fab fa-instagram"></i
+        ></a>
+        <a
+          href="https://www.linkedin.com/company/finance-and-economics-club-iitg/"
+          target="_blank"
+          ><i class="fab fa-linkedin"></i
+        ></a>
+        <a href="https://x.com/fec_iitg" target="_blank"
+          ><i class="fab fa-twitter"></i
+        ></a>
+        <a
+          href="https://www.youtube.com/@financeandeconomicsclubiit1029"
+          target="_blank"
+          ><i class="fab fa-youtube"></i
+        ></a>
+        <a href="https://www.facebook.com/financeclubiitg/" target="_blank"
+          ><i class="fab fa-facebook"></i
+        ></a>
+        <a
+          href="https://chat.whatsapp.com/EUfRkvIR5DPALPlOOrjKJf?mode=gi_t"
+          target="_blank"
+          rel="noopener"
+          ><i class="fab fa-whatsapp"></i
+        ></a>
+      </div>
+      <p>Finance and Economics Club,</p>
+      <p>IIT Guwahati</p>
+    </footer>
+
+    <script>
+      const tabs = document.querySelectorAll(".task-tab");
+      const panes = document.querySelectorAll(".task-pane");
+      const prevBtn = document.getElementById("prevTaskBtn");
+      const nextBtn = document.getElementById("nextTaskBtn");
+      let current = 0;
+
+      function showTask(index) {
+        tabs.forEach((t, i) => t.classList.toggle("active", i === index));
+        panes.forEach((p, i) => p.classList.toggle("active", i === index));
+        current = index;
+        prevBtn.style.visibility = current === 0 ? "hidden" : "visible";
+        nextBtn.style.visibility =
+          current === tabs.length - 1 ? "hidden" : "visible";
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+
+      tabs.forEach((tab, i) =>
+        tab.addEventListener("click", () => showTask(i)),
+      );
+      prevBtn.addEventListener("click", () => showTask(current - 1));
+      nextBtn.addEventListener("click", () => showTask(current + 1));
+
+      if (window.location.hash === "#task2") showTask(1);
+      if (window.location.hash === "#task3") showTask(2);
+
+      window.addEventListener("scroll", () => {
+        const el = document.documentElement;
+        const pct = (el.scrollTop / (el.scrollHeight - el.clientHeight)) * 100;
+        document.getElementById("readingProgress").style.width =
+          Math.min(pct, 100) + "%";
+      });
+    </script>
+  </body>
+</html>
