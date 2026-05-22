@@ -456,6 +456,11 @@ await tx.wait();  // waits until the transaction is mined</code></pre>
         async function connectWallet() {
             provider = new ethers.providers.Web3Provider(window.ethereum);
             await provider.send("eth_requestAccounts", []);
+            const network = await provider.getNetwork();
+            if (network.chainId !== 11155111) {
+                setStatus("Wrong network - please switch MetaMask to Sepolia and try again.");
+                return;
+            }
             signer = provider.getSigner();
             const address = await signer.getAddress();
             document.getElementById("walletAddress").textContent = address;
@@ -471,6 +476,7 @@ await tx.wait();  // waits until the transaction is mined</code></pre>
 
             await refreshBalance(address);
 
+            contract.removeAllListeners("Transfer");
             contract.on("Transfer", async (from, to, amount) => {
                 const myAddr = await signer.getAddress();
                 if (to.toLowerCase() === myAddr.toLowerCase()) {
@@ -488,6 +494,7 @@ await tx.wait();  // waits until the transaction is mined</code></pre>
         }
 
         async function sendTokens() {
+            if (!contract) { setStatus("Please connect your wallet first."); return; }
             const recipient = document.getElementById("recipientAddress").value;
             const amount = document.getElementById("sendAmount").value;
 
@@ -529,13 +536,16 @@ await tx.wait();  // waits until the transaction is mined</code></pre>
           </p>
 
           <p>
-            <strong><code>connectWallet</code></strong> does five things in
+            <strong><code>connectWallet</code></strong> does six things in
             order: creates a provider from MetaMask, requests the user&rsquo;s
-            accounts (this is the popup), gets a signer for the connected
-            account, creates a contract instance tied to that signer, and then
-            loads all the display data. The event listener is registered here
-            too &mdash; once per connection. Task 3 covers how that works in
-            detail.
+            accounts (this is the popup), checks that MetaMask is connected to
+            Sepolia and exits early with a clear message if not, gets a signer
+            for the connected account, creates a contract instance tied to that
+            signer, and then loads all the display data. The event listener is
+            registered here too &mdash; once per connection;
+            <code>removeAllListeners</code> is called first so that clicking
+            &ldquo;Connect MetaMask&rdquo; a second time does not stack a
+            duplicate listener. Task 3 covers how that works in detail.
           </p>
 
           <p>
@@ -549,12 +559,17 @@ await tx.wait();  // waits until the transaction is mined</code></pre>
           <p>
             <strong><code>sendTokens</code></strong> reads both input fields,
             validates that they are filled, and then calls
-            <code>contract.transfer()</code>. The call is wrapped in
-            <code>try/catch</code> because many things can go wrong: the user
-            rejects the MetaMask popup, the recipient address is malformed, or
-            the sender doesn&rsquo;t have enough tokens. All of these throw
-            exceptions &mdash; catch them and display the error message rather
-            than letting the page crash silently.
+            <code>contract.transfer()</code>. It also checks that
+            <code>contract</code> is not <code>null</code> &mdash; if the user
+            clicks Send before connecting their wallet,
+            <code>contract</code> is still <code>undefined</code> and calling a
+            method on it would throw a confusing TypeError. The guard at the top
+            catches this with a clear message instead. The rest of the call is
+            wrapped in <code>try/catch</code> because many things can go wrong:
+            the user rejects the MetaMask popup, the recipient address is
+            malformed, or the sender doesn&rsquo;t have enough tokens. All of
+            these throw exceptions &mdash; catch them and display the error
+            message rather than letting the page crash silently.
           </p>
 
           <p>
@@ -577,9 +592,9 @@ await tx.wait();  // waits until the transaction is mined</code></pre>
               (double-click the file &mdash; no server needed).
             </li>
             <li>
-              Make sure MetaMask is on the <strong>Sepolia</strong> network. If
-              it&rsquo;s on mainnet, the contract address will not be found and
-              all calls will fail.
+              MetaMask can be on any network when you open the file. The code
+              checks the network for you &mdash; if you are not on Sepolia it
+              will tell you exactly what to do instead of failing silently.
             </li>
             <li>Click <strong>Connect MetaMask</strong> and approve.</li>
             <li>
@@ -724,6 +739,7 @@ await tx.wait();  // waits until the transaction is mined</code></pre>
           </p>
 
           <pre><code>async function checkBalance() {
+    if (!window.ethereum) { document.getElementById("checkResult").textContent = "MetaMask not installed."; return; }
     const address = document.getElementById("checkAddress").value.trim();
     if (!address) { document.getElementById("checkResult").textContent = "Enter an address."; return; }
 
