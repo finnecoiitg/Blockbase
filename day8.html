@@ -269,77 +269,55 @@
             </p>
           </div>
 
-          <h3>Your contract: <code>TokenVoting.sol</code></h3>
+                    <h3>Your contract: <code>TokenVoting.sol</code></h3>
 
           <p>
-            Create a new file in Remix and implement the contract from this
-            specification. The state layout and events are given; you write all
-            the functions.
+            Create <code>TokenVoting.sol</code> in Remix. Design the storage
+            layout, events, and all function logic yourself to satisfy these
+            requirements:
           </p>
 
-          <pre><code>// SPDX-License-Identifier: MIT
-pragma solidity ^0.8.10;
-
-import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-
-contract TokenVoting {
-
-    // ─── State ────────────────────────────────────────────────────
-    address public owner;
-    IERC20  public voteToken;
-    bool    public votingOpen;
-
-    struct Candidate {
-        string  name;
-        string  description;
-        uint256 totalVotes;
-    }
-
-    Candidate[] public candidates;
-
-    mapping(address =&gt; bool)    public hasVoted;
-    mapping(address =&gt; uint256) public tokensCommitted;
-
-    // ─── Events ───────────────────────────────────────────────────
-    event CandidateAdded(uint256 indexed id, string name);
-    event VoteCast(
-        address indexed voter,
-        uint256 indexed candidateId,
-        uint256 weight
-    );
-    event VotingClosed(
-        uint256 indexed winnerId,
-        string  winnerName,
-        uint256 winnerVotes
-    );
-
-    // ─── Implement these functions ────────────────────────────────
-
-    // constructor(address _tokenAddress)
-    //   Set owner, voteToken, and votingOpen.
-
-    // addCandidate(string _name, string _description)  onlyOwner  whenOpen
-    //   Push a new Candidate into candidates[]; emit CandidateAdded.
-
-    // vote(uint256 _candidateId, uint256 _amount)  whenOpen
-    //   Validate candidateId bounds, one-vote-per-address, amount &gt; 0.
-    //   Pull tokens with voteToken.transferFrom(); update totalVotes.
-    //   Emit VoteCast.
-
-    // closeVoting()  onlyOwner  whenOpen
-    //   Set votingOpen = false; find the winning candidate; emit VotingClosed.
-
-    // getCandidateCount()  public view  returns (uint256)
-
-    // getCandidate(uint256 _id)  public view
-    //     returns (string name, string description, uint256 totalVotes)
-
-    // getWinnerId()  public view  returns (uint256)
-    //     Only callable after voting closes.
-
-    // _getWinnerId()  internal view  returns (uint256 winnerId)
-    //     Iterate candidates[]; return the index with the highest totalVotes.
-}</code></pre>
+          <ul class="content-list">
+            <li>
+              Accept an ERC-20 token address at deployment. Import
+              <code>IERC20</code> from OpenZeppelin
+              (<code>@openzeppelin/contracts/token/ERC20/IERC20.sol</code>).
+              Voting weight equals the number of tokens a voter commits.
+            </li>
+            <li>
+              The owner can add candidates (name + description) while voting
+              is open. Only the deploying address should be able to do this.
+            </li>
+            <li>
+              Token holders vote by committing tokens to one candidate. Each
+              address may vote only once. Tokens are pulled from the caller
+              using <code>transferFrom</code> &mdash; the voter must have
+              already approved the voting contract on the token.
+            </li>
+            <li>
+              The owner can close voting. The winner is the candidate with
+              the highest accumulated token weight.
+            </li>
+            <li>
+              Emit events to record when a candidate is added, when a vote
+              is cast, and when voting closes. Decide yourself what data
+              each event should carry.
+            </li>
+            <li>
+              <strong>Your contract must expose these exact function
+              signatures</strong> (the frontend template calls them by name):
+              <ul>
+                <li><code>addCandidate(string name, string description)</code></li>
+                <li><code>vote(uint256 candidateId, uint256 amount)</code></li>
+                <li><code>closeVoting()</code></li>
+                <li><code>getCandidateCount() view returns (uint256)</code></li>
+                <li><code>getCandidate(uint256 id) view returns (string name, string description, uint256 totalVotes)</code></li>
+                <li><code>getWinnerId() view returns (uint256)</code></li>
+                <li><code>votingOpen() view returns (bool)</code></li>
+                <li><code>hasVoted(address) view returns (bool)</code></li>
+              </ul>
+            </li>
+          </ul>
 
           <h3>Implementation guide</h3>
 
@@ -445,10 +423,9 @@ contract TokenVoting {
               constants at the top with your deployed addresses.
             </li>
             <li>
-              <strong>Implement <code>castVote()</code>.</strong> Follow the
-              three TODO comments: approve the voting contract to spend the
-              tokens and wait, cast the vote and wait, then show a success
-              message and reload.
+              <strong>Implement <code>castVote()</code>.</strong> Complete
+              the stub in the frontend template using what you know from
+              Days 5–7 about ethers.js contract calls.
             </li>
             <li>
               <strong>Live test.</strong> Open <code>voting-dapp.html</code>
@@ -675,15 +652,9 @@ const TOKEN_ABI = [
 
             const amount = ethers.utils.parseUnits(amountStr, 18);
             try {
-                // Step 1: Approve the voting contract to spend `amount` tokens.
-                // TODO: setStatus("Step 1/2 \u2014 Approving...", "")
-                // TODO: call tokenContract.approve(VOTING_ADDRESS, amount) and await .wait()
-
-                // Step 2: Cast the vote.
-                // TODO: setStatus("Step 2/2 \u2014 Casting vote...", "")
-                // TODO: call votingContract.vote(candidateId, amount) and await .wait()
-
-                // TODO: setStatus("Vote cast!", "ok") and call loadData()
+                // TODO: Step 1 — approve the voting contract to spend the tokens
+                // TODO: Step 2 — cast the vote
+                // TODO: Step 3 — show a success message and reload the data
             } catch (err) {
                 setStatus(err.reason || err.message, "err");
             }
@@ -744,61 +715,51 @@ const TOKEN_ABI = [
             time.
           </p>
 
-          <h3>Your contract: <code>BlockBaseNFT.sol</code></h3>
+                    <h3>Your contract: <code>BlockBaseNFT.sol</code></h3>
 
           <p>
-            Create a new file in Remix and implement the contract from this
-            specification. The state and events are given; you write all the
-            functions.
+            Create <code>BlockBaseNFT.sol</code> in Remix. Inherit from
+            OpenZeppelin&rsquo;s <code>ERC721</code>
+            (<code>@openzeppelin/contracts/token/ERC721/ERC721.sol</code>).
+            Design the storage, events, and all function logic yourself:
           </p>
 
-          <pre><code>// SPDX-License-Identifier: MIT
-pragma solidity ^0.8.10;
-
-import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
-
-contract BlockBaseNFT is ERC721 {
-
-    // ─── State ────────────────────────────────────────────────────
-    address public owner;
-    uint256 public nextTokenId;
-    uint256 public mintPrice = 0.001 ether;
-
-    struct TokenData {
-        string  name;
-        uint256 mintedAt;
-    }
-
-    mapping(uint256 =&gt; TokenData) public tokens;
-    mapping(address =&gt; uint256[]) private _owned;
-
-    // ─── Events ───────────────────────────────────────────────────
-    event Minted(address indexed to, uint256 indexed tokenId, string name);
-    event MintPriceUpdated(uint256 newPrice);
-
-    // ─── Implement these functions ────────────────────────────────
-
-    // constructor()
-    //   Call ERC721("BlockBase NFT", "BBNFT"); set owner = msg.sender.
-
-    // mint(string memory _name)  public payable
-    //   Require msg.value >= mintPrice and name length 1–64 chars.
-    //   Call _mint(); store TokenData; track token in _owned[msg.sender].
-    //   Refund any overpayment. Emit Minted.
-
-    // setMintPrice(uint256 _newPrice)  public  onlyOwner
-    //   Update mintPrice; emit MintPriceUpdated.
-
-    // withdraw()  public  onlyOwner
-    //   Transfer the contract's full ETH balance to owner.
-
-    // getOwnedTokens(address _owner)  public view  returns (uint256[] memory)
-
-    // getTokenData(uint256 _tokenId)  public view
-    //     returns (string name, address tokenOwner, uint256 mintedAt)
-
-    // totalSupply()  public view  returns (uint256)
-}</code></pre>
+          <ul class="content-list">
+            <li>
+              Minting requires a small ETH payment (0.001 ETH by default).
+              Reject underpayment; refund any overpayment back to the caller.
+            </li>
+            <li>
+              Store a custom name and a mint timestamp for each token,
+              on-chain. Decide yourself how to structure this data.
+            </li>
+            <li>
+              Track which token IDs each address has minted. The frontend
+              gallery reads this &mdash; figure out a storage structure that
+              supports it.
+            </li>
+            <li>
+              The owner can update the mint price and withdraw accumulated
+              ETH from the contract.
+            </li>
+            <li>
+              Emit events to record when a token is minted and when the
+              mint price changes. Decide what data each event should include.
+            </li>
+            <li>
+              <strong>Your contract must expose these exact function
+              signatures</strong> (the frontend calls them by name):
+              <ul>
+                <li><code>mint(string name) payable</code></li>
+                <li><code>setMintPrice(uint256 newPrice)</code></li>
+                <li><code>withdraw()</code></li>
+                <li><code>getOwnedTokens(address owner) view returns (uint256[])</code></li>
+                <li><code>getTokenData(uint256 tokenId) view returns (string name, address tokenOwner, uint256 mintedAt)</code></li>
+                <li><code>nextTokenId() view returns (uint256)</code></li>
+                <li><code>mintPrice() view returns (uint256)</code></li>
+              </ul>
+            </li>
+          </ul>
 
           <h3>Implementation guide</h3>
 
@@ -892,11 +853,10 @@ contract BlockBaseNFT is ERC721 {
               with your deployed address.
             </li>
             <li>
-              <strong>Implement <code>mintNFT()</code>.</strong> Follow the TODO
-              comments: fetch the current mint price, send the transaction with
-              the correct <code>value</code>, wait for confirmation, parse the
-              <code>Minted</code> event from the receipt to get the token ID,
-              show a success message, and reload the gallery.
+              <strong>Implement <code>mintNFT()</code>.</strong> Complete
+              the stub in the frontend template. The function must send ETH
+              equal to the mint price &mdash; figure out how using what you
+              know from Days 6–7.
             </li>
             <li>
               <strong>Live test.</strong> Open the HTML in a browser, connect
@@ -1075,12 +1035,8 @@ contract BlockBaseNFT is ERC721 {
             if (!name)     { setStatus("Enter a name.", "err"); return; }
             if (!contract) { setStatus("Connect your wallet first.", "err"); return; }
             try {
-                // TODO: fetch the current mint price with await contract.mintPrice()
-                // TODO: setStatus("Confirm in MetaMask...", "")
-                // TODO: call contract.mint(name, { value: price }) and await .wait()
-                // TODO: find the Minted event in receipt.events to get the tokenId
-                // TODO: show a success message with the token ID and call loadData()
-                // TODO: clear the input: document.getElementById("nftName").value = ""
+                // TODO: send the mint transaction with the correct ETH value
+                // TODO: show a success message with the token ID and reload the gallery
             } catch (err) {
                 setStatus(err.reason || err.message, "err");
             }
@@ -1138,62 +1094,58 @@ contract BlockBaseNFT is ERC721 {
             >
           </p>
 
-          <h3>Your contract: <code>Fundraiser.sol</code></h3>
+                    <h3>Your contract: <code>Fundraiser.sol</code></h3>
 
           <p>
-            Create a new file in Remix and implement the contract from this
-            specification. No OpenZeppelin imports are needed &mdash; this is
-            pure Solidity. The state and events are given; you write all the
-            functions.
+            Create <code>Fundraiser.sol</code> in Remix. No OpenZeppelin
+            imports needed &mdash; pure Solidity. Design the storage, events,
+            and all function logic yourself:
           </p>
 
-          <pre><code>// SPDX-License-Identifier: MIT
-pragma solidity ^0.8.10;
-
-contract Fundraiser {
-
-    // ─── State ────────────────────────────────────────────────────
-    address public owner;
-    string  public title;
-    string  public description;
-    uint256 public goal;      // in wei
-    uint256 public deadline;  // Unix timestamp
-    uint256 public totalRaised;
-    bool    public withdrawn;
-
-    mapping(address =&gt; uint256) public donations;
-
-    // ─── Events ───────────────────────────────────────────────────
-    event Donated(address indexed donor, uint256 amount, uint256 newTotal);
-    event FundsWithdrawn(address indexed owner, uint256 amount);
-    event Refunded(address indexed donor, uint256 amount);
-
-    // ─── Implement these functions ────────────────────────────────
-
-    // constructor(string _title, string _description,
-    //             uint256 _goalInWei, uint256 _durationSeconds)
-    //   Validate goal &gt; 0 and duration &gt; 0. Set all state variables.
-    //   deadline = block.timestamp + _durationSeconds.
-
-    // donate()  public payable
-    //   Require campaign is still active (block.timestamp &lt; deadline)
-    //   and msg.value &gt; 0. Update donations[msg.sender] and totalRaised.
-    //   Emit Donated.
-
-    // withdraw()  public  onlyOwner
-    //   Require goal is met and funds not yet withdrawn.
-    //   Checks-Effects-Interactions: set withdrawn = true first,
-    //   then transfer. Emit FundsWithdrawn.
-
-    // refund()  public
-    //   Require deadline has passed, goal was not met, caller has a donation.
-    //   Checks-Effects-Interactions: zero out donations[msg.sender] first,
-    //   then transfer. Emit Refunded.
-
-    // getStatus()  public view
-    //     returns (bool isActive, bool goalReached,
-    //              uint256 remaining, uint256 timeLeft)
-}</code></pre>
+          <ul class="content-list">
+            <li>
+              Deploy with a title, description, funding goal (in wei), and a
+              campaign duration in seconds. Calculate the deadline at deploy
+              time.
+            </li>
+            <li>
+              Accept ETH donations while the campaign is active. Track how
+              much each address has donated.
+            </li>
+            <li>
+              If the goal is met before the deadline: only the owner may
+              withdraw all funds, and only once.<br>
+              If the campaign ends without meeting the goal: every donor may
+              claim a full refund of their contribution.
+            </li>
+            <li>
+              <strong>Both <code>withdraw</code> and <code>refund</code>
+              must follow Checks-Effects-Interactions</strong>: update all
+              state before transferring ETH. This is the most important
+              security rule you will apply today.
+            </li>
+            <li>
+              Emit events to record donations, withdrawals, and refunds.
+              Decide yourself what data each event carries.
+            </li>
+            <li>
+              <strong>Your contract must expose these exact
+              signatures</strong> (the frontend reads them directly):
+              <ul>
+                <li><code>donate() payable</code></li>
+                <li><code>withdraw()</code></li>
+                <li><code>refund()</code></li>
+                <li><code>getStatus() view returns (bool isActive, bool goalReached, uint256 remaining, uint256 timeLeft)</code></li>
+                <li>
+                  Public state variables readable by the frontend:
+                  <code>title</code>, <code>description</code>,
+                  <code>goal</code>, <code>deadline</code>,
+                  <code>totalRaised</code>, <code>withdrawn</code>,
+                  <code>owner</code>, <code>donations(address)</code>
+                </li>
+              </ul>
+            </li>
+          </ul>
 
           <h3>Implementation guide</h3>
 
@@ -1279,11 +1231,10 @@ contract Fundraiser {
               <code>CONTRACT_ADDRESS</code> with your deployed address.
             </li>
             <li>
-              <strong>Implement the three stubs.</strong> Follow the TODO
-              comments in <code>donateFunds()</code>,
-              <code>claimRefund()</code>, and <code>withdrawFunds()</code>. Each
-              is a single contract call followed by a status update and a data
-              reload.
+              <strong>Implement the three stubs.</strong> Complete
+              <code>donateFunds()</code>, <code>claimRefund()</code>, and
+              <code>withdrawFunds()</code> in the template using what you
+              know about ethers.js contract interactions.
             </li>
             <li>
               <strong>Live test.</strong> Open the HTML in a browser, connect
@@ -1579,24 +1530,19 @@ contract Fundraiser {
                 setStatus("Enter a valid ETH amount.", "err"); return;
             }
             try {
-                // TODO: setStatus("Confirm in MetaMask...", "")
-                // TODO: call contract.donate({ value: ethers.utils.parseEther(amtStr) })
-                // TODO: await .wait() and setStatus("Donation confirmed!", "ok")
-                // TODO: clear the input and call loadAllData()
+                // TODO: send the donation transaction and update the UI
             } catch (err) { setStatus(err.reason || err.message, "err"); }
         }
 
         async function claimRefund() {
             try {
-                // TODO: call contract.refund() and await .wait()
-                // TODO: setStatus("Refund received!", "ok") and call loadAllData()
+                // TODO: call refund() and update the UI
             } catch (err) { setStatus(err.reason || err.message, "err"); }
         }
 
         async function withdrawFunds() {
             try {
-                // TODO: call contract.withdraw() and await .wait()
-                // TODO: setStatus("Funds withdrawn!", "ok") and call loadAllData()
+                // TODO: call withdraw() and update the UI
             } catch (err) { setStatus(err.reason || err.message, "err"); }
         }
 
@@ -1629,9 +1575,9 @@ contract Fundraiser {
               below a floor are rejected
             </li>
             <li>
-              Add a <code>topDonor()</code> view function that iterates the
-              <code>donors</code> array and returns the address and amount of
-              the single largest contributor
+              Add a <code>topDonor()</code> view function that returns the
+              address and amount of the single largest contributor (you’ll
+              need to decide how to store donors to make this possible)
             </li>
             <li>
               Extend the frontend to display a live countdown timer that
