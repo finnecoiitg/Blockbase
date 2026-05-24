@@ -269,9 +269,13 @@
             </p>
           </div>
 
-          <h3>The smart contract</h3>
+          <h3>Your contract: <code>TokenVoting.sol</code></h3>
 
-          <p>Create a new file <code>TokenVoting.sol</code> in Remix:</p>
+          <p>
+            Create a new file in Remix and implement the contract from this
+            specification. The state layout and events are given; you write all
+            the functions.
+          </p>
 
           <pre><code>// SPDX-License-Identifier: MIT
 pragma solidity ^0.8.10;
@@ -288,7 +292,7 @@ contract TokenVoting {
     struct Candidate {
         string  name;
         string  description;
-        uint256 totalVotes;   // accumulated token-weight
+        uint256 totalVotes;
     }
 
     Candidate[] public candidates;
@@ -309,96 +313,32 @@ contract TokenVoting {
         uint256 winnerVotes
     );
 
-    // ─── Constructor ──────────────────────────────────────────────
-    constructor(address _tokenAddress) {
-        owner      = msg.sender;
-        voteToken  = IERC20(_tokenAddress);
-        votingOpen = true;
-    }
+    // ─── Implement these functions ────────────────────────────────
 
-    // ─── Modifiers ────────────────────────────────────────────────
-    modifier onlyOwner() {
-        require(msg.sender == owner, "TokenVoting: not owner");
-        _;
-    }
+    // constructor(address _tokenAddress)
+    //   Set owner, voteToken, and votingOpen.
 
-    modifier whenOpen() {
-        require(votingOpen, "TokenVoting: voting is closed");
-        _;
-    }
+    // addCandidate(string _name, string _description)  onlyOwner  whenOpen
+    //   Push a new Candidate into candidates[]; emit CandidateAdded.
 
-    // ─── Owner functions ──────────────────────────────────────────
-    // addCandidate is provided as a worked example — study it, then
-    // implement closeVoting() and vote() using the same patterns.
-    function addCandidate(
-        string memory _name,
-        string memory _description
-    ) public onlyOwner whenOpen {
-        uint256 id = candidates.length;
-        candidates.push(
-            Candidate({ name: _name, description: _description, totalVotes: 0 })
-        );
-        emit CandidateAdded(id, _name);
-    }
+    // vote(uint256 _candidateId, uint256 _amount)  whenOpen
+    //   Validate candidateId bounds, one-vote-per-address, amount &gt; 0.
+    //   Pull tokens with voteToken.transferFrom(); update totalVotes.
+    //   Emit VoteCast.
 
-    function closeVoting() public onlyOwner whenOpen {
-        // TODO: set votingOpen to false
-        // TODO: call _getWinnerId() to get the winner index
-        // TODO: emit VotingClosed with winnerId, winner name, and winner vote total
-    }
+    // closeVoting()  onlyOwner  whenOpen
+    //   Set votingOpen = false; find the winning candidate; emit VotingClosed.
 
-    // ─── Voter functions ──────────────────────────────────────────
-    /**
-     * @notice  Cast a weighted vote by committing ERC-20 tokens.
-     * @dev     Caller must call token.approve(address(this), amount) first.
-     * @param   _candidateId  Index of the candidate to vote for.
-     * @param   _amount       Tokens to commit, in wei (1 token = 1e18).
-     */
-    function vote(uint256 _candidateId, uint256 _amount) public whenOpen {
-        // TODO: require _candidateId &lt; candidates.length
-        // TODO: require !hasVoted[msg.sender]
-        // TODO: require _amount &gt; 0
-        //
-        // The voter must have called token.approve(address(this), _amount) first.
-        // TODO: call voteToken.transferFrom(msg.sender, address(this), _amount)
-        //       and require the return value is true
-        //
-        // TODO: add _amount to candidates[_candidateId].totalVotes
-        // TODO: set tokensCommitted[msg.sender] = _amount
-        // TODO: set hasVoted[msg.sender] = true
-        // TODO: emit VoteCast
-    }
+    // getCandidateCount()  public view  returns (uint256)
 
-    // ─── View functions ───────────────────────────────────────────
-    function getCandidateCount() public view returns (uint256) {
-        return candidates.length;
-    }
+    // getCandidate(uint256 _id)  public view
+    //     returns (string name, string description, uint256 totalVotes)
 
-    function getCandidate(uint256 _id)
-        public view
-        returns (
-            string memory name,
-            string memory description,
-            uint256 totalVotes
-        )
-    {
-        require(_id &lt; candidates.length, "TokenVoting: invalid id");
-        Candidate memory c = candidates[_id];
-        return (c.name, c.description, c.totalVotes);
-    }
+    // getWinnerId()  public view  returns (uint256)
+    //     Only callable after voting closes.
 
-    function getWinnerId() public view returns (uint256) {
-        require(!votingOpen,             "TokenVoting: voting still open");
-        require(candidates.length &gt; 0,  "TokenVoting: no candidates");
-        return _getWinnerId();
-    }
-
-    // ─── Internal ─────────────────────────────────────────────────
-    function _getWinnerId() internal view returns (uint256 winnerId) {
-        // TODO: loop through all candidates
-        // TODO: track the index of the candidate with the highest totalVotes
-        // Hint: the named return variable `winnerId` is returned automatically
-    }
+    // _getWinnerId()  internal view  returns (uint256 winnerId)
+    //     Iterate candidates[]; return the index with the highest totalVotes.
 }</code></pre>
 
           <h3>Implementation guide</h3>
@@ -441,26 +381,79 @@ contract TokenVoting {
             between public and internal functions immediately legible.
           </p>
 
-          <h3>Deploy and set up</h3>
+          <h3>Full project workflow</h3>
 
           <ol class="content-list">
             <li>
-              Compile <code>TokenVoting.sol</code> in Remix (compiler 0.8.10+)
+              <strong>Write the contract.</strong> Create
+              <code>TokenVoting.sol</code> in Remix and implement every function
+              from the specification above.
             </li>
             <li>
-              Switch to <strong>Injected Provider &ndash; MetaMask</strong> and
-              confirm Sepolia is selected
+              <strong>Compile.</strong> Open the Solidity Compiler tab, select
+              version <strong>0.8.10</strong> or higher, and click
+              <strong>Compile TokenVoting.sol</strong>. Fix all errors before
+              continuing.
             </li>
             <li>
-              Paste your Day&nbsp;6 ERC-20 address into the constructor field
-              and click <strong>Deploy</strong>
+              <strong>Quick local test.</strong> Switch the environment to
+              <strong>Remix VM</strong> and deploy with a dummy address
+              (<code>0x0000000000000000000000000000000000000001</code>). Call
+              <code>addCandidate("Alice", "Candidate A")</code> and check
+              <code>getCandidateCount()</code> returns <code>1</code>. This
+              confirms basic logic works before spending testnet gas.
             </li>
             <li>
-              After deployment, call <code>addCandidate</code> two or three
-              times with different names and descriptions
+              <strong>Deploy to Sepolia.</strong> Switch to
+              <strong>Injected Provider &ndash; MetaMask</strong>, confirm
+              Sepolia is selected, paste your Day&nbsp;6 ERC-20 address into the
+              constructor field, and click <strong>Deploy</strong>. Copy the
+              deployed contract address from Remix.
             </li>
             <li>
-              Verify the contract on Etherscan (same process as Day&nbsp;6)
+              <strong>Add candidates.</strong> Call <code>addCandidate</code>
+              two or three times with different names and descriptions. Confirm
+              each MetaMask transaction.
+            </li>
+            <li>
+              <strong>Test voting.</strong> On your ERC-20 contract (open it in
+              a second Remix tab or via Etherscan Write Contract), call
+              <code>approve(votingContractAddress, 100000000000000000000)</code>
+              (100 tokens in wei). Then on the voting contract call
+              <code>vote(0, 100000000000000000000)</code>. Read
+              <code>hasVoted(yourAddress)</code> &mdash; it must return
+              <code>true</code>.
+            </li>
+            <li>
+              <strong>Close voting.</strong> Call <code>closeVoting()</code> and
+              verify <code>getWinnerId()</code> returns the correct candidate
+              index.
+            </li>
+            <li>
+              <strong>Verify on Etherscan.</strong> Open the contract on
+              <a
+                href="https://sepolia.etherscan.io"
+                target="_blank"
+                rel="noopener"
+                >sepolia.etherscan.io</a
+              >, go to the Contract tab, and verify the source (same process as
+              Day&nbsp;6).
+            </li>
+            <li>
+              <strong>Build the frontend.</strong> Copy the template below into
+              a new file <code>voting-dapp.html</code> and replace both address
+              constants at the top with your deployed addresses.
+            </li>
+            <li>
+              <strong>Implement <code>castVote()</code>.</strong> Follow the
+              three TODO comments: approve the voting contract to spend the
+              tokens and wait, cast the vote and wait, then show a success
+              message and reload.
+            </li>
+            <li>
+              <strong>Live test.</strong> Open <code>voting-dapp.html</code>
+              in a browser, connect MetaMask on Sepolia, and run through a full
+              vote cycle from the UI.
             </li>
           </ol>
 
@@ -751,9 +744,13 @@ const TOKEN_ABI = [
             time.
           </p>
 
-          <h3>The smart contract</h3>
+          <h3>Your contract: <code>BlockBaseNFT.sol</code></h3>
 
-          <p>Create <code>BlockBaseNFT.sol</code> in Remix:</p>
+          <p>
+            Create a new file in Remix and implement the contract from this
+            specification. The state and events are given; you write all the
+            functions.
+          </p>
 
           <pre><code>// SPDX-License-Identifier: MIT
 pragma solidity ^0.8.10;
@@ -779,69 +776,28 @@ contract BlockBaseNFT is ERC721 {
     event Minted(address indexed to, uint256 indexed tokenId, string name);
     event MintPriceUpdated(uint256 newPrice);
 
-    // ─── Constructor ──────────────────────────────────────────────
-    constructor() ERC721("BlockBase NFT", "BBNFT") {
-        owner = msg.sender;
-    }
+    // ─── Implement these functions ────────────────────────────────
 
-    // ─── Modifier ─────────────────────────────────────────────────
-    modifier onlyOwner() {
-        require(msg.sender == owner, "BlockBaseNFT: not owner");
-        _;
-    }
+    // constructor()
+    //   Call ERC721("BlockBase NFT", "BBNFT"); set owner = msg.sender.
 
-    // ─── Core functions ───────────────────────────────────────────
-    /**
-     * @notice Mint a new NFT with a custom name.
-     * @param  _name  Display name stored on-chain (1–64 characters).
-     */
-    function mint(string memory _name) public payable {
-        // TODO: require msg.value &gt;= mintPrice
-        // TODO: require bytes(_name).length &gt; 0
-        // TODO: require bytes(_name).length &lt;= 64
-        //
-        // TODO: save nextTokenId to a local variable, then increment nextTokenId
-        // TODO: call _mint(msg.sender, tokenId)  — inherited from ERC721
-        // TODO: store TokenData{ name: _name, mintedAt: block.timestamp } in tokens[tokenId]
-        // TODO: push tokenId onto _owned[msg.sender]
-        //
-        // TODO: if msg.value &gt; mintPrice, refund the excess to msg.sender
-        // TODO: emit Minted
-    }
+    // mint(string memory _name)  public payable
+    //   Require msg.value >= mintPrice and name length 1–64 chars.
+    //   Call _mint(); store TokenData; track token in _owned[msg.sender].
+    //   Refund any overpayment. Emit Minted.
 
-    // ─── View functions ───────────────────────────────────────────
-    function getOwnedTokens(address _owner)
-        public view returns (uint256[] memory)
-    {
-        return _owned[_owner];
-    }
+    // setMintPrice(uint256 _newPrice)  public  onlyOwner
+    //   Update mintPrice; emit MintPriceUpdated.
 
-    function getTokenData(uint256 _tokenId)
-        public view
-        returns (string memory name, address tokenOwner, uint256 mintedAt)
-    {
-        require(_exists(_tokenId), "BlockBaseNFT: token does not exist");
-        return (
-            tokens[_tokenId].name,
-            ownerOf(_tokenId),
-            tokens[_tokenId].mintedAt
-        );
-    }
+    // withdraw()  public  onlyOwner
+    //   Transfer the contract's full ETH balance to owner.
 
-    function totalSupply() public view returns (uint256) {
-        return nextTokenId;
-    }
+    // getOwnedTokens(address _owner)  public view  returns (uint256[] memory)
 
-    // ─── Owner functions ──────────────────────────────────────────
-    function setMintPrice(uint256 _newPrice) public onlyOwner {
-        // TODO: update mintPrice
-        // TODO: emit MintPriceUpdated
-    }
+    // getTokenData(uint256 _tokenId)  public view
+    //     returns (string name, address tokenOwner, uint256 mintedAt)
 
-    function withdraw() public onlyOwner {
-        // TODO: require address(this).balance &gt; 0
-        // TODO: transfer the full balance to owner
-    }
+    // totalSupply()  public view  returns (uint256)
 }</code></pre>
 
           <h3>Implementation guide</h3>
@@ -880,28 +836,73 @@ contract BlockBaseNFT is ERC721 {
             on every mint.
           </p>
 
-          <h3>Deploy and test in Remix</h3>
+          <h3>Full project workflow</h3>
 
           <ol class="content-list">
             <li>
-              Compile and deploy <code>BlockBaseNFT.sol</code> on Sepolia via
-              Injected Provider &ndash; MetaMask
+              <strong>Write the contract.</strong> Create
+              <code>BlockBaseNFT.sol</code> in Remix and implement every
+              function from the specification above.
             </li>
             <li>
-              To call <code>mint</code> in Remix, set the
-              <strong>Value</strong> field (top of the Deploy tab) to
-              <code>1000000000000000</code> wei (= 0.001 ETH), then call
-              <code>mint</code> with any name string
+              <strong>Compile.</strong> Select compiler version
+              <strong>0.8.10</strong> or higher and compile. Fix all errors
+              before continuing.
             </li>
             <li>
-              Call <code>getOwnedTokens(yourAddress)</code> &rarr; should return
-              <code>[0]</code>
+              <strong>Quick local test.</strong> Deploy in
+              <strong>Remix VM</strong>. Set the Value field to
+              <code>1000000000000000</code> wei (= 0.001 ETH) and call
+              <code>mint("Test")</code>. Check
+              <code>getOwnedTokens(yourAddress)</code> returns
+              <code>[0]</code> and <code>getTokenData(0)</code> returns your
+              name and a timestamp.
             </li>
             <li>
-              Call <code>getTokenData(0)</code> &rarr; your name, your address,
-              and a Unix timestamp
+              <strong>Deploy to Sepolia.</strong> Switch to
+              <strong>Injected Provider &ndash; MetaMask</strong>, confirm
+              Sepolia is selected, and click <strong>Deploy</strong>. Copy the
+              deployed contract address.
             </li>
-            <li>Verify on Etherscan</li>
+            <li>
+              <strong>Mint on testnet.</strong> Set the Value field to
+              <code>1000000000000000</code> wei, enter a name, and call
+              <code>mint</code>. Confirm in MetaMask.
+            </li>
+            <li>
+              <strong>Verify the mint.</strong> Call
+              <code>getOwnedTokens(yourAddress)</code> and
+              <code>getTokenData(0)</code> to confirm the name and timestamp
+              were stored correctly.
+            </li>
+            <li>
+              <strong>Verify on Etherscan.</strong> Open the contract on
+              <a
+                href="https://sepolia.etherscan.io"
+                target="_blank"
+                rel="noopener"
+                >sepolia.etherscan.io</a
+              >
+              and verify the source code.
+            </li>
+            <li>
+              <strong>Build the frontend.</strong> Copy the template below into
+              <code>nft-minter.html</code> and replace
+              <code>CONTRACT_ADDRESS</code>
+              with your deployed address.
+            </li>
+            <li>
+              <strong>Implement <code>mintNFT()</code>.</strong> Follow the TODO
+              comments: fetch the current mint price, send the transaction with
+              the correct <code>value</code>, wait for confirmation, parse the
+              <code>Minted</code> event from the receipt to get the token ID,
+              show a success message, and reload the gallery.
+            </li>
+            <li>
+              <strong>Live test.</strong> Open the HTML in a browser, connect
+              MetaMask, enter a name, and mint. Confirm the NFT card appears in
+              your collection.
+            </li>
           </ol>
 
           <h3>Human-readable ABI</h3>
@@ -1137,9 +1138,14 @@ contract BlockBaseNFT is ERC721 {
             >
           </p>
 
-          <h3>The smart contract</h3>
+          <h3>Your contract: <code>Fundraiser.sol</code></h3>
 
-          <p>Create <code>Fundraiser.sol</code> in Remix:</p>
+          <p>
+            Create a new file in Remix and implement the contract from this
+            specification. No OpenZeppelin imports are needed &mdash; this is
+            pure Solidity. The state and events are given; you write all the
+            functions.
+          </p>
 
           <pre><code>// SPDX-License-Identifier: MIT
 pragma solidity ^0.8.10;
@@ -1150,108 +1156,43 @@ contract Fundraiser {
     address public owner;
     string  public title;
     string  public description;
-    uint256 public goal;         // in wei
-    uint256 public deadline;     // Unix timestamp
+    uint256 public goal;      // in wei
+    uint256 public deadline;  // Unix timestamp
     uint256 public totalRaised;
     bool    public withdrawn;
 
     mapping(address =&gt; uint256) public donations;
-    address[] public donors;
 
     // ─── Events ───────────────────────────────────────────────────
     event Donated(address indexed donor, uint256 amount, uint256 newTotal);
-    event GoalReached(uint256 totalRaised);
     event FundsWithdrawn(address indexed owner, uint256 amount);
     event Refunded(address indexed donor, uint256 amount);
 
-    // ─── Constructor ──────────────────────────────────────────────
-    /**
-     * @param _title           Campaign display name.
-     * @param _description     Short description stored on-chain.
-     * @param _goalInWei       Fundraising target in wei.
-     * @param _durationSeconds Duration from deployment, in seconds.
-     *                         86400 = 1 day, 604800 = 1 week.
-     */
-    constructor(
-        string memory _title,
-        string memory _description,
-        uint256 _goalInWei,
-        uint256 _durationSeconds
-    ) {
-        require(_goalInWei &gt; 0,       "Fundraiser: goal must be &gt; 0");
-        require(_durationSeconds &gt; 0, "Fundraiser: duration must be &gt; 0");
-        owner       = msg.sender;
-        title       = _title;
-        description = _description;
-        goal        = _goalInWei;
-        deadline    = block.timestamp + _durationSeconds;
-        withdrawn   = false;
-    }
+    // ─── Implement these functions ────────────────────────────────
 
-    // ─── Modifier ─────────────────────────────────────────────────
-    modifier onlyOwner() {
-        require(msg.sender == owner, "Fundraiser: not owner");
-        _;
-    }
+    // constructor(string _title, string _description,
+    //             uint256 _goalInWei, uint256 _durationSeconds)
+    //   Validate goal &gt; 0 and duration &gt; 0. Set all state variables.
+    //   deadline = block.timestamp + _durationSeconds.
 
-    // ─── Core functions ───────────────────────────────────────────
+    // donate()  public payable
+    //   Require campaign is still active (block.timestamp &lt; deadline)
+    //   and msg.value &gt; 0. Update donations[msg.sender] and totalRaised.
+    //   Emit Donated.
 
-    /// @notice Donate ETH to the campaign.
-    function donate() public payable {
-        // TODO: require block.timestamp &lt; deadline
-        // TODO: require msg.value &gt; 0
-        // TODO: if this is msg.sender's first donation, push them onto donors[]
-        // TODO: add msg.value to donations[msg.sender] and to totalRaised
-        // TODO: emit Donated
-        // TODO: if totalRaised &gt;= goal, also emit GoalReached
-    }
+    // withdraw()  public  onlyOwner
+    //   Require goal is met and funds not yet withdrawn.
+    //   Checks-Effects-Interactions: set withdrawn = true first,
+    //   then transfer. Emit FundsWithdrawn.
 
-    /// @notice Owner withdraws funds once the goal is reached.
-    function withdraw() public onlyOwner {
-        // Checks
-        // TODO: require totalRaised &gt;= goal
-        // TODO: require !withdrawn
-        // Effects — update state BEFORE transferring (Checks-Effects-Interactions)
-        // TODO: set withdrawn = true
-        // TODO: save address(this).balance to a local variable
-        // Interaction — ETH transfer last
-        // TODO: transfer the saved amount to owner
-        // TODO: emit FundsWithdrawn
-    }
+    // refund()  public
+    //   Require deadline has passed, goal was not met, caller has a donation.
+    //   Checks-Effects-Interactions: zero out donations[msg.sender] first,
+    //   then transfer. Emit Refunded.
 
-    /// @notice Donor reclaims ETH when deadline passed and goal not met.
-    function refund() public {
-        // Checks
-        // TODO: require block.timestamp &gt;= deadline
-        // TODO: require totalRaised &lt; goal
-        // TODO: require donations[msg.sender] &gt; 0
-        // Effects — zero out donation BEFORE transferring (Checks-Effects-Interactions)
-        // TODO: save donations[msg.sender] to a local variable
-        // TODO: set donations[msg.sender] = 0
-        // Interaction — ETH transfer last
-        // TODO: transfer the saved amount to msg.sender
-        // TODO: emit Refunded
-    }
-
-    // ─── View functions ───────────────────────────────────────────
-    function getStatus()
-        public view
-        returns (
-            bool    isActive,
-            bool    goalReached,
-            uint256 remaining,
-            uint256 timeLeft
-        )
-    {
-        isActive    = block.timestamp &lt; deadline;
-        goalReached = totalRaised &gt;= goal;
-        remaining   = goalReached ? 0 : goal - totalRaised;
-        timeLeft    = block.timestamp &gt;= deadline ? 0 : deadline - block.timestamp;
-    }
-
-    function getDonorCount() public view returns (uint256) {
-        return donors.length;
-    }
+    // getStatus()  public view
+    //     returns (bool isActive, bool goalReached,
+    //              uint256 remaining, uint256 timeLeft)
 }</code></pre>
 
           <h3>Implementation guide</h3>
@@ -1276,42 +1217,81 @@ contract Fundraiser {
             multiplication at the deployment step.
           </p>
 
-          <p>
-            <strong>Donors array.</strong> Mappings cannot be iterated, so the
-            <code>donors</code> array exists purely for the frontend to
-            enumerate contributors. The check
-            <code>if (donations[msg.sender] == 0)</code> before
-            <code>push</code> ensures the same address is not added to the array
-            twice if they donate more than once.
-          </p>
-
-          <h3>Deploy and test</h3>
-
-          <p>
-            In Remix, expand the constructor field and fill in all four
-            arguments:
-          </p>
-
-          <pre><code>// Remix constructor arguments — fill in as separate fields
-"My Fundraiser"              // title
-"Building a blockchain lab"  // description
-10000000000000000            // goal = 0.01 SepoliaETH in wei
-3600                         // duration = 1 hour in seconds</code></pre>
+          <h3>Full project workflow</h3>
 
           <ol class="content-list">
-            <li>Deploy with the arguments above</li>
             <li>
-              Call <code>donate()</code> with a small ETH value (set the Value
-              field in Remix to e.g. <code>5000000000000000</code> = 0.005 ETH)
+              <strong>Write the contract.</strong> Create
+              <code>Fundraiser.sol</code> in Remix and implement every function
+              from the specification above.
             </li>
             <li>
-              Call <code>getStatus()</code> to inspect all campaign fields
+              <strong>Compile.</strong> Select compiler version
+              <strong>0.8.10</strong> or higher and compile. Fix all errors
+              before continuing.
             </li>
             <li>
-              Try <code>refund()</code> &mdash; it should fail with
-              &ldquo;campaign still active&rdquo;
+              <strong>Quick local test.</strong> Deploy in
+              <strong>Remix VM</strong> with these constructor arguments:
+              <code>"Test Campaign"</code>, <code>"Testing"</code>,
+              <code>10000000000000000</code> (0.01 ETH goal),
+              <code>3600</code> (1 hour). Set the Value field to
+              <code>5000000000000000</code> and call <code>donate()</code>.
+              Check <code>getStatus()</code> &mdash;
+              <code>isActive</code> should be <code>true</code>.
             </li>
-            <li>Verify on Etherscan</li>
+            <li>
+              <strong>Deploy to Sepolia.</strong> Switch to
+              <strong>Injected Provider &ndash; MetaMask</strong>, confirm
+              Sepolia is selected. Fill the constructor fields:
+              <pre
+                style="margin: 0.5rem 0"
+              ><code>"My Fundraiser"              // _title
+"Building a blockchain lab"  // _description
+10000000000000000            // _goalInWei  (= 0.01 ETH)
+3600                         // _durationSeconds  (= 1 hour)</code></pre>
+              Click <strong>Deploy</strong> and copy the contract address.
+            </li>
+            <li>
+              <strong>Test donating.</strong> Set the Value field to
+              <code>5000000000000000</code> wei (0.005 ETH) and call
+              <code>donate()</code>. Confirm in MetaMask.
+            </li>
+            <li>
+              <strong>Inspect state.</strong> Call <code>getStatus()</code>
+              and confirm all four return values look correct. Try calling
+              <code>refund()</code> &mdash; it should revert because the
+              campaign is still active.
+            </li>
+            <li>
+              <strong>Verify on Etherscan.</strong> Open the contract on
+              <a
+                href="https://sepolia.etherscan.io"
+                target="_blank"
+                rel="noopener"
+                >sepolia.etherscan.io</a
+              >
+              and verify the source code.
+            </li>
+            <li>
+              <strong>Build the frontend.</strong> Copy the template below into
+              <code>fundraiser-dapp.html</code> and replace
+              <code>CONTRACT_ADDRESS</code> with your deployed address.
+            </li>
+            <li>
+              <strong>Implement the three stubs.</strong> Follow the TODO
+              comments in <code>donateFunds()</code>,
+              <code>claimRefund()</code>, and <code>withdrawFunds()</code>. Each
+              is a single contract call followed by a status update and a data
+              reload.
+            </li>
+            <li>
+              <strong>Live test.</strong> Open the HTML in a browser, connect
+              MetaMask, donate, and verify the progress bar and stats update. To
+              test the refund path, deploy a fresh contract with a 60-second
+              duration, donate without reaching the goal, wait a minute, then
+              claim your refund.
+            </li>
           </ol>
 
           <div class="resource-card watch-card">
@@ -1335,7 +1315,6 @@ contract Fundraiser {
     "function withdrawn() view returns (bool)",
     "function owner() view returns (address)",
     "function donations(address) view returns (uint256)",
-    "function getDonorCount() view returns (uint256)",
     "function getStatus() view returns (bool isActive, bool goalReached, uint256 remaining, uint256 timeLeft)",
     "function donate() payable",
     "function withdraw()",
@@ -1423,7 +1402,7 @@ contract Fundraiser {
         &lt;div class="stats"&gt;
             &lt;div class="stat"&gt;
                 &lt;div class="stat-val" id="donorCount"&gt;&amp;mdash;&lt;/div&gt;
-                &lt;div class="stat-lbl"&gt;Donors&lt;/div&gt;
+                &lt;div class="stat-lbl"&gt;Funded&lt;/div&gt;
             &lt;/div&gt;
             &lt;div class="stat"&gt;
                 &lt;div class="stat-val" id="timeLeft"&gt;&amp;mdash;&lt;/div&gt;
@@ -1483,7 +1462,6 @@ contract Fundraiser {
             "function withdrawn() view returns (bool)",
             "function owner() view returns (address)",
             "function donations(address) view returns (uint256)",
-            "function getDonorCount() view returns (uint256)",
             "function getStatus() view returns (bool isActive, bool goalReached, uint256 remaining, uint256 timeLeft)",
             "function donate() payable",
             "function withdraw()",
@@ -1523,14 +1501,13 @@ contract Fundraiser {
         }
 
         async function loadPublicData() {
-            const [title, desc, goal, raised, status, donorCount] =
+            const [title, desc, goal, raised, status] =
                 await Promise.all([
                     contract.title(),
                     contract.description(),
                     contract.goal(),
                     contract.totalRaised(),
-                    contract.getStatus(),
-                    contract.getDonorCount()
+                    contract.getStatus()
                 ]);
 
             document.getElementById("campaignTitle").textContent = title;
@@ -1539,11 +1516,10 @@ contract Fundraiser {
                 ethers.utils.formatEther(goal) + " ETH";
             document.getElementById("raised").textContent =
                 ethers.utils.formatEther(raised) + " ETH";
-            document.getElementById("donorCount").textContent =
-                donorCount.toString();
 
             const pct = goal.gt(0)
                 ? Math.min(raised.mul(100).div(goal).toNumber(), 100) : 0;
+            document.getElementById("donorCount").textContent = pct + "%";
             document.getElementById("progressBar").style.width = pct + "%";
 
             const tl = status.timeLeft.toNumber();
