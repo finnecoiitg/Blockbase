@@ -241,9 +241,9 @@
           <div class="day-card-body">
             <h3>Connecting to a Frontend</h3>
             <p>
-              ethers.js, providers, signers, and ABIs &mdash; build a live
-              token dashboard that reads and writes to your Sepolia contract
-              from a plain HTML file.
+              ethers.js, providers, signers, and ABIs &mdash; build a live token
+              dashboard that reads and writes to your Sepolia contract from a
+              plain HTML file.
             </p>
             <div class="day-tasks">
               <a href="day7.html#task1" class="task-link"
@@ -265,12 +265,27 @@
         <div class="day-card" data-day="8">
           <div class="day-card-left"><span class="day-num">08</span></div>
           <div class="day-card-body">
-            <h3>Final Project</h3>
+            <h3>Capstone Project</h3>
             <p>
-              Build and deploy your own dApp &mdash; combining everything from
-              Day 1 to Day 7 into a working product.
+              Build and deploy a complete dApp from scratch &mdash; smart
+              contract, Sepolia deployment, Etherscan verification, and a
+              working frontend, all in one session.
             </p>
-            <div class="day-tasks"></div>
+            <div class="day-tasks">
+              <a href="day8.html#task1" class="task-link"
+                >Briefing &amp; Schedule</a
+              >
+              <a href="day8.html#task2" class="task-link"
+                >Option A &mdash; Token Voting</a
+              >
+              <a href="day8.html#task3" class="task-link"
+                >Option B &mdash; NFT Minter</a
+              >
+              <a href="day8.html#task4" class="task-link"
+                >Option C &mdash; Fundraiser</a
+              >
+              <a href="day8.html#task5" class="task-link">What&rsquo;s Next</a>
+            </div>
             <div class="day-locked-msg">
               <i class="fas fa-lock"></i> Content releasing soon
             </div>
@@ -281,7 +296,7 @@
       <script>
         // â”€â”€ UNLOCK CONFIG â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
         // Add a day number to release it. Example: [1, 2] releases Days 1 and 2.
-        const UNLOCKED_DAYS = [1, 2, 3, 4, 5, 6, 7];
+        const UNLOCKED_DAYS = [1, 2, 3, 4, 5, 6, 7, 8];
         // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
         document.querySelectorAll(".day-card").forEach((card) => {
           const day = parseInt(card.dataset.day);

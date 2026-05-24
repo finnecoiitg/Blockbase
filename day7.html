@@ -85,10 +85,10 @@
 
           <p>
             Today you build exactly that. By the end of this session you will
-            have a working HTML file that connects to your deployed ERC-20
-            token on Sepolia, reads its live on-chain data, lets you send
-            tokens, and reacts to incoming transfers in real time &mdash; all
-            from a browser, with no backend server involved.
+            have a working HTML file that connects to your deployed ERC-20 token
+            on Sepolia, reads its live on-chain data, lets you send tokens, and
+            reacts to incoming transfers in real time &mdash; all from a
+            browser, with no backend server involved.
           </p>
 
           <h3>The dApp stack</h3>
@@ -337,8 +337,8 @@ await tx.wait();  // waits until the transaction is mined</code></pre>
             <code>1000000000000000000000</code>. JavaScript&rsquo;s native
             <code>number</code> type is a 64-bit float, which can only represent
             integers exactly up to 2<sup>53</sup> &mdash; roughly 9 quadrillion.
-            Any integer larger than that is silently rounded, which would corrupt
-            every balance. Ethers.js returns all on-chain integers as
+            Any integer larger than that is silently rounded, which would
+            corrupt every balance. Ethers.js returns all on-chain integers as
             <code>BigNumber</code> objects, a type that performs
             arbitrary-precision integer arithmetic in software.
           </p>
@@ -358,13 +358,14 @@ await tx.wait();  // waits until the transaction is mined</code></pre>
             <li>
               <strong>Displaying a balance to the user:</strong>
               <code>ethers.utils.formatUnits(bigNumber, 18)</code> converts to a
-              human-readable decimal string such as <code>&ldquo;1000.0&rdquo;</code>.
+              human-readable decimal string such as
+              <code>&ldquo;1000.0&rdquo;</code>.
             </li>
             <li>
               <strong>Accepting input from the user:</strong>
-              <code>ethers.utils.parseUnits(&ldquo;1000&rdquo;, 18)</code> converts a
-              decimal string back to the 18-decimal BigNumber the contract
-              expects.
+              <code>ethers.utils.parseUnits(&ldquo;1000&rdquo;, 18)</code>
+              converts a decimal string back to the 18-decimal BigNumber the
+              contract expects.
             </li>
           </ul>
 
@@ -385,11 +386,11 @@ await tx.wait();  // waits until the transaction is mined</code></pre>
         <!-- ═══════════════════════════════════════════════════════════ TASK 2 -->
         <article id="task2" class="task-pane">
           <p>
-            This task assembles those concepts into a complete Token
-            Dashboard &mdash; a single HTML file that connects to your Sepolia
-            ERC-20 token, shows live data, and lets you send tokens. Read
-            through the full code before typing it out. Every section is
-            explained after the listing.
+            This task assembles those concepts into a complete Token Dashboard
+            &mdash; a single HTML file that connects to your Sepolia ERC-20
+            token, shows live data, and lets you send tokens. Read through the
+            full code before typing it out. Every section is explained after the
+            listing.
           </p>
 
           <h3>Setup: what you need first</h3>
@@ -571,16 +572,16 @@ await tx.wait();  // waits until the transaction is mined</code></pre>
           </p>
 
           <p>
-            <strong><code>refreshBalance</code></strong> fetches the
-            connected address&rsquo;s token balance and the token symbol, then
-            writes both to the DOM. It fetches the symbol on every call rather
-            than caching it &mdash; a minor extra RPC call that keeps the
-            function fully self-contained and the code easier to follow. It is
-            extracted as a standalone function because it is called from two
-            places: once during wallet connection to show the opening balance,
-            and again after a successful send to reflect the transferred amount.
-            Factoring shared DOM logic into one place also means any future fix
-            only needs to be made once.
+            <strong><code>refreshBalance</code></strong> fetches the connected
+            address&rsquo;s token balance and the token symbol, then writes both
+            to the DOM. It fetches the symbol on every call rather than caching
+            it &mdash; a minor extra RPC call that keeps the function fully
+            self-contained and the code easier to follow. It is extracted as a
+            standalone function because it is called from two places: once
+            during wallet connection to show the opening balance, and again
+            after a successful send to reflect the transferred amount. Factoring
+            shared DOM logic into one place also means any future fix only needs
+            to be made once.
           </p>
 
           <p>
@@ -588,30 +589,30 @@ await tx.wait();  // waits until the transaction is mined</code></pre>
             validates that they are filled, and then calls
             <code>contract.transfer()</code>. It also checks that
             <code>contract</code> is not <code>null</code> &mdash; if the user
-            clicks Send before connecting their wallet,
-            <code>contract</code> is still <code>undefined</code> and calling a
-            method on it would throw a confusing TypeError. The guard at the top
-            catches this with a clear message instead. The rest of the call is
-            wrapped in <code>try/catch</code> because several distinct errors
-            are possible: the user rejects the MetaMask popup (MetaMask throws
-            with <code>&ldquo;user rejected transaction&rdquo;</code>), the
-            recipient address is malformed (ethers.js throws before the
-            transaction is even submitted to the network), or the sender does
-            not have enough tokens (the contract reverts and ethers.js throws
-            with <code>&ldquo;execution reverted&rdquo;</code>). Catching all
-            cases uniformly and printing <code>err.message</code> surfaces a
+            clicks Send before connecting their wallet, <code>contract</code> is
+            still <code>undefined</code> and calling a method on it would throw
+            a confusing TypeError. The guard at the top catches this with a
+            clear message instead. The rest of the call is wrapped in
+            <code>try/catch</code> because several distinct errors are possible:
+            the user rejects the MetaMask popup (MetaMask throws with
+            <code>&ldquo;user rejected transaction&rdquo;</code>), the recipient
+            address is malformed (ethers.js throws before the transaction is
+            even submitted to the network), or the sender does not have enough
+            tokens (the contract reverts and ethers.js throws with
+            <code>&ldquo;execution reverted&rdquo;</code>). Catching all cases
+            uniformly and printing <code>err.message</code> surfaces a
             meaningful message for every scenario without needing to distinguish
             between them explicitly.
           </p>
 
           <p>
-            The <code>await tx.wait()</code> call is important and easy to
-            get wrong. Calling <code>contract.transfer()</code> submits the
+            The <code>await tx.wait()</code> call is important and easy to get
+            wrong. Calling <code>contract.transfer()</code> submits the
             transaction to the Ethereum mempool and returns immediately with a
-            transaction object &mdash; the transaction exists in the network
-            but has not been executed yet. Without <code>tx.wait()</code>, your
-            code would call <code>refreshBalance</code> before the on-chain
-            state has actually changed, showing a stale balance.
+            transaction object &mdash; the transaction exists in the network but
+            has not been executed yet. Without <code>tx.wait()</code>, your code
+            would call <code>refreshBalance</code> before the on-chain state has
+            actually changed, showing a stale balance.
             <code>tx.wait()</code> resolves only once the transaction is
             included in a confirmed block and the contract state is final. The
             transaction hash (<code>tx.hash</code>) is available on the
@@ -698,11 +699,11 @@ await tx.wait();  // waits until the transaction is mined</code></pre>
 });</code></pre>
 
           <p>
-            Under the hood, ethers.js translates <code>contract.on()</code>
-            into an active subscription to Ethereum event logs &mdash; the
-            permanent on-chain record of every event your contract has ever
-            emitted. Each time MetaMask&rsquo;s node sees a new block containing
-            a <code>Transfer</code> event from your contract address, it pushes
+            Under the hood, ethers.js translates <code>contract.on()</code> into
+            an active subscription to Ethereum event logs &mdash; the permanent
+            on-chain record of every event your contract has ever emitted. Each
+            time MetaMask&rsquo;s node sees a new block containing a
+            <code>Transfer</code> event from your contract address, it pushes
             the raw log to ethers.js, which decodes the ABI-encoded data and
             invokes your callback with the typed arguments.
           </p>
@@ -718,8 +719,8 @@ await tx.wait();  // waits until the transaction is mined</code></pre>
             current on-chain state &mdash; but the event history is not shown.
             To query past events, you would use
             <code>contract.queryFilter(filter, fromBlock, toBlock)</code>, which
-            returns an array of matching historical log entries. Building a
-            full transaction history feature would start there.
+            returns an array of matching historical log entries. Building a full
+            transaction history feature would start there.
           </p>
 
           <p>

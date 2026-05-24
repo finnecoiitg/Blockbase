@@ -1,0 +1,2021 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Day 8 &mdash; Capstone Project | BlockBase</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Karantina&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Nico+Moji&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="reading-progress" id="readingProgress"></div>
+    <nav class="navbar">
+      <div class="logo-container">
+        <img src="blockbase.png" alt="Blockbase" />
+        <img src="fec.png" alt="FEC IITG" />
+      </div>
+      <ul class="nav-links">
+        <li><a href="index.html#about">About</a></li>
+        <li><a href="index.html#curriculum">Curriculum</a></li>
+        <li>
+          <a
+            href="https://chat.whatsapp.com/EUfRkvIR5DPALPlOOrjKJf?mode=gi_t"
+            class="nav-whatsapp"
+            target="_blank"
+            rel="noopener"
+            ><i class="fab fa-whatsapp"></i> Join Blockbase WhatsApp</a
+          >
+        </li>
+      </ul>
+    </nav>
+
+    <div class="reader-wrap">
+      <div class="reader-header">
+        <a href="index.html#curriculum" class="back-link"
+          ><i class="fas fa-arrow-left"></i> Back to Curriculum</a
+        >
+        <div>
+          <span class="day-pill">Day 8</span>
+          <h1 class="day-header-title">Capstone Project</h1>
+        </div>
+      </div>
+
+      <div class="task-tabs">
+        <button class="task-tab active" data-index="0">Project Briefing</button>
+        <button class="task-tab" data-index="1">
+          Option A &mdash; Token Voting
+        </button>
+        <button class="task-tab" data-index="2">
+          Option B &mdash; NFT Minter
+        </button>
+        <button class="task-tab" data-index="3">
+          Option C &mdash; Fundraiser
+        </button>
+        <button class="task-tab" data-index="4">What&rsquo;s Next</button>
+      </div>
+
+      <div class="reader-body">
+        <!-- ═══════════════════════════════════════════ TAB 1: BRIEFING -->
+        <article id="task1" class="task-pane active">
+          <p>
+            Day 8 is the full development loop in a single session: smart
+            contract, Sepolia deployment, Etherscan verification, and a browser
+            frontend. Choose one of the three options below, read through its
+            entire tab before writing any code, then build and demo.
+          </p>
+
+          <h3>Choosing your option</h3>
+
+          <p>
+            All three options apply every skill from Days 3&ndash;7: Solidity,
+            OpenZeppelin inheritance, Remix, Sepolia testnet, ethers.js, and
+            MetaMask. The difference is what the contract <em>does</em>.
+          </p>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Option</th>
+                  <th>What it builds</th>
+                  <th>Core concept</th>
+                  <th>Good if you&rsquo;re interested in</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>A</strong></td>
+                  <td>Token Voting Dashboard</td>
+                  <td>
+                    <code>approve</code> + <code>transferFrom</code>, weighted
+                    governance
+                  </td>
+                  <td>DeFi, DAOs, protocol governance</td>
+                </tr>
+                <tr>
+                  <td><strong>B</strong></td>
+                  <td>NFT Minter</td>
+                  <td>
+                    ERC-721, <code>payable</code> functions, on-chain metadata
+                  </td>
+                  <td>Digital ownership, NFTs, creative applications</td>
+                </tr>
+                <tr>
+                  <td><strong>C</strong></td>
+                  <td>Decentralised Fundraiser</td>
+                  <td>ETH handling, time-based logic, refund pattern</td>
+                  <td>Real-world finance, crowdfunding, community tools</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3>What every project must include</h3>
+
+          <p>
+            Regardless of which option you choose, your submission must satisfy
+            all four of these:
+          </p>
+
+          <ul class="content-list">
+            <li>
+              <strong>Deployed on Sepolia</strong> &mdash; a working contract
+              address visible on
+              <a
+                href="https://sepolia.etherscan.io"
+                target="_blank"
+                rel="noopener"
+                >sepolia.etherscan.io</a
+              >
+            </li>
+            <li>
+              <strong>Verified source code</strong> &mdash; the full Solidity
+              visible on Etherscan&rsquo;s Contract tab (same process as Day 6)
+            </li>
+            <li>
+              <strong>Working frontend</strong> &mdash; a browser HTML file that
+              connects via MetaMask and performs at least one state-changing
+              transaction
+            </li>
+            <li>
+              <strong>Live demo</strong> &mdash; you show it working in front of
+              the room
+            </li>
+          </ul>
+
+          <h3>What separates a strong project</h3>
+
+          <p>
+            Beyond the requirements above, strong projects tend to have three
+            qualities:
+          </p>
+
+          <ul class="content-list">
+            <li>
+              <strong>Robust contract logic</strong> &mdash; edge cases handled
+              with <code>require</code> statements, events emitted for every
+              state change, error messages that tell you exactly what went wrong
+            </li>
+            <li>
+              <strong>Responsive frontend</strong> &mdash; the user always knows
+              what is happening: loading states while transactions confirm,
+              clear success and error messages, relevant data that updates after
+              each interaction
+            </li>
+            <li>
+              <strong>Clean presentation</strong> &mdash; you can explain what
+              your contract does, point to it on Etherscan, and name one thing
+              you would add next
+            </li>
+          </ul>
+
+          <h3>Before you start</h3>
+
+          <p>Have these ready before writing any code:</p>
+
+          <ul class="content-list">
+            <li>
+              MetaMask installed and set to <strong>Sepolia testnet</strong>
+            </li>
+            <li>
+              At least <strong>0.05 SepoliaETH</strong> &mdash; enough for
+              deployment plus several test transactions. Refill at
+              <a href="https://sepoliafaucet.com" target="_blank" rel="noopener"
+                >sepoliafaucet.com</a
+              >
+              or the
+              <a
+                href="https://faucet.quicknode.com/ethereum/sepolia"
+                target="_blank"
+                rel="noopener"
+                >QuickNode faucet</a
+              >
+            </li>
+            <li>
+              <a
+                href="https://remix.ethereum.org"
+                target="_blank"
+                rel="noopener"
+                >Remix IDE</a
+              >
+              open in a browser tab
+            </li>
+            <li>
+              Your Day 6 ERC-20 contract address ready (only needed for Option
+              A)
+            </li>
+            <li>A plain text editor for writing the HTML frontend</li>
+          </ul>
+
+          <div class="resource-card try-card">
+            <span class="resource-label">Tip</span>
+            <p>
+              Read the full tab for your chosen option before writing any code.
+              Understanding the complete picture first prevents you from having
+              to rewrite logic partway through.
+            </p>
+          </div>
+        </article>
+
+        <!-- ══════════════════════════════════════ TAB 2: OPTION A -->
+        <article id="task2" class="task-pane">
+          <p>
+            Option A is a governance-style voting dApp where participants cast
+            weighted votes by committing ERC-20 tokens. The candidate with the
+            highest accumulated token-weight wins. Token-weighted governance is
+            the mechanism Uniswap, Compound, Aave, and MakerDAO use for protocol
+            decisions &mdash; this is a simplified version of that architecture.
+          </p>
+
+          <h3>How it works</h3>
+
+          <p>
+            The owner deploys the voting contract and passes the address of an
+            existing ERC-20 token. The owner adds candidates. To vote, a
+            participant calls <code>approve</code> on the token contract to
+            authorise the voting contract to spend some of their tokens, then
+            calls <code>vote()</code> &mdash; which pulls the approved tokens
+            into the voting contract and records the weight. When the owner
+            closes voting, the winner is the candidate with the highest
+            accumulated token-weight.
+          </p>
+
+          <div class="resource-card demo-card">
+            <span class="resource-label">Prerequisite</span>
+            <p>
+              This option requires your deployed ERC-20 contract from Day 6. You
+              will pass that contract&rsquo;s address to the voting contract
+              constructor. If you cannot find it, check your Remix history, or
+              deploy a fresh token from your Day 5 code first.
+            </p>
+          </div>
+
+          <h3>The smart contract</h3>
+
+          <p>Create a new file <code>TokenVoting.sol</code> in Remix:</p>
+
+          <pre><code>// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.10;
+
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+
+contract TokenVoting {
+
+    // ─── State ────────────────────────────────────────────────────
+    address public owner;
+    IERC20  public voteToken;
+    bool    public votingOpen;
+
+    struct Candidate {
+        string  name;
+        string  description;
+        uint256 totalVotes;   // accumulated token-weight
+    }
+
+    Candidate[] public candidates;
+
+    mapping(address =&gt; bool)    public hasVoted;
+    mapping(address =&gt; uint256) public tokensCommitted;
+
+    // ─── Events ───────────────────────────────────────────────────
+    event CandidateAdded(uint256 indexed id, string name);
+    event VoteCast(
+        address indexed voter,
+        uint256 indexed candidateId,
+        uint256 weight
+    );
+    event VotingClosed(
+        uint256 indexed winnerId,
+        string  winnerName,
+        uint256 winnerVotes
+    );
+
+    // ─── Constructor ──────────────────────────────────────────────
+    constructor(address _tokenAddress) {
+        owner      = msg.sender;
+        voteToken  = IERC20(_tokenAddress);
+        votingOpen = true;
+    }
+
+    // ─── Modifiers ────────────────────────────────────────────────
+    modifier onlyOwner() {
+        require(msg.sender == owner, "TokenVoting: not owner");
+        _;
+    }
+
+    modifier whenOpen() {
+        require(votingOpen, "TokenVoting: voting is closed");
+        _;
+    }
+
+    // ─── Owner functions ──────────────────────────────────────────
+    // addCandidate is provided as a worked example — study it, then
+    // implement closeVoting() and vote() using the same patterns.
+    function addCandidate(
+        string memory _name,
+        string memory _description
+    ) public onlyOwner whenOpen {
+        uint256 id = candidates.length;
+        candidates.push(
+            Candidate({ name: _name, description: _description, totalVotes: 0 })
+        );
+        emit CandidateAdded(id, _name);
+    }
+
+    function closeVoting() public onlyOwner whenOpen {
+        // TODO: set votingOpen to false
+        // TODO: call _getWinnerId() to get the winner index
+        // TODO: emit VotingClosed with winnerId, winner name, and winner vote total
+    }
+
+    // ─── Voter functions ──────────────────────────────────────────
+    /**
+     * @notice  Cast a weighted vote by committing ERC-20 tokens.
+     * @dev     Caller must call token.approve(address(this), amount) first.
+     * @param   _candidateId  Index of the candidate to vote for.
+     * @param   _amount       Tokens to commit, in wei (1 token = 1e18).
+     */
+    function vote(uint256 _candidateId, uint256 _amount) public whenOpen {
+        // TODO: require _candidateId &lt; candidates.length
+        // TODO: require !hasVoted[msg.sender]
+        // TODO: require _amount &gt; 0
+        //
+        // The voter must have called token.approve(address(this), _amount) first.
+        // TODO: call voteToken.transferFrom(msg.sender, address(this), _amount)
+        //       and require the return value is true
+        //
+        // TODO: add _amount to candidates[_candidateId].totalVotes
+        // TODO: set tokensCommitted[msg.sender] = _amount
+        // TODO: set hasVoted[msg.sender] = true
+        // TODO: emit VoteCast
+    }
+
+    // ─── View functions ───────────────────────────────────────────
+    function getCandidateCount() public view returns (uint256) {
+        return candidates.length;
+    }
+
+    function getCandidate(uint256 _id)
+        public view
+        returns (
+            string memory name,
+            string memory description,
+            uint256 totalVotes
+        )
+    {
+        require(_id &lt; candidates.length, "TokenVoting: invalid id");
+        Candidate memory c = candidates[_id];
+        return (c.name, c.description, c.totalVotes);
+    }
+
+    function getWinnerId() public view returns (uint256) {
+        require(!votingOpen,             "TokenVoting: voting still open");
+        require(candidates.length &gt; 0,  "TokenVoting: no candidates");
+        return _getWinnerId();
+    }
+
+    // ─── Internal ─────────────────────────────────────────────────
+    function _getWinnerId() internal view returns (uint256 winnerId) {
+        // TODO: loop through all candidates
+        // TODO: track the index of the candidate with the highest totalVotes
+        // Hint: the named return variable `winnerId` is returned automatically
+    }
+}</code></pre>
+
+          <h3>Implementation guide</h3>
+
+          <p>
+            <strong>IERC20 interface.</strong> Instead of importing the full
+            ERC-20 implementation, the contract imports only the
+            <code>IERC20</code> interface &mdash; the minimum set of signatures
+            needed to call <code>transferFrom</code>. This lets the voting
+            contract work with <em>any</em> standard ERC-20 token, not just one
+            specific implementation.
+          </p>
+
+          <p>
+            <strong>The vote flow.</strong> <code>vote()</code> calls
+            <code
+              >voteToken.transferFrom(msg.sender, address(this), _amount)</code
+            >. This only works if the voter has already called
+            <code>approve(votingContractAddress, amount)</code> on the token
+            contract. Without the prior approval, the transfer reverts. This
+            two-step <em>approve &rarr; transferFrom</em> pattern is the
+            standard ERC-20 mechanism for letting another contract spend your
+            tokens &mdash; the same one you studied on Day 5.
+          </p>
+
+          <p>
+            <strong>Error message prefixes.</strong> Each
+            <code>require</code> includes the contract name as a prefix (<code
+              >"TokenVoting: ..."</code
+            >). When a reverted transaction lands in your frontend, this tells
+            you immediately which contract rejected it &mdash; essential once
+            you have multiple contracts involved.
+          </p>
+
+          <p>
+            <strong>Internal naming convention.</strong>
+            <code>_getWinnerId</code> uses a leading underscore to signal it is
+            an internal helper, not a public interface. This is a Solidity
+            convention rather than a compiler rule, but it makes the distinction
+            between public and internal functions immediately legible.
+          </p>
+
+          <h3>Deploy and set up</h3>
+
+          <ol class="content-list">
+            <li>
+              Compile <code>TokenVoting.sol</code> in Remix (compiler 0.8.10+)
+            </li>
+            <li>
+              Switch to <strong>Injected Provider &ndash; MetaMask</strong> and
+              confirm Sepolia is selected
+            </li>
+            <li>
+              Paste your Day&nbsp;6 ERC-20 address into the constructor field
+              and click <strong>Deploy</strong>
+            </li>
+            <li>
+              After deployment, call <code>addCandidate</code> two or three
+              times with different names and descriptions
+            </li>
+            <li>
+              Verify the contract on Etherscan (same process as Day&nbsp;6)
+            </li>
+          </ol>
+
+          <div class="resource-card watch-card">
+            <span class="resource-label">Before voting</span>
+            <p>
+              On your ERC-20 contract (in Remix or via Etherscan Write
+              Contract), call
+              <code>approve(votingContractAddress, amount)</code> before calling
+              <code>vote()</code>. To approve 100 tokens enter
+              <code>100000000000000000000</code>
+              (100&nbsp;&times;&nbsp;10<sup>18</sup>). Your frontend handles
+              this step automatically for the user.
+            </p>
+          </div>
+
+          <h3>Human-readable ABI</h3>
+
+          <pre><code>const VOTING_ABI = [
+    "function votingOpen() view returns (bool)",
+    "function getCandidateCount() view returns (uint256)",
+    "function getCandidate(uint256 id) view returns (string name, string description, uint256 totalVotes)",
+    "function hasVoted(address) view returns (bool)",
+    "function vote(uint256 candidateId, uint256 amount)",
+    "function closeVoting()",
+    "function getWinnerId() view returns (uint256)",
+    "event VoteCast(address indexed voter, uint256 indexed candidateId, uint256 weight)",
+    "event VotingClosed(uint256 indexed winnerId, string winnerName, uint256 winnerVotes)"
+];
+
+const TOKEN_ABI = [
+    "function balanceOf(address) view returns (uint256)",
+    "function symbol() view returns (string)",
+    "function allowance(address owner, address spender) view returns (uint256)",
+    "function approve(address spender, uint256 amount) returns (bool)"
+];</code></pre>
+
+          <h3>Frontend template</h3>
+
+          <p>
+            Copy into a new file <code>voting-dapp.html</code>. Replace the two
+            address constants at the top, then implement the stubbed functions.
+          </p>
+
+          <pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+    &lt;title&gt;Token Voting&lt;/title&gt;
+    &lt;style&gt;
+        * { box-sizing: border-box; }
+        body { font-family: system-ui, sans-serif; background: #0f0f0f; color: #ddd;
+               max-width: 680px; margin: 0 auto; padding: 2rem 1rem; }
+        h1   { font-size: 1.4rem; margin-bottom: 0.25rem; }
+        .sub { color: #666; font-size: 0.85rem; margin-bottom: 2rem; }
+        .card      { background: #161616; border: 1px solid #2a2a2a;
+                     border-radius: 10px; padding: 1.4rem; margin: 1rem 0; }
+        .card h2   { margin: 0 0 1rem; font-size: 1rem; color: #eee; }
+        button     { background: #2563eb; color: #fff; border: none; border-radius: 6px;
+                     padding: 0.55rem 1.2rem; cursor: pointer; font-size: 0.85rem;
+                     margin-top: 0.5rem; }
+        button:disabled { background: #222; color: #555; cursor: not-allowed; }
+        input, select   { width: 100%; padding: 0.5rem 0.75rem; background: #111;
+                          border: 1px solid #333; border-radius: 6px; color: #ddd;
+                          font-size: 0.85rem; margin-top: 0.5rem; }
+        .candidate      { border: 1px solid #2a2a2a; border-radius: 8px;
+                          padding: 1rem; margin: 0.6rem 0; }
+        .candidate h3   { margin: 0 0 0.25rem; font-size: 0.95rem; color: #eee; }
+        .cand-desc      { font-size: 0.8rem; color: #666; margin-bottom: 0.75rem; }
+        .bar-wrap       { background: #222; border-radius: 4px; height: 6px; margin: 0.5rem 0; }
+        .bar            { background: #2563eb; height: 6px; border-radius: 4px;
+                          transition: width 0.5s; }
+        .vote-count     { font-size: 0.78rem; color: #555; }
+        #status         { font-size: 0.82rem; margin-top: 0.75rem; min-height: 1.2em; color: #888; }
+        #status.err     { color: #f87171; }
+        #status.ok      { color: #4ade80; }
+        .addr           { font-size: 0.75rem; font-family: monospace; color: #555;
+                          word-break: break-all; }
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1&gt;Token Voting&lt;/h1&gt;
+    &lt;p class="sub"&gt;Cast weighted votes using your ERC-20 tokens.&lt;/p&gt;
+
+    &lt;div class="card"&gt;
+        &lt;h2&gt;Wallet&lt;/h2&gt;
+        &lt;button id="connectBtn" onclick="connectWallet()"&gt;Connect MetaMask&lt;/button&gt;
+        &lt;p class="addr" id="walletAddr"&gt;Not connected&lt;/p&gt;
+        &lt;p style="margin:0.5rem 0 0;font-size:0.85rem"&gt;
+            Token balance: &lt;strong id="tokenBal"&gt;&amp;mdash;&lt;/strong&gt;
+        &lt;/p&gt;
+        &lt;p style="margin:0.25rem 0 0;font-size:0.85rem"&gt;
+            Voting: &lt;strong id="votingStatus"&gt;&amp;mdash;&lt;/strong&gt;
+        &lt;/p&gt;
+    &lt;/div&gt;
+
+    &lt;div class="card"&gt;
+        &lt;h2&gt;Candidates&lt;/h2&gt;
+        &lt;div id="candidateList"&gt;
+            &lt;p style="color:#555;font-size:0.85rem"&gt;
+                Connect wallet to load candidates.
+            &lt;/p&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class="card" id="voteCard" style="display:none"&gt;
+        &lt;h2&gt;Cast Your Vote&lt;/h2&gt;
+        &lt;select id="candidateSelect"&gt;
+            &lt;option value=""&gt;Select a candidate&lt;/option&gt;
+        &lt;/select&gt;
+        &lt;input type="number" id="voteAmount"
+               placeholder="Tokens to commit (e.g. 100)" min="1" /&gt;
+        &lt;button onclick="castVote()"&gt;Approve &amp; Vote&lt;/button&gt;
+        &lt;p id="status"&gt;&lt;/p&gt;
+    &lt;/div&gt;
+
+    &lt;script src="https://unpkg.com/ethers@5.7.2/dist/ethers.umd.min.js"&gt;&lt;/script&gt;
+    &lt;script&gt;
+        // ── Replace with your deployed addresses ──────────────────
+        const VOTING_ADDRESS = "0xYOUR_VOTING_CONTRACT_ADDRESS";
+        const TOKEN_ADDRESS  = "0xYOUR_ERC20_TOKEN_ADDRESS";
+        // ─────────────────────────────────────────────────────────
+
+        const VOTING_ABI = [
+            "function votingOpen() view returns (bool)",
+            "function getCandidateCount() view returns (uint256)",
+            "function getCandidate(uint256 id) view returns (string name, string description, uint256 totalVotes)",
+            "function hasVoted(address) view returns (bool)",
+            "function vote(uint256 candidateId, uint256 amount)",
+            "event VoteCast(address indexed voter, uint256 indexed candidateId, uint256 weight)"
+        ];
+        const TOKEN_ABI = [
+            "function balanceOf(address) view returns (uint256)",
+            "function symbol() view returns (string)",
+            "function approve(address spender, uint256 amount) returns (bool)"
+        ];
+
+        let provider, signer, votingContract, tokenContract, userAddress;
+
+        async function connectWallet() {
+            if (!window.ethereum) { setStatus("MetaMask not found.", "err"); return; }
+            provider = new ethers.providers.Web3Provider(window.ethereum);
+            await provider.send("eth_requestAccounts", []);
+            const network = await provider.getNetwork();
+            if (network.chainId !== 11155111) {
+                setStatus("Switch MetaMask to Sepolia and try again.", "err");
+                return;
+            }
+            signer      = provider.getSigner();
+            userAddress = await signer.getAddress();
+            document.getElementById("connectBtn").textContent = "Connected";
+            document.getElementById("connectBtn").disabled    = true;
+            document.getElementById("walletAddr").textContent = userAddress;
+
+            votingContract = new ethers.Contract(VOTING_ADDRESS, VOTING_ABI, signer);
+            tokenContract  = new ethers.Contract(TOKEN_ADDRESS,  TOKEN_ABI,  signer);
+
+            await loadData();
+            votingContract.on("VoteCast", async () =&gt; await loadData());
+        }
+
+        async function loadData() {
+            const [count, open, voted, bal, sym] = await Promise.all([
+                votingContract.getCandidateCount(),
+                votingContract.votingOpen(),
+                votingContract.hasVoted(userAddress),
+                tokenContract.balanceOf(userAddress),
+                tokenContract.symbol()
+            ]);
+
+            document.getElementById("tokenBal").textContent =
+                ethers.utils.formatUnits(bal, 18) + " " + sym;
+            document.getElementById("votingStatus").textContent =
+                open ? "Open" : "Closed";
+
+            // Accumulate total weight for percentage bars
+            let totalWeight = ethers.BigNumber.from(0);
+            const data = [];
+            for (let i = 0; i &lt; count; i++) {
+                const [name, desc, votes] = await votingContract.getCandidate(i);
+                data.push({ name, desc, votes });
+                totalWeight = totalWeight.add(votes);
+            }
+
+            // Render candidate cards
+            const list   = document.getElementById("candidateList");
+            const select = document.getElementById("candidateSelect");
+            list.innerHTML   = "";
+            select.innerHTML = "&lt;option value=''&gt;Select a candidate&lt;/option&gt;";
+
+            data.forEach((c, i) =&gt; {
+                const pct = totalWeight.gt(0)
+                    ? Math.round(c.votes.mul(100).div(totalWeight).toNumber())
+                    : 0;
+                list.innerHTML +=
+                    `&lt;div class="candidate"&gt;` +
+                    `  &lt;h3&gt;${c.name}&lt;/h3&gt;` +
+                    `  &lt;p class="cand-desc"&gt;${c.desc}&lt;/p&gt;` +
+                    `  &lt;div class="bar-wrap"&gt;&lt;div class="bar" style="width:${pct}%"&gt;&lt;/div&gt;&lt;/div&gt;` +
+                    `  &lt;span class="vote-count"&gt;` +
+                    `    ${ethers.utils.formatUnits(c.votes, 18)} tokens (${pct}%)` +
+                    `  &lt;/span&gt;` +
+                    `&lt;/div&gt;`;
+                select.innerHTML += `&lt;option value="${i}"&gt;${c.name}&lt;/option&gt;`;
+            });
+
+            const voteCard = document.getElementById("voteCard");
+            voteCard.style.display = (open &amp;&amp; !voted) ? "block" : "none";
+            if (voted &amp;&amp; open) setStatus("You have already voted.", "");
+            if (!open)         setStatus("Voting is closed.", "");
+        }
+
+        async function castVote() {
+            const candidateId = document.getElementById("candidateSelect").value;
+            const amountStr   = document.getElementById("voteAmount").value;
+            if (!candidateId)                  { setStatus("Select a candidate.", "err"); return; }
+            if (!amountStr || +amountStr &lt;= 0) { setStatus("Enter an amount &gt; 0.", "err"); return; }
+
+            const amount = ethers.utils.parseUnits(amountStr, 18);
+            try {
+                // Step 1: Approve the voting contract to spend `amount` tokens.
+                // TODO: setStatus("Step 1/2 \u2014 Approving...", "")
+                // TODO: call tokenContract.approve(VOTING_ADDRESS, amount) and await .wait()
+
+                // Step 2: Cast the vote.
+                // TODO: setStatus("Step 2/2 \u2014 Casting vote...", "")
+                // TODO: call votingContract.vote(candidateId, amount) and await .wait()
+
+                // TODO: setStatus("Vote cast!", "ok") and call loadData()
+            } catch (err) {
+                setStatus(err.reason || err.message, "err");
+            }
+        }
+
+        function setStatus(msg, type) {
+            const el = document.getElementById("status");
+            el.textContent = msg;
+            el.className   = type;
+        }
+    &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+
+          <h3>Extensions to try</h3>
+
+          <ul class="content-list">
+            <li>
+              Show a &ldquo;Winner Announced&rdquo; banner when
+              <code>votingOpen</code> turns <code>false</code>, displaying the
+              winner&rsquo;s name and vote total
+            </li>
+            <li>
+              Add a <code>closeVoting()</code> button visible only when
+              <code>signer.getAddress() === owner</code>
+            </li>
+            <li>
+              Fetch the full vote history using
+              <code>contract.queryFilter(contract.filters.VoteCast())</code>
+              and display a live event log
+            </li>
+            <li>
+              Add a token refund function that returns committed tokens to
+              voters after voting closes
+            </li>
+          </ul>
+        </article>
+
+        <!-- ══════════════════════════════════════ TAB 3: OPTION B -->
+        <article id="task3" class="task-pane">
+          <p>
+            Option B is an NFT minting dApp where anyone can mint a unique
+            on-chain token with a custom name. Unlike ERC-20 where every token
+            is identical, each ERC-721 token has a unique ID and can carry
+            distinct data. CryptoPunks, Bored Apes, and ENS domain names are all
+            ERC-721 contracts.
+          </p>
+
+          <h3>How it works</h3>
+
+          <p>
+            Minting requires a small ETH payment per token (0.001 Sepolia ETH by
+            default &mdash; trivial for testing but it teaches the
+            <code>payable</code> pattern). The user enters a name, confirms the
+            transaction in MetaMask, and receives a unique NFT with an
+            incremental token ID. The name and timestamp are stored on-chain.
+            The owner can withdraw accumulated ETH from the contract at any
+            time.
+          </p>
+
+          <h3>The smart contract</h3>
+
+          <p>Create <code>BlockBaseNFT.sol</code> in Remix:</p>
+
+          <pre><code>// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.10;
+
+import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+
+contract BlockBaseNFT is ERC721 {
+
+    // ─── State ────────────────────────────────────────────────────
+    address public owner;
+    uint256 public nextTokenId;
+    uint256 public mintPrice = 0.001 ether;
+
+    struct TokenData {
+        string  name;
+        uint256 mintedAt;
+    }
+
+    mapping(uint256 =&gt; TokenData) public tokens;
+    mapping(address =&gt; uint256[]) private _owned;
+
+    // ─── Events ───────────────────────────────────────────────────
+    event Minted(address indexed to, uint256 indexed tokenId, string name);
+    event MintPriceUpdated(uint256 newPrice);
+
+    // ─── Constructor ──────────────────────────────────────────────
+    constructor() ERC721("BlockBase NFT", "BBNFT") {
+        owner = msg.sender;
+    }
+
+    // ─── Modifier ─────────────────────────────────────────────────
+    modifier onlyOwner() {
+        require(msg.sender == owner, "BlockBaseNFT: not owner");
+        _;
+    }
+
+    // ─── Core functions ───────────────────────────────────────────
+    /**
+     * @notice Mint a new NFT with a custom name.
+     * @param  _name  Display name stored on-chain (1–64 characters).
+     */
+    function mint(string memory _name) public payable {
+        // TODO: require msg.value &gt;= mintPrice
+        // TODO: require bytes(_name).length &gt; 0
+        // TODO: require bytes(_name).length &lt;= 64
+        //
+        // TODO: save nextTokenId to a local variable, then increment nextTokenId
+        // TODO: call _mint(msg.sender, tokenId)  — inherited from ERC721
+        // TODO: store TokenData{ name: _name, mintedAt: block.timestamp } in tokens[tokenId]
+        // TODO: push tokenId onto _owned[msg.sender]
+        //
+        // TODO: if msg.value &gt; mintPrice, refund the excess to msg.sender
+        // TODO: emit Minted
+    }
+
+    // ─── View functions ───────────────────────────────────────────
+    function getOwnedTokens(address _owner)
+        public view returns (uint256[] memory)
+    {
+        return _owned[_owner];
+    }
+
+    function getTokenData(uint256 _tokenId)
+        public view
+        returns (string memory name, address tokenOwner, uint256 mintedAt)
+    {
+        require(_exists(_tokenId), "BlockBaseNFT: token does not exist");
+        return (
+            tokens[_tokenId].name,
+            ownerOf(_tokenId),
+            tokens[_tokenId].mintedAt
+        );
+    }
+
+    function totalSupply() public view returns (uint256) {
+        return nextTokenId;
+    }
+
+    // ─── Owner functions ──────────────────────────────────────────
+    function setMintPrice(uint256 _newPrice) public onlyOwner {
+        // TODO: update mintPrice
+        // TODO: emit MintPriceUpdated
+    }
+
+    function withdraw() public onlyOwner {
+        // TODO: require address(this).balance &gt; 0
+        // TODO: transfer the full balance to owner
+    }
+}</code></pre>
+
+          <h3>Implementation guide</h3>
+
+          <p>
+            <strong>ERC-721 inheritance.</strong> Inheriting from
+            OpenZeppelin&rsquo;s <code>ERC721</code> gives you
+            <code>ownerOf</code>, <code>transferFrom</code>,
+            <code>approve</code>, and all other standard NFT functions for free.
+            The constructor passes the collection name and ticker symbol to the
+            parent.
+          </p>
+
+          <p>
+            <strong>Overpayment refund.</strong> If the user sends more than
+            <code>mintPrice</code>, the excess is returned. This is better UX
+            than reverting &mdash; a user who accidentally sends 0.01 ETH
+            instead of 0.001 ETH still gets their NFT and gets 0.009 ETH back.
+          </p>
+
+          <p>
+            <strong>The <code>_owned</code> mapping.</strong>
+            OpenZeppelin&rsquo;s ERC-721 only tracks the count of tokens per
+            address via <code>balanceOf</code>, not the individual token IDs. To
+            display a gallery in the frontend, we maintain a separate
+            <code>_owned</code> mapping. Note the limitation: this does not
+            update if a token is transferred to another wallet after minting
+            &mdash; a good extension exercise.
+          </p>
+
+          <p>
+            <strong>Withdraw pattern.</strong> ETH received by the contract
+            accumulates in its balance until the owner explicitly calls
+            <code>withdraw()</code>. This <em>pull over push</em> approach is
+            safer than the contract trying to push ETH somewhere automatically
+            on every mint.
+          </p>
+
+          <h3>Deploy and test in Remix</h3>
+
+          <ol class="content-list">
+            <li>
+              Compile and deploy <code>BlockBaseNFT.sol</code> on Sepolia via
+              Injected Provider &ndash; MetaMask
+            </li>
+            <li>
+              To call <code>mint</code> in Remix, set the
+              <strong>Value</strong> field (top of the Deploy tab) to
+              <code>1000000000000000</code> wei (= 0.001 ETH), then call
+              <code>mint</code> with any name string
+            </li>
+            <li>
+              Call <code>getOwnedTokens(yourAddress)</code> &rarr; should return
+              <code>[0]</code>
+            </li>
+            <li>
+              Call <code>getTokenData(0)</code> &rarr; your name, your address,
+              and a Unix timestamp
+            </li>
+            <li>Verify on Etherscan</li>
+          </ol>
+
+          <h3>Human-readable ABI</h3>
+
+          <pre><code>const NFT_ABI = [
+    "function nextTokenId() view returns (uint256)",
+    "function mintPrice() view returns (uint256)",
+    "function mint(string name) payable",
+    "function getOwnedTokens(address owner) view returns (uint256[])",
+    "function getTokenData(uint256 tokenId) view returns (string name, address tokenOwner, uint256 mintedAt)",
+    "function totalSupply() view returns (uint256)",
+    "event Minted(address indexed to, uint256 indexed tokenId, string name)"
+];</code></pre>
+
+          <h3>Frontend template</h3>
+
+          <p>
+            Copy into <code>nft-minter.html</code>, replace the contract
+            address, then implement the stubbed functions.
+          </p>
+
+          <pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+    &lt;title&gt;BlockBase NFT Minter&lt;/title&gt;
+    &lt;style&gt;
+        * { box-sizing: border-box; }
+        body { font-family: system-ui, sans-serif; background: #0f0f0f; color: #ddd;
+               max-width: 680px; margin: 0 auto; padding: 2rem 1rem; }
+        h1   { font-size: 1.4rem; margin-bottom: 0.25rem; }
+        .sub { color: #666; font-size: 0.85rem; margin-bottom: 2rem; }
+        .card    { background: #161616; border: 1px solid #2a2a2a;
+                   border-radius: 10px; padding: 1.4rem; margin: 1rem 0; }
+        .card h2 { margin: 0 0 1rem; font-size: 1rem; color: #eee; }
+        button   { background: #7c3aed; color: #fff; border: none; border-radius: 6px;
+                   padding: 0.55rem 1.2rem; cursor: pointer; font-size: 0.85rem;
+                   margin-top: 0.5rem; }
+        button:disabled { background: #222; color: #555; cursor: not-allowed; }
+        input    { width: 100%; padding: 0.5rem 0.75rem; background: #111;
+                   border: 1px solid #333; border-radius: 6px; color: #ddd;
+                   font-size: 0.85rem; margin-top: 0.5rem; }
+        .nft-grid  { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px,1fr));
+                     gap: 0.75rem; margin-top: 1rem; }
+        .nft-card  { background: #0d0d0d; border: 1px solid #2a2a2a;
+                     border-radius: 8px; padding: 1rem; text-align: center; }
+        .nft-id    { font-size: 2rem; margin-bottom: 0.25rem; }
+        .nft-name  { font-size: 0.8rem; font-weight: 600; color: #eee;
+                     word-break: break-word; }
+        .nft-date  { font-size: 0.7rem; color: #555; margin-top: 0.25rem; }
+        #status    { font-size: 0.82rem; color: #888; margin-top: 0.75rem;
+                     min-height: 1.2em; }
+        #status.err { color: #f87171; }
+        #status.ok  { color: #4ade80; }
+        .addr  { font-size: 0.75rem; font-family: monospace; color: #555;
+                 word-break: break-all; }
+        .stats { display: flex; gap: 2rem; flex-wrap: wrap; margin-top: 0.5rem; }
+        .stats span  { font-size: 0.8rem; color: #666; }
+        .stats strong { color: #ddd; }
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1&gt;BlockBase NFT Minter&lt;/h1&gt;
+    &lt;p class="sub"&gt;Mint a uniquely named NFT on the Sepolia testnet.&lt;/p&gt;
+
+    &lt;div class="card"&gt;
+        &lt;h2&gt;Wallet&lt;/h2&gt;
+        &lt;button id="connectBtn" onclick="connectWallet()"&gt;Connect MetaMask&lt;/button&gt;
+        &lt;p class="addr" id="walletAddr"&gt;Not connected&lt;/p&gt;
+        &lt;div class="stats"&gt;
+            &lt;span&gt;Total minted: &lt;strong id="totalSupply"&gt;&amp;mdash;&lt;/strong&gt;&lt;/span&gt;
+            &lt;span&gt;Mint price: &lt;strong id="mintPrice"&gt;&amp;mdash;&lt;/strong&gt;&lt;/span&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class="card"&gt;
+        &lt;h2&gt;Mint an NFT&lt;/h2&gt;
+        &lt;input type="text" id="nftName"
+               placeholder="Give your NFT a name (max 64 chars)" maxlength="64" /&gt;
+        &lt;button onclick="mintNFT()"&gt;Mint NFT&lt;/button&gt;
+        &lt;p id="status"&gt;&lt;/p&gt;
+    &lt;/div&gt;
+
+    &lt;div class="card"&gt;
+        &lt;h2&gt;Your Collection&lt;/h2&gt;
+        &lt;div class="nft-grid" id="gallery"&gt;
+            &lt;p style="color:#555;font-size:0.85rem;grid-column:1/-1"&gt;
+                Connect your wallet to see your NFTs.
+            &lt;/p&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;script src="https://unpkg.com/ethers@5.7.2/dist/ethers.umd.min.js"&gt;&lt;/script&gt;
+    &lt;script&gt;
+        // ── Replace with your deployed contract address ───────────
+        const CONTRACT_ADDRESS = "0xYOUR_NFT_CONTRACT_ADDRESS";
+        // ─────────────────────────────────────────────────────────
+
+        const ABI = [
+            "function nextTokenId() view returns (uint256)",
+            "function mintPrice() view returns (uint256)",
+            "function mint(string name) payable",
+            "function getOwnedTokens(address owner) view returns (uint256[])",
+            "function getTokenData(uint256 tokenId) view returns (string name, address tokenOwner, uint256 mintedAt)",
+            "event Minted(address indexed to, uint256 indexed tokenId, string name)"
+        ];
+
+        let provider, signer, contract, userAddress;
+
+        async function connectWallet() {
+            if (!window.ethereum) { setStatus("MetaMask not found.", "err"); return; }
+            provider = new ethers.providers.Web3Provider(window.ethereum);
+            await provider.send("eth_requestAccounts", []);
+            const network = await provider.getNetwork();
+            if (network.chainId !== 11155111) {
+                setStatus("Switch MetaMask to Sepolia.", "err"); return;
+            }
+            signer      = provider.getSigner();
+            userAddress = await signer.getAddress();
+            contract    = new ethers.Contract(CONTRACT_ADDRESS, ABI, signer);
+
+            document.getElementById("connectBtn").textContent = "Connected";
+            document.getElementById("connectBtn").disabled    = true;
+            document.getElementById("walletAddr").textContent = userAddress;
+
+            await loadData();
+            contract.on("Minted", async () =&gt; await loadData());
+        }
+
+        async function loadData() {
+            const [supply, price] = await Promise.all([
+                contract.nextTokenId(),
+                contract.mintPrice()
+            ]);
+            document.getElementById("totalSupply").textContent = supply.toString();
+            document.getElementById("mintPrice").textContent =
+                ethers.utils.formatEther(price) + " ETH";
+            await loadGallery();
+        }
+
+        async function loadGallery() {
+            const tokenIds = await contract.getOwnedTokens(userAddress);
+            const gallery  = document.getElementById("gallery");
+            if (tokenIds.length === 0) {
+                gallery.innerHTML =
+                    "&lt;p style='color:#555;font-size:0.85rem;grid-column:1/-1'&gt;" +
+                    "You haven't minted any NFTs yet.&lt;/p&gt;";
+                return;
+            }
+            const details = await Promise.all(
+                tokenIds.map(id =&gt; contract.getTokenData(id))
+            );
+            gallery.innerHTML = tokenIds.map((id, i) =&gt; {
+                const date = new Date(
+                    details[i].mintedAt.toNumber() * 1000
+                ).toLocaleDateString();
+                return (
+                    `&lt;div class="nft-card"&gt;` +
+                    `  &lt;div class="nft-id"&gt;#${id}&lt;/div&gt;` +
+                    `  &lt;div class="nft-name"&gt;${details[i].name}&lt;/div&gt;` +
+                    `  &lt;div class="nft-date"&gt;${date}&lt;/div&gt;` +
+                    `&lt;/div&gt;`
+                );
+            }).join("");
+        }
+
+        async function mintNFT() {
+            const name = document.getElementById("nftName").value.trim();
+            if (!name)     { setStatus("Enter a name.", "err"); return; }
+            if (!contract) { setStatus("Connect your wallet first.", "err"); return; }
+            try {
+                // TODO: fetch the current mint price with await contract.mintPrice()
+                // TODO: setStatus("Confirm in MetaMask...", "")
+                // TODO: call contract.mint(name, { value: price }) and await .wait()
+                // TODO: find the Minted event in receipt.events to get the tokenId
+                // TODO: show a success message with the token ID and call loadData()
+                // TODO: clear the input: document.getElementById("nftName").value = ""
+            } catch (err) {
+                setStatus(err.reason || err.message, "err");
+            }
+        }
+
+        function setStatus(msg, type) {
+            const el = document.getElementById("status");
+            el.textContent = msg;
+            el.className   = type;
+        }
+    &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+
+          <h3>Extensions to try</h3>
+
+          <ul class="content-list">
+            <li>
+              Add a gallery of the 10 most recently minted NFTs across all
+              addresses by querying the <code>Minted</code> event with
+              <code>contract.queryFilter</code>
+            </li>
+            <li>
+              Show a &ldquo;Withdraw&rdquo; button when the connected wallet
+              matches the contract owner address
+            </li>
+            <li>
+              Add a <code>transfer(to, tokenId)</code> form so users can send
+              their NFTs to another address using the inherited ERC-721
+              <code>transferFrom</code> function
+            </li>
+            <li>
+              Add a maximum supply cap to the contract and display how many
+              remain
+            </li>
+          </ul>
+        </article>
+
+        <!-- ══════════════════════════════════════ TAB 4: OPTION C -->
+        <article id="task4" class="task-pane">
+          <p>
+            Option C is a trustless crowdfunding contract &mdash; a
+            stripped-down on-chain analogue of Kickstarter. Donors send ETH
+            toward a goal; if the goal is met before the deadline the owner can
+            withdraw, otherwise every donor can claim a full refund. This
+            conditional-release-with-refund pattern appears in token sales,
+            grant programmes, and community treasuries.
+          </p>
+
+          <p>
+            The contract is also a direct illustration of the most important
+            security principle in Solidity: specifying precisely
+            <strong
+              >who can move funds and under exactly what conditions.</strong
+            >
+          </p>
+
+          <h3>The smart contract</h3>
+
+          <p>Create <code>Fundraiser.sol</code> in Remix:</p>
+
+          <pre><code>// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.10;
+
+contract Fundraiser {
+
+    // ─── State ────────────────────────────────────────────────────
+    address public owner;
+    string  public title;
+    string  public description;
+    uint256 public goal;         // in wei
+    uint256 public deadline;     // Unix timestamp
+    uint256 public totalRaised;
+    bool    public withdrawn;
+
+    mapping(address =&gt; uint256) public donations;
+    address[] public donors;
+
+    // ─── Events ───────────────────────────────────────────────────
+    event Donated(address indexed donor, uint256 amount, uint256 newTotal);
+    event GoalReached(uint256 totalRaised);
+    event FundsWithdrawn(address indexed owner, uint256 amount);
+    event Refunded(address indexed donor, uint256 amount);
+
+    // ─── Constructor ──────────────────────────────────────────────
+    /**
+     * @param _title           Campaign display name.
+     * @param _description     Short description stored on-chain.
+     * @param _goalInWei       Fundraising target in wei.
+     * @param _durationSeconds Duration from deployment, in seconds.
+     *                         86400 = 1 day, 604800 = 1 week.
+     */
+    constructor(
+        string memory _title,
+        string memory _description,
+        uint256 _goalInWei,
+        uint256 _durationSeconds
+    ) {
+        require(_goalInWei &gt; 0,       "Fundraiser: goal must be &gt; 0");
+        require(_durationSeconds &gt; 0, "Fundraiser: duration must be &gt; 0");
+        owner       = msg.sender;
+        title       = _title;
+        description = _description;
+        goal        = _goalInWei;
+        deadline    = block.timestamp + _durationSeconds;
+        withdrawn   = false;
+    }
+
+    // ─── Modifier ─────────────────────────────────────────────────
+    modifier onlyOwner() {
+        require(msg.sender == owner, "Fundraiser: not owner");
+        _;
+    }
+
+    // ─── Core functions ───────────────────────────────────────────
+
+    /// @notice Donate ETH to the campaign.
+    function donate() public payable {
+        // TODO: require block.timestamp &lt; deadline
+        // TODO: require msg.value &gt; 0
+        // TODO: if this is msg.sender's first donation, push them onto donors[]
+        // TODO: add msg.value to donations[msg.sender] and to totalRaised
+        // TODO: emit Donated
+        // TODO: if totalRaised &gt;= goal, also emit GoalReached
+    }
+
+    /// @notice Owner withdraws funds once the goal is reached.
+    function withdraw() public onlyOwner {
+        // Checks
+        // TODO: require totalRaised &gt;= goal
+        // TODO: require !withdrawn
+        // Effects — update state BEFORE transferring (Checks-Effects-Interactions)
+        // TODO: set withdrawn = true
+        // TODO: save address(this).balance to a local variable
+        // Interaction — ETH transfer last
+        // TODO: transfer the saved amount to owner
+        // TODO: emit FundsWithdrawn
+    }
+
+    /// @notice Donor reclaims ETH when deadline passed and goal not met.
+    function refund() public {
+        // Checks
+        // TODO: require block.timestamp &gt;= deadline
+        // TODO: require totalRaised &lt; goal
+        // TODO: require donations[msg.sender] &gt; 0
+        // Effects — zero out donation BEFORE transferring (Checks-Effects-Interactions)
+        // TODO: save donations[msg.sender] to a local variable
+        // TODO: set donations[msg.sender] = 0
+        // Interaction — ETH transfer last
+        // TODO: transfer the saved amount to msg.sender
+        // TODO: emit Refunded
+    }
+
+    // ─── View functions ───────────────────────────────────────────
+    function getStatus()
+        public view
+        returns (
+            bool    isActive,
+            bool    goalReached,
+            uint256 remaining,
+            uint256 timeLeft
+        )
+    {
+        isActive    = block.timestamp &lt; deadline;
+        goalReached = totalRaised &gt;= goal;
+        remaining   = goalReached ? 0 : goal - totalRaised;
+        timeLeft    = block.timestamp &gt;= deadline ? 0 : deadline - block.timestamp;
+    }
+
+    function getDonorCount() public view returns (uint256) {
+        return donors.length;
+    }
+}</code></pre>
+
+          <h3>Implementation guide</h3>
+
+          <p>
+            <strong>Checks-Effects-Interactions.</strong> Both
+            <code>withdraw</code> and <code>refund</code> follow the most
+            important security pattern in Solidity: state is updated
+            <em>first</em> (<code>withdrawn = true</code> /
+            <code>donations[msg.sender] = 0</code>), then ETH is sent. If the
+            transfer were first, a malicious contract could re-enter the
+            function before the state update &mdash; this is the
+            <strong>reentrancy attack</strong> that drained The DAO in 2016 and
+            cost $60 million. Order: Checks &rarr; Effects &rarr; Interactions,
+            always.
+          </p>
+
+          <p>
+            <strong>Constructor parameters.</strong> The constructor takes
+            <code>_goalInWei</code> directly, not in ETH. For Remix, a goal of
+            0.01 ETH is <code>10000000000000000</code>. This avoids needing
+            multiplication at the deployment step.
+          </p>
+
+          <p>
+            <strong>Donors array.</strong> Mappings cannot be iterated, so the
+            <code>donors</code> array exists purely for the frontend to
+            enumerate contributors. The check
+            <code>if (donations[msg.sender] == 0)</code> before
+            <code>push</code> ensures the same address is not added to the array
+            twice if they donate more than once.
+          </p>
+
+          <h3>Deploy and test</h3>
+
+          <p>
+            In Remix, expand the constructor field and fill in all four
+            arguments:
+          </p>
+
+          <pre><code>// Remix constructor arguments — fill in as separate fields
+"My Fundraiser"              // title
+"Building a blockchain lab"  // description
+10000000000000000            // goal = 0.01 SepoliaETH in wei
+3600                         // duration = 1 hour in seconds</code></pre>
+
+          <ol class="content-list">
+            <li>Deploy with the arguments above</li>
+            <li>
+              Call <code>donate()</code> with a small ETH value (set the Value
+              field in Remix to e.g. <code>5000000000000000</code> = 0.005 ETH)
+            </li>
+            <li>
+              Call <code>getStatus()</code> to inspect all campaign fields
+            </li>
+            <li>
+              Try <code>refund()</code> &mdash; it should fail with
+              &ldquo;campaign still active&rdquo;
+            </li>
+            <li>Verify on Etherscan</li>
+          </ol>
+
+          <div class="resource-card watch-card">
+            <span class="resource-label">Testing the deadline</span>
+            <p>
+              To test the refund path without waiting an hour, set
+              <code>_durationSeconds</code> to <code>60</code> when deploying.
+              After 60 seconds, <code>refund()</code> becomes callable if the
+              goal was not reached.
+            </p>
+          </div>
+
+          <h3>Human-readable ABI</h3>
+
+          <pre><code>const ABI = [
+    "function title() view returns (string)",
+    "function description() view returns (string)",
+    "function goal() view returns (uint256)",
+    "function deadline() view returns (uint256)",
+    "function totalRaised() view returns (uint256)",
+    "function withdrawn() view returns (bool)",
+    "function owner() view returns (address)",
+    "function donations(address) view returns (uint256)",
+    "function getDonorCount() view returns (uint256)",
+    "function getStatus() view returns (bool isActive, bool goalReached, uint256 remaining, uint256 timeLeft)",
+    "function donate() payable",
+    "function withdraw()",
+    "function refund()",
+    "event Donated(address indexed donor, uint256 amount, uint256 newTotal)",
+    "event FundsWithdrawn(address indexed owner, uint256 amount)",
+    "event Refunded(address indexed donor, uint256 amount)"
+];</code></pre>
+
+          <h3>Frontend template</h3>
+
+          <p>
+            Copy into <code>fundraiser-dapp.html</code>, then implement the
+            stubbed functions:
+          </p>
+
+          <pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+    &lt;title&gt;Decentralised Fundraiser&lt;/title&gt;
+    &lt;style&gt;
+        * { box-sizing: border-box; }
+        body { font-family: system-ui, sans-serif; background: #0f0f0f; color: #ddd;
+               max-width: 680px; margin: 0 auto; padding: 2rem 1rem; }
+        h1   { font-size: 1.4rem; margin-bottom: 0.2rem; }
+        .desc-text { color: #777; font-size: 0.9rem; margin: 0.2rem 0 2rem; }
+        .card    { background: #161616; border: 1px solid #2a2a2a;
+                   border-radius: 10px; padding: 1.4rem; margin: 1rem 0; }
+        .card h2 { margin: 0 0 1rem; font-size: 1rem; color: #eee; }
+        button   { border: none; border-radius: 6px; padding: 0.55rem 1.2rem;
+                   cursor: pointer; font-size: 0.85rem; margin-top: 0.5rem; }
+        .btn-connect  { background: #1e1e1e; border: 1px solid #444; color: #ccc; }
+        .btn-donate   { background: #059669; color: #fff; }
+        .btn-refund   { background: #b45309; color: #fff; }
+        .btn-withdraw { background: #4f46e5; color: #fff; }
+        button:disabled { background: #222; color: #444; cursor: not-allowed; }
+        input    { width: 100%; padding: 0.5rem 0.75rem; background: #111;
+                   border: 1px solid #333; border-radius: 6px; color: #ddd;
+                   font-size: 0.85rem; margin-top: 0.5rem; }
+        .bar-wrap  { background: #222; border-radius: 6px; height: 12px;
+                     margin: 0.75rem 0 0.4rem; overflow: hidden; }
+        .bar       { background: linear-gradient(to right, #059669, #34d399);
+                     height: 12px; transition: width 0.6s ease; }
+        .bar-label { display: flex; justify-content: space-between;
+                     font-size: 0.78rem; color: #555; margin-bottom: 0.5rem; }
+        .stats     { display: grid; grid-template-columns: repeat(3,1fr);
+                     gap: 0.75rem; margin: 1rem 0; }
+        .stat      { background: #111; border: 1px solid #222;
+                     border-radius: 8px; padding: 0.85rem; text-align: center; }
+        .stat-val  { font-size: 1.1rem; font-weight: 600; color: #eee; }
+        .stat-lbl  { font-size: 0.72rem; color: #555; margin-top: 0.2rem; }
+        .badge-active { color: #4ade80; font-size: 0.75rem; font-weight: 600;
+                        background: #052e16; padding: 2px 8px; border-radius: 4px; }
+        .badge-ended  { color: #f87171; font-size: 0.75rem; font-weight: 600;
+                        background: #2d0b0b; padding: 2px 8px; border-radius: 4px; }
+        #status    { font-size: 0.82rem; color: #888; margin-top: 0.75rem;
+                     min-height: 1.2em; }
+        #status.err { color: #f87171; }
+        #status.ok  { color: #4ade80; }
+        .addr      { font-size: 0.75rem; font-family: monospace; color: #555;
+                     word-break: break-all; }
+        .event-row { font-size: 0.78rem; color: #666; padding: 0.4rem 0;
+                     border-bottom: 1px solid #1a1a1a; }
+        .event-row:last-child { border-bottom: none; }
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1 id="campaignTitle"&gt;Loading...&lt;/h1&gt;
+    &lt;p class="desc-text" id="campaignDesc"&gt;&lt;/p&gt;
+
+    &lt;div class="card"&gt;
+        &lt;div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem"&gt;
+            &lt;h2 style="margin:0"&gt;Progress&lt;/h2&gt;
+            &lt;span id="statusBadge"&gt;&amp;mdash;&lt;/span&gt;
+        &lt;/div&gt;
+        &lt;div class="bar-wrap"&gt;
+            &lt;div class="bar" id="progressBar" style="width:0%"&gt;&lt;/div&gt;
+        &lt;/div&gt;
+        &lt;div class="bar-label"&gt;
+            &lt;span&gt;Raised: &lt;strong id="raised"&gt;&amp;mdash;&lt;/strong&gt;&lt;/span&gt;
+            &lt;span&gt;Goal: &lt;strong id="goal"&gt;&amp;mdash;&lt;/strong&gt;&lt;/span&gt;
+        &lt;/div&gt;
+        &lt;div class="stats"&gt;
+            &lt;div class="stat"&gt;
+                &lt;div class="stat-val" id="donorCount"&gt;&amp;mdash;&lt;/div&gt;
+                &lt;div class="stat-lbl"&gt;Donors&lt;/div&gt;
+            &lt;/div&gt;
+            &lt;div class="stat"&gt;
+                &lt;div class="stat-val" id="timeLeft"&gt;&amp;mdash;&lt;/div&gt;
+                &lt;div class="stat-lbl"&gt;Time Left&lt;/div&gt;
+            &lt;/div&gt;
+            &lt;div class="stat"&gt;
+                &lt;div class="stat-val" id="myDonation"&gt;&amp;mdash;&lt;/div&gt;
+                &lt;div class="stat-lbl"&gt;My Donation&lt;/div&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class="card"&gt;
+        &lt;h2&gt;Wallet&lt;/h2&gt;
+        &lt;button class="btn-connect" id="connectBtn" onclick="connectWallet()"&gt;
+            Connect MetaMask
+        &lt;/button&gt;
+        &lt;p class="addr" id="walletAddr"&gt;Not connected&lt;/p&gt;
+    &lt;/div&gt;
+
+    &lt;div class="card" id="actionCard" style="display:none"&gt;
+        &lt;h2&gt;Actions&lt;/h2&gt;
+        &lt;div id="donateSection"&gt;
+            &lt;input type="number" id="donateAmount"
+                   placeholder="Amount in ETH (e.g. 0.005)" step="0.001" min="0" /&gt;
+            &lt;button class="btn-donate" onclick="donateFunds()"&gt;Donate ETH&lt;/button&gt;
+        &lt;/div&gt;
+        &lt;div id="refundSection" style="display:none"&gt;
+            &lt;button class="btn-refund" onclick="claimRefund()"&gt;Claim Refund&lt;/button&gt;
+        &lt;/div&gt;
+        &lt;div id="withdrawSection" style="display:none"&gt;
+            &lt;button class="btn-withdraw" onclick="withdrawFunds()"&gt;
+                Withdraw Funds (Owner)
+            &lt;/button&gt;
+        &lt;/div&gt;
+        &lt;p id="status"&gt;&lt;/p&gt;
+    &lt;/div&gt;
+
+    &lt;div class="card"&gt;
+        &lt;h2&gt;Recent Donations&lt;/h2&gt;
+        &lt;div id="eventLog"&gt;
+            &lt;p style="color:#555;font-size:0.85rem"&gt;Connect wallet to load.&lt;/p&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;script src="https://unpkg.com/ethers@5.7.2/dist/ethers.umd.min.js"&gt;&lt;/script&gt;
+    &lt;script&gt;
+        // ── Replace with your deployed contract address ───────────
+        const CONTRACT_ADDRESS = "0xYOUR_FUNDRAISER_CONTRACT_ADDRESS";
+        // ─────────────────────────────────────────────────────────
+
+        const ABI = [
+            "function title() view returns (string)",
+            "function description() view returns (string)",
+            "function goal() view returns (uint256)",
+            "function totalRaised() view returns (uint256)",
+            "function withdrawn() view returns (bool)",
+            "function owner() view returns (address)",
+            "function donations(address) view returns (uint256)",
+            "function getDonorCount() view returns (uint256)",
+            "function getStatus() view returns (bool isActive, bool goalReached, uint256 remaining, uint256 timeLeft)",
+            "function donate() payable",
+            "function withdraw()",
+            "function refund()",
+            "event Donated(address indexed donor, uint256 amount, uint256 newTotal)"
+        ];
+
+        let provider, signer, contract, userAddress;
+
+        // Load public read-only data before wallet connection
+        window.addEventListener("load", async () =&gt; {
+            if (!window.ethereum) return;
+            provider = new ethers.providers.Web3Provider(window.ethereum);
+            contract = new ethers.Contract(CONTRACT_ADDRESS, ABI, provider);
+            await loadPublicData();
+        });
+
+        async function connectWallet() {
+            if (!window.ethereum) { setStatus("MetaMask not found.", "err"); return; }
+            provider = new ethers.providers.Web3Provider(window.ethereum);
+            await provider.send("eth_requestAccounts", []);
+            const network = await provider.getNetwork();
+            if (network.chainId !== 11155111) {
+                setStatus("Switch MetaMask to Sepolia.", "err"); return;
+            }
+            signer      = provider.getSigner();
+            userAddress = await signer.getAddress();
+            contract    = new ethers.Contract(CONTRACT_ADDRESS, ABI, signer);
+
+            document.getElementById("connectBtn").textContent = "Connected";
+            document.getElementById("connectBtn").disabled    = true;
+            document.getElementById("walletAddr").textContent = userAddress;
+            document.getElementById("actionCard").style.display = "block";
+
+            await loadAllData();
+            contract.on("Donated", async () =&gt; await loadAllData());
+        }
+
+        async function loadPublicData() {
+            const [title, desc, goal, raised, status, donorCount] =
+                await Promise.all([
+                    contract.title(),
+                    contract.description(),
+                    contract.goal(),
+                    contract.totalRaised(),
+                    contract.getStatus(),
+                    contract.getDonorCount()
+                ]);
+
+            document.getElementById("campaignTitle").textContent = title;
+            document.getElementById("campaignDesc").textContent  = desc;
+            document.getElementById("goal").textContent =
+                ethers.utils.formatEther(goal) + " ETH";
+            document.getElementById("raised").textContent =
+                ethers.utils.formatEther(raised) + " ETH";
+            document.getElementById("donorCount").textContent =
+                donorCount.toString();
+
+            const pct = goal.gt(0)
+                ? Math.min(raised.mul(100).div(goal).toNumber(), 100) : 0;
+            document.getElementById("progressBar").style.width = pct + "%";
+
+            const tl = status.timeLeft.toNumber();
+            document.getElementById("timeLeft").textContent =
+                tl === 0 ? "Ended" : formatDuration(tl);
+
+            const badge = document.getElementById("statusBadge");
+            badge.className   = status.isActive ? "badge-active" : "badge-ended";
+            badge.textContent = status.isActive ? "Active" : "Ended";
+
+            await loadEventLog();
+        }
+
+        async function loadAllData() {
+            await loadPublicData();
+            const [ownerAddr, myDon, status] = await Promise.all([
+                contract.owner(),
+                contract.donations(userAddress),
+                contract.getStatus()
+            ]);
+
+            document.getElementById("myDonation").textContent =
+                ethers.utils.formatEther(myDon) + " ETH";
+
+            document.getElementById("donateSection").style.display =
+                status.isActive ? "block" : "none";
+            document.getElementById("refundSection").style.display =
+                (!status.isActive &amp;&amp; !status.goalReached &amp;&amp; myDon.gt(0))
+                    ? "block" : "none";
+            document.getElementById("withdrawSection").style.display =
+                (status.goalReached &amp;&amp;
+                 ownerAddr.toLowerCase() === userAddress.toLowerCase())
+                    ? "block" : "none";
+        }
+
+        async function loadEventLog() {
+            const events = await contract.queryFilter(
+                contract.filters.Donated()
+            );
+            const log = document.getElementById("eventLog");
+            if (events.length === 0) {
+                log.innerHTML =
+                    "&lt;p style='color:#555;font-size:0.85rem'&gt;No donations yet.&lt;/p&gt;";
+                return;
+            }
+            log.innerHTML = events.slice(-10).reverse().map(e =&gt; {
+                const addr   = e.args.donor.slice(0,6) + "..." +
+                               e.args.donor.slice(-4);
+                const amount = ethers.utils.formatEther(e.args.amount);
+                return `&lt;div class="event-row"&gt;${addr} donated ${amount} ETH&lt;/div&gt;`;
+            }).join("");
+        }
+
+        async function donateFunds() {
+            const amtStr = document.getElementById("donateAmount").value;
+            if (!amtStr || +amtStr &lt;= 0) {
+                setStatus("Enter a valid ETH amount.", "err"); return;
+            }
+            try {
+                // TODO: setStatus("Confirm in MetaMask...", "")
+                // TODO: call contract.donate({ value: ethers.utils.parseEther(amtStr) })
+                // TODO: await .wait() and setStatus("Donation confirmed!", "ok")
+                // TODO: clear the input and call loadAllData()
+            } catch (err) { setStatus(err.reason || err.message, "err"); }
+        }
+
+        async function claimRefund() {
+            try {
+                // TODO: call contract.refund() and await .wait()
+                // TODO: setStatus("Refund received!", "ok") and call loadAllData()
+            } catch (err) { setStatus(err.reason || err.message, "err"); }
+        }
+
+        async function withdrawFunds() {
+            try {
+                // TODO: call contract.withdraw() and await .wait()
+                // TODO: setStatus("Funds withdrawn!", "ok") and call loadAllData()
+            } catch (err) { setStatus(err.reason || err.message, "err"); }
+        }
+
+        function formatDuration(s) {
+            if (s &lt; 60)    return s + "s";
+            if (s &lt; 3600)  return Math.floor(s / 60) + "m";
+            if (s &lt; 86400) return Math.floor(s / 3600) + "h";
+            return Math.floor(s / 86400) + "d";
+        }
+
+        function setStatus(msg, type) {
+            const el = document.getElementById("status");
+            el.textContent = msg;
+            el.className   = type;
+        }
+    &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+
+          <h3>Extensions to try</h3>
+
+          <ul class="content-list">
+            <li>
+              Show a full donor leaderboard, sorted by contribution amount,
+              built from <code>queryFilter</code> on the <code>Donated</code>
+              event
+            </li>
+            <li>
+              Add a minimum donation threshold to the contract so dust amounts
+              below a floor are rejected
+            </li>
+            <li>
+              Add a <code>topDonor()</code> view function that iterates the
+              <code>donors</code> array and returns the address and amount of
+              the single largest contributor
+            </li>
+            <li>
+              Extend the frontend to display a live countdown timer that
+              refreshes every second using <code>setInterval</code>
+            </li>
+          </ul>
+        </article>
+
+        <!-- ══════════════════════════════════════ TAB 5: NEXT -->
+        <article id="task5" class="task-pane">
+          <h3>What to learn next</h3>
+
+          <p>
+            BlockBase covered the complete end-to-end Web3 development loop:
+            blockchain fundamentals, Solidity, deployment, and a browser
+            frontend. What you built today is the same architecture used by
+            production dApps &mdash; just with more tooling and more testing
+            layered on top. Here is where to go from here, by focus area.
+          </p>
+
+          <h3>Deepen your Solidity</h3>
+
+          <div class="resource-card try-card">
+            <span class="resource-label">Interactive</span>
+            <a href="https://cryptozombies.io" target="_blank" rel="noopener"
+              >CryptoZombies</a
+            >
+            <p>
+              The most widely used interactive Solidity tutorial. Builds a
+              zombie game contract step by step, covering inheritance,
+              interfaces, gas optimisation, and the ERC-721 standard. Free.
+              Estimated 10&ndash;15 hours for the core tracks.
+            </p>
+          </div>
+
+          <div class="resource-card try-card">
+            <span class="resource-label">Challenges</span>
+            <a
+              href="https://speedrunethereum.com"
+              target="_blank"
+              rel="noopener"
+              >Speed Run Ethereum</a
+            >
+            <p>
+              Guided dApp challenges using Hardhat and a React frontend
+              scaffold. Each challenge takes 2&ndash;4 hours and covers a
+              complete, real pattern: simple NFT, staking, decentralised
+              exchange, multisig wallet. The most direct next step after
+              BlockBase.
+            </p>
+          </div>
+
+          <div class="resource-card demo-card">
+            <span class="resource-label">Reference</span>
+            <a
+              href="https://solidity-by-example.org"
+              target="_blank"
+              rel="noopener"
+              >Solidity by Example</a
+            >
+            <p>
+              Every Solidity concept illustrated with minimal, self-contained
+              contracts. Useful as a quick reference when you know what pattern
+              you want but need a reminder of the syntax. Coverage includes
+              reentrancy, flash loans, proxies, and EIPs.
+            </p>
+          </div>
+
+          <div class="resource-card demo-card">
+            <span class="resource-label">Reference</span>
+            <a
+              href="https://docs.openzeppelin.com/contracts"
+              target="_blank"
+              rel="noopener"
+              >OpenZeppelin Contracts Documentation</a
+            >
+            <p>
+              The canonical reference for ERC standards, access control,
+              upgradeable proxies, governance, and more. Read the source of
+              <code>ERC20.sol</code> and <code>ERC721.sol</code> &mdash; they
+              are shorter and more legible than you expect, and every function
+              is annotated with natspec explaining exactly what it does.
+            </p>
+          </div>
+
+          <h3>Learn the professional toolchain</h3>
+
+          <div class="resource-card watch-card">
+            <span class="resource-label">Course</span>
+            <a
+              href="https://www.youtube.com/@PatrickAlphaC"
+              target="_blank"
+              rel="noopener"
+              >Patrick Collins &mdash; Foundry Full Course (YouTube)</a
+            >
+            <p>
+              The most comprehensive free Solidity course available. The Foundry
+              edition (32+ hours) covers testing, deployment scripts, fuzz
+              testing, and professional security practices. Foundry has largely
+              replaced Hardhat in professional teams. Free on YouTube.
+            </p>
+          </div>
+
+          <div class="resource-card watch-card">
+            <span class="resource-label">Tooling</span>
+            <a href="https://book.getfoundry.sh" target="_blank" rel="noopener"
+              >Foundry Book</a
+            >
+            <p>
+              Full documentation for the Foundry toolkit &mdash;
+              <code>forge</code> (build and test), <code>cast</code> (CLI
+              contract interactions), and <code>anvil</code> (local blockchain).
+              Fuzz testing in Foundry is particularly powerful: you write one
+              test and Foundry generates thousands of random inputs to try to
+              break it.
+            </p>
+          </div>
+
+          <div class="resource-card watch-card">
+            <span class="resource-label">Tooling</span>
+            <a href="https://hardhat.org/docs" target="_blank" rel="noopener"
+              >Hardhat Documentation</a
+            >
+            <p>
+              The standard JavaScript-based Ethereum development environment. If
+              you work with a team that uses JavaScript/TypeScript, Hardhat is
+              likely what they use. Tasks, tests with Mocha/Chai, and a plugin
+              ecosystem. The Getting Started guide takes about two hours.
+            </p>
+          </div>
+
+          <h3>Build real frontends</h3>
+
+          <div class="resource-card explore-card">
+            <span class="resource-label">Library</span>
+            <a href="https://wagmi.sh" target="_blank" rel="noopener">wagmi</a>
+            <p>
+              React hooks for Ethereum. Handles wallet connection state, network
+              switching, and transaction lifecycle with far less boilerplate
+              than raw ethers.js. The standard choice for React-based dApp
+              frontends. The concepts you learned with ethers.js map directly to
+              wagmi hooks.
+            </p>
+          </div>
+
+          <div class="resource-card explore-card">
+            <span class="resource-label">Library</span>
+            <a href="https://www.rainbowkit.com" target="_blank" rel="noopener"
+              >RainbowKit</a
+            >
+            <p>
+              A polished wallet connection modal built on top of wagmi. Supports
+              MetaMask, WalletConnect, Coinbase Wallet, and more &mdash; all
+              with one component. This is what the &ldquo;Connect Wallet&rdquo;
+              button looks like in most production dApps today.
+            </p>
+          </div>
+
+          <div class="resource-card explore-card">
+            <span class="resource-label">Docs</span>
+            <a href="https://docs.ethers.org/v6/" target="_blank" rel="noopener"
+              >ethers.js v6</a
+            >
+            <p>
+              The current major version. The API changed from v5:
+              <code>BrowserProvider</code> instead of <code>Web3Provider</code>,
+              and <code>ethers.parseUnits</code> directly instead of
+              <code>ethers.utils.parseUnits</code>. The concepts are identical
+              &mdash; migration takes about 30 minutes once you know v5.
+            </p>
+          </div>
+
+          <h3>Understand Ethereum deeply</h3>
+
+          <div class="resource-card demo-card">
+            <span class="resource-label">Official docs</span>
+            <a
+              href="https://ethereum.org/en/developers/docs/"
+              target="_blank"
+              rel="noopener"
+              >ethereum.org Developer Documentation</a
+            >
+            <p>
+              The official Ethereum documentation. Covers the protocol spec,
+              EIPs, account abstraction, layer 2 rollups, and the full Ethereum
+              roadmap. The best single reference for the concepts from Days 1
+              and 2.
+            </p>
+          </div>
+
+          <div class="resource-card demo-card">
+            <span class="resource-label">Security</span>
+            <a href="https://swcregistry.io" target="_blank" rel="noopener"
+              >Smart Contract Weakness Classification (SWC Registry)</a
+            >
+            <p>
+              A catalogue of every known smart contract vulnerability with
+              Solidity examples of the vulnerable code and the fix. Read through
+              the top ten. Reentrancy (SWC-107), integer overflow (SWC-101), and
+              access control (SWC-105) are the most common. Understanding what
+              can go wrong is essential before writing contracts that handle
+              real money.
+            </p>
+          </div>
+
+          <div class="resource-card demo-card">
+            <span class="resource-label">Security</span>
+            <a
+              href="https://github.com/crytic/not-so-smart-contracts"
+              target="_blank"
+              rel="noopener"
+              >Not So Smart Contracts (Trail of Bits)</a
+            >
+            <p>
+              A repository of real-world smart contract vulnerability examples
+              maintained by Trail of Bits, one of the leading blockchain
+              security firms. Each folder contains the vulnerable contract, an
+              explanation of why it is exploitable, and a fixed version.
+            </p>
+          </div>
+
+          <h3>Stay current</h3>
+
+          <div class="resource-card explore-card">
+            <span class="resource-label">Newsletter</span>
+            <a
+              href="https://www.weekinethereumnews.com"
+              target="_blank"
+              rel="noopener"
+              >Week in Ethereum News</a
+            >
+            <p>
+              The most comprehensive weekly digest of everything in the Ethereum
+              ecosystem &mdash; EIPs, protocol upgrades, new tools, security
+              incidents, and research. Free. Running since 2017.
+            </p>
+          </div>
+
+          <div class="resource-card explore-card">
+            <span class="resource-label">Research</span>
+            <a href="https://ethresear.ch" target="_blank" rel="noopener"
+              >ethresear.ch</a
+            >
+            <p>
+              The Ethereum research forum. Where protocol upgrades, layer 2
+              designs, and new cryptographic constructions are proposed and
+              debated before they become EIPs. Technically dense, but reading
+              one thread shows you how the protocol evolves.
+            </p>
+          </div>
+
+          <div class="resource-card watch-card">
+            <span class="resource-label">YouTube</span>
+            <a
+              href="https://www.youtube.com/@Finematics"
+              target="_blank"
+              rel="noopener"
+              >Finematics</a
+            >
+            <p>
+              The best visual explainers for DeFi protocols and Ethereum
+              architecture &mdash; Uniswap v2/v3, Aave, MakerDAO, layer 2
+              rollups. Each video is 10&ndash;15 minutes. A good way to
+              understand what the major dApps actually do under the hood.
+            </p>
+          </div>
+
+          <h3>A final note</h3>
+
+          <p>
+            A verified contract on a public blockchain, wired to a browser
+            frontend, is the same architecture Uniswap, Aave, and OpenSea use
+            &mdash; with more tooling and testing layered on top.
+          </p>
+
+          <p>
+            The resources above will fill in gaps as you encounter them. The
+            most direct next step is picking a concrete problem and building it;
+            the fundamentals solidify through the specific issues you run into
+            and resolve.
+          </p>
+        </article>
+      </div>
+
+      <div class="reader-footer-nav">
+        <button class="nav-btn" id="prevTaskBtn" style="visibility: hidden">
+          &larr; Previous
+        </button>
+        <button class="nav-btn" id="nextTaskBtn">Next &rarr;</button>
+      </div>
+    </div>
+
+    <footer>
+      <div class="social-icons">
+        <a href="https://www.instagram.com/fec_iitg/" target="_blank"
+          ><i class="fab fa-instagram"></i
+        ></a>
+        <a
+          href="https://www.linkedin.com/company/finance-and-economics-club-iitg/"
+          target="_blank"
+          ><i class="fab fa-linkedin"></i
+        ></a>
+        <a href="https://x.com/fec_iitg" target="_blank"
+          ><i class="fab fa-twitter"></i
+        ></a>
+        <a
+          href="https://www.youtube.com/@financeandeconomicsclubiit1029"
+          target="_blank"
+          ><i class="fab fa-youtube"></i
+        ></a>
+        <a href="https://www.facebook.com/financeclubiitg/" target="_blank"
+          ><i class="fab fa-facebook"></i
+        ></a>
+        <a
+          href="https://chat.whatsapp.com/EUfRkvIR5DPALPlOOrjKJf?mode=gi_t"
+          target="_blank"
+          rel="noopener"
+          ><i class="fab fa-whatsapp"></i
+        ></a>
+      </div>
+      <p>Finance and Economics Club,</p>
+      <p>IIT Guwahati</p>
+    </footer>
+
+    <script>
+      const tabs = document.querySelectorAll(".task-tab");
+      const panes = document.querySelectorAll(".task-pane");
+      const prevBtn = document.getElementById("prevTaskBtn");
+      const nextBtn = document.getElementById("nextTaskBtn");
+      let current = 0;
+
+      function showTask(index) {
+        tabs.forEach((t, i) => t.classList.toggle("active", i === index));
+        panes.forEach((p, i) => p.classList.toggle("active", i === index));
+        current = index;
+        prevBtn.style.visibility = current === 0 ? "hidden" : "visible";
+        nextBtn.style.visibility =
+          current === tabs.length - 1 ? "hidden" : "visible";
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+
+      tabs.forEach((tab, i) =>
+        tab.addEventListener("click", () => showTask(i)),
+      );
+      prevBtn.addEventListener("click", () => showTask(current - 1));
+      nextBtn.addEventListener("click", () => showTask(current + 1));
+
+      // Deep-link support
+      const hash = window.location.hash;
+      if (hash === "#task2") showTask(1);
+      if (hash === "#task3") showTask(2);
+      if (hash === "#task4") showTask(3);
+      if (hash === "#task5") showTask(4);
+
+      window.addEventListener("scroll", () => {
+        const el = document.documentElement;
+        const pct = (el.scrollTop / (el.scrollHeight - el.clientHeight)) * 100;
+        document.getElementById("readingProgress").style.width =
+          Math.min(pct, 100) + "%";
+      });
+    </script>
+  </body>
+</html>
